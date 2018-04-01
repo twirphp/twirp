@@ -7,6 +7,7 @@ import (
 	"github.com/twitchtv/protogen/typemap"
 )
 
+// ServiceComment extracts comments for a service.
 func ServiceComment(file *descriptor.FileDescriptorProto, svc *descriptor.ServiceDescriptorProto) string {
 	reg := &typemap.Registry{}
 
@@ -23,6 +24,7 @@ func ServiceComment(file *descriptor.FileDescriptorProto, svc *descriptor.Servic
 	return text
 }
 
+// MethodComment extracts comments for a service method.
 func MethodComment(file *descriptor.FileDescriptorProto, svc *descriptor.ServiceDescriptorProto, method *descriptor.MethodDescriptorProto) string {
 	reg := &typemap.Registry{}
 

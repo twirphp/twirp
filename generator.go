@@ -40,7 +40,7 @@ func (g *generator) generate(in *plugin.CodeGeneratorRequest) (*plugin.CodeGener
 		}
 	}
 
-	for namespace, _ := range namespaces {
+	for namespace := range namespaces {
 		errorFile, err := g.generateError(namespace)
 		if err != nil {
 			return nil, err
@@ -52,13 +52,13 @@ func (g *generator) generate(in *plugin.CodeGeneratorRequest) (*plugin.CodeGener
 	return resp, nil
 }
 
-type ServiceDefinition struct {
+type serviceDefinition struct {
 	File    *descriptor.FileDescriptorProto
 	Service *descriptor.ServiceDescriptorProto
 }
 
 func (g *generator) generateServiceInterface(file *descriptor.FileDescriptorProto, svc *descriptor.ServiceDescriptorProto) (*plugin.CodeGeneratorResponse_File, error) {
-	data := &ServiceDefinition{
+	data := &serviceDefinition{
 		File:    file,
 		Service: svc,
 	}
@@ -80,7 +80,7 @@ func (g *generator) generateServiceInterface(file *descriptor.FileDescriptorProt
 }
 
 func (g *generator) generateServiceServer(file *descriptor.FileDescriptorProto, svc *descriptor.ServiceDescriptorProto) (*plugin.CodeGeneratorResponse_File, error) {
-	data := &ServiceDefinition{
+	data := &serviceDefinition{
 		File:    file,
 		Service: svc,
 	}
@@ -101,12 +101,12 @@ func (g *generator) generateServiceServer(file *descriptor.FileDescriptorProto, 
 	}, nil
 }
 
-type ErrorDefinition struct {
+type errorDefinition struct {
 	Namespace string
 }
 
 func (g *generator) generateError(namespace string) (*plugin.CodeGeneratorResponse_File, error) {
-	data := &ErrorDefinition{
+	data := &errorDefinition{
 		Namespace: namespace,
 	}
 

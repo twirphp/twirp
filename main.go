@@ -35,6 +35,7 @@ func main() {
 	}
 }
 
+// Main does the hard work. It is called by the main func.
 func Main(in io.Reader, out io.Writer, templates string) error {
 	req, err := readCodeGeneratorRequest(in)
 	if err != nil {
