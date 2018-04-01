@@ -41,12 +41,17 @@ func (g *generator) generate(in *plugin.CodeGeneratorRequest) (*plugin.CodeGener
 	}
 
 	for namespace := range namespaces {
-		errorFile, err := g.generateError(namespace)
+		protocolFile, err := g.generateProtocol(namespace)
 		if err != nil {
 			return nil, err
 		}
 
-		resp.File = append(resp.File, errorFile)
+		serverFile, err := g.generateServer(namespace)
+		if err != nil {
+			return nil, err
+		}
+
+		resp.File = append(resp.File, protocolFile, serverFile)
 	}
 
 	return resp, nil
@@ -101,16 +106,16 @@ func (g *generator) generateServiceServer(file *descriptor.FileDescriptorProto, 
 	}, nil
 }
 
-type errorDefinition struct {
+type protocolDefinition struct {
 	Namespace string
 }
 
-func (g *generator) generateError(namespace string) (*plugin.CodeGeneratorResponse_File, error) {
-	data := &errorDefinition{
+func (g *generator) generateProtocol(namespace string) (*plugin.CodeGeneratorResponse_File, error) {
+	data := &protocolDefinition{
 		Namespace: namespace,
 	}
 
-	tpl, err := g.box.MustString("Error.php")
+	tpl, err := g.box.MustString("Protocol.php")
 	if err != nil {
 		return nil, err
 	}
@@ -121,7 +126,28 @@ func (g *generator) generateError(namespace string) (*plugin.CodeGeneratorRespon
 	}
 
 	return &plugin.CodeGeneratorResponse_File{
-		Name:    proto.String(fmt.Sprintf("%s/Error.php", PhpPathFromNamespace(namespace))),
+		Name:    proto.String(fmt.Sprintf("%s/Protocol.php", PhpPathFromNamespace(namespace))),
+		Content: proto.String(tpl),
+	}, nil
+}
+
+func (g *generator) generateServer(namespace string) (*plugin.CodeGeneratorResponse_File, error) {
+	data := &protocolDefinition{
+		Namespace: namespace,
+	}
+
+	tpl, err := g.box.MustString("Server.php")
+	if err != nil {
+		return nil, err
+	}
+
+	tpl, err = executeTemplate(tpl, data)
+	if err != nil {
+		return nil, err
+	}
+
+	return &plugin.CodeGeneratorResponse_File{
+		Name:    proto.String(fmt.Sprintf("%s/Server.php", PhpPathFromNamespace(namespace))),
 		Content: proto.String(tpl),
 	}, nil
 }

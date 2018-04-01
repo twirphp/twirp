@@ -12,7 +12,6 @@ use Http\Message\StreamFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twirp\Context;
-use Twirp\ErrorCode;
 use Twirp\RequestHandler;
 use Twirp\TwirpError;
 
@@ -23,6 +22,8 @@ use Twirp\TwirpError;
  */
 final class HaberdasherServer implements RequestHandler
 {
+    use Protocol;
+
     const PATH_PREFIX = '/twirp/twitch.twirp.example.Haberdasher/';
 
     /**
@@ -138,9 +139,9 @@ final class HaberdasherServer implements RequestHandler
 
         $data = $out->serializeToJsonString();
 
-        $body = $this->streamFactory->createStream($data);
+        $body = $this->getStreamFactory()->createStream($data);
 
-        return $this->messageFactory
+        return $this->getMessageFactory()
             ->createResponse(200)
             ->withHeader('Content-Type', 'application/json')
             ->withBody($body);
@@ -168,36 +169,11 @@ final class HaberdasherServer implements RequestHandler
 
         $data = $out->serializeToString();
 
-        $body = $this->streamFactory->createStream($data);
+        $body = $this->getStreamFactory()->createStream($data);
 
-        return $this->messageFactory
+        return $this->getMessageFactory()
             ->createResponse(200)
             ->withHeader('Content-Type', 'application/protobuf')
-            ->withBody($body);
-    }
-
-    /**
-     * Writes Twirp errors in the response and triggers hooks.
-     *
-     * @param array        $ctx
-     * @param \Twirp\Error $e
-     *
-     * @return ResponseInterface
-     */
-    private function writeError(array $ctx, \Twirp\Error $e)
-    {
-        $statusCode = ErrorCode::serverHTTPStatusFromErrorCode($e->code());
-        $ctx = Context::withStatusCode($ctx, $statusCode);
-
-        $body = $this->streamFactory->createStream(json_encode([
-            'code' => $e->code(),
-            'msg' => $e->msg(),
-            'meta' => $e->metaMap(),
-        ]));
-
-        return $this->messageFactory
-            ->createResponse($statusCode)
-            ->withHeader('Content-Type', 'application/json') // Error responses are always JSON (instead of protobuf)
             ->withBody($body);
     }
 }
