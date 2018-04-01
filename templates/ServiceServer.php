@@ -151,21 +151,10 @@ final class {{ .Service | php_service_name }}Server implements RequestHandler
 
         try {
             $ctx = $this->hook->requestRouted($ctx);
-        } catch (\Twirp\Error $e) {
-            return $this->writeError($ctx, $e);
-        } catch (\Exception $e) {
-            return $this->writeError($ctx, TwirpError::internalErrorWith($e));
-        }
 
-        $in = new {{ $inputType }}();
-
-        try {
+            $in = new {{ $inputType }}();
             $in->mergeFromJsonString((string)$req->getBody());
-        } catch (GPBDecodeException $e) {
-            return $this->writeError($ctx, TwirpError::internalError('failed to parse request json'));
-        }
 
-        try {
             $out = $this->svc->{{ $method.Name }}($ctx, $in);
 
             if ($out === null) {
@@ -173,6 +162,8 @@ final class {{ .Service | php_service_name }}Server implements RequestHandler
             }
 
             $ctx = $this->hook->responsePrepared($ctx);
+        } catch (GPBDecodeException $e) {
+            return $this->writeError($ctx, TwirpError::internalError('failed to parse request json'));
         } catch (\Twirp\Error $e) {
             return $this->writeError($ctx, $e);
         } catch (\Exception $e) {
@@ -199,21 +190,10 @@ final class {{ .Service | php_service_name }}Server implements RequestHandler
 
         try {
             $ctx = $this->hook->requestRouted($ctx);
-        } catch (\Twirp\Error $e) {
-            return $this->writeError($ctx, $e);
-        } catch (\Exception $e) {
-            return $this->writeError($ctx, TwirpError::internalErrorWith($e));
-        }
 
-        $in = new {{ $inputType }}();
-
-        try {
+            $in = new {{ $inputType }}();
             $in->mergeFromString((string)$req->getBody());
-        } catch (GPBDecodeException $e) {
-            return $this->writeError($ctx, TwirpError::internalError('failed to parse request proto'));
-        }
 
-        try {
             $out = $this->svc->{{ $method.Name }}($ctx, $in);
 
             if ($out === null) {
@@ -221,6 +201,8 @@ final class {{ .Service | php_service_name }}Server implements RequestHandler
             }
 
             $ctx = $this->hook->responsePrepared($ctx);
+        } catch (GPBDecodeException $e) {
+            return $this->writeError($ctx, TwirpError::internalError('failed to parse request proto'));
         } catch (\Twirp\Error $e) {
             return $this->writeError($ctx, $e);
         } catch (\Exception $e) {
@@ -280,7 +262,7 @@ final class {{ .Service | php_service_name }}Server implements RequestHandler
     }
 
     /**
-     * Triggers response sent hook hooks.
+     * Triggers response sent hook.
      *
      * @param array $ctx
      */

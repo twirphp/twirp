@@ -148,21 +148,10 @@ final class HaberdasherServer implements RequestHandler
 
         try {
             $ctx = $this->hook->requestRouted($ctx);
-        } catch (\Twirp\Error $e) {
-            return $this->writeError($ctx, $e);
-        } catch (\Exception $e) {
-            return $this->writeError($ctx, TwirpError::internalErrorWith($e));
-        }
 
-        $in = new Size();
-
-        try {
+            $in = new Size();
             $in->mergeFromJsonString((string)$req->getBody());
-        } catch (GPBDecodeException $e) {
-            return $this->writeError($ctx, TwirpError::internalError('failed to parse request json'));
-        }
 
-        try {
             $out = $this->svc->MakeHat($ctx, $in);
 
             if ($out === null) {
@@ -170,6 +159,8 @@ final class HaberdasherServer implements RequestHandler
             }
 
             $ctx = $this->hook->responsePrepared($ctx);
+        } catch (GPBDecodeException $e) {
+            return $this->writeError($ctx, TwirpError::internalError('failed to parse request json'));
         } catch (\Twirp\Error $e) {
             return $this->writeError($ctx, $e);
         } catch (\Exception $e) {
@@ -196,21 +187,10 @@ final class HaberdasherServer implements RequestHandler
 
         try {
             $ctx = $this->hook->requestRouted($ctx);
-        } catch (\Twirp\Error $e) {
-            return $this->writeError($ctx, $e);
-        } catch (\Exception $e) {
-            return $this->writeError($ctx, TwirpError::internalErrorWith($e));
-        }
 
-        $in = new Size();
-
-        try {
+            $in = new Size();
             $in->mergeFromString((string)$req->getBody());
-        } catch (GPBDecodeException $e) {
-            return $this->writeError($ctx, TwirpError::internalError('failed to parse request proto'));
-        }
 
-        try {
             $out = $this->svc->MakeHat($ctx, $in);
 
             if ($out === null) {
@@ -218,6 +198,8 @@ final class HaberdasherServer implements RequestHandler
             }
 
             $ctx = $this->hook->responsePrepared($ctx);
+        } catch (GPBDecodeException $e) {
+            return $this->writeError($ctx, TwirpError::internalError('failed to parse request proto'));
         } catch (\Twirp\Error $e) {
             return $this->writeError($ctx, $e);
         } catch (\Exception $e) {
@@ -276,7 +258,7 @@ final class HaberdasherServer implements RequestHandler
     }
 
     /**
-     * Triggers response sent hook hooks.
+     * Triggers response sent hook.
      *
      * @param array $ctx
      */
