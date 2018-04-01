@@ -8,6 +8,7 @@ import (
 	"github.com/Masterminds/sprig"
 )
 
+// TxtFuncMap wraps sprig.TxtFuncMap and adds some proto generation specific ones.
 func TxtFuncMap() template.FuncMap {
 	funcMap := sprig.TxtFuncMap()
 
