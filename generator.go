@@ -1,14 +1,12 @@
 package main
 
 import (
+	"fmt"
 
-"fmt"
-
-"github.com/gobuffalo/packr"
-"github.com/golang/protobuf/proto"
-"github.com/golang/protobuf/protoc-gen-go/descriptor"
-plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
-
+	"github.com/gobuffalo/packr"
+	"github.com/golang/protobuf/proto"
+	"github.com/golang/protobuf/protoc-gen-go/descriptor"
+	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 )
 
 type generator struct {

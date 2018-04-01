@@ -2,9 +2,10 @@ package main
 
 import (
 	"bytes"
-	"text/template"
-	"github.com/Masterminds/sprig"
 	"strings"
+	"text/template"
+
+	"github.com/Masterminds/sprig"
 )
 
 func TxtFuncMap() template.FuncMap {
