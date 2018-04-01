@@ -1,0 +1,38 @@
+language: go
+
+sudo: false
+
+os:
+    - linux
+    - osx
+
+go:
+    - 1.9.x
+    - 1.10.x
+    - tip
+
+matrix:
+    allow_failures:
+        - go: tip
+
+branches:
+    only:
+        - master
+        - /^v\d+\.\d+\.\d+(-\S*)?$/
+
+before_install:
+    - mkdir -p $HOME/bin
+    - curl -sL https://get.binhq.io/binbrew | DEST=$HOME/bin NAME=bin bash
+    - bin get golang/dep@0.4.1 $HOME/bin
+
+install: dep ensure -vendor-only
+
+script: go test -v ./...
+
+deploy:
+    provider: script
+    skip_cleanup: true
+    script: bin get goreleaser/goreleaser@0.62.5 $HOME/bin && goreleaser
+    on:
+        tags: true
+        condition: $TRAVIS_OS_NAME = linux && $TRAVIS_GO_VERSION =~ ^1\.10(\.[0-9]+)?$
