@@ -7,7 +7,7 @@ use Http\Discovery\MessageFactoryDiscovery;
 use Http\Discovery\StreamFactoryDiscovery;
 use Http\Message\MessageFactory;
 use Http\Message\StreamFactory;
-use Twirp\Context;
+use Psr\Http\Message\ResponseInterface;
 use Twirp\ErrorCode;
 use Twirp\TwirpError;
 
@@ -54,7 +54,6 @@ trait Protocol
     private function writeError(array $ctx, \Twirp\Error $e)
     {
         $statusCode = ErrorCode::serverHTTPStatusFromErrorCode($e->code());
-        $ctx = Context::withStatusCode($ctx, $statusCode);
 
         $body = $this->getStreamFactory()->createStream(json_encode([
             'code' => $e->code(),

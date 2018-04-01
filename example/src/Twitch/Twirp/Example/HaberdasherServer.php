@@ -11,8 +11,11 @@ use Http\Message\MessageFactory;
 use Http\Message\StreamFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Twirp\BaseServerHook;
 use Twirp\Context;
+use Twirp\ErrorCode;
 use Twirp\RequestHandler;
+use Twirp\ServerHook;
 use Twirp\TwirpError;
 
 /**
@@ -22,7 +25,9 @@ use Twirp\TwirpError;
  */
 final class HaberdasherServer implements RequestHandler
 {
-    use Protocol;
+    use Protocol {
+        writeError as protocolWriteError;
+    }
 
     const PATH_PREFIX = '/twirp/twitch.twirp.example.Haberdasher/';
 
@@ -30,6 +35,11 @@ final class HaberdasherServer implements RequestHandler
      * @var Haberdasher
      */
     private $svc;
+
+    /**
+     * @var ServerHook
+     */
+    private $hook;
 
     /**
      * @var MessageFactory
@@ -43,14 +53,20 @@ final class HaberdasherServer implements RequestHandler
 
     /**
      * @param Haberdasher $svc
+     * @param ServerHook|null     $hook
      * @param MessageFactory|null $messageFactory
      * @param StreamFactory|null  $streamFactory
      */
     public function __construct(
         Haberdasher $svc,
+        ServerHook $hook = null,
         MessageFactory $messageFactory = null,
         StreamFactory $streamFactory = null
     ) {
+        if ($hook === null) {
+            $hook = new BaseServerHook();
+        }
+
         if ($messageFactory === null) {
             $messageFactory = MessageFactoryDiscovery::find();
         }
@@ -60,6 +76,7 @@ final class HaberdasherServer implements RequestHandler
         }
 
         $this->svc = $svc;
+        $this->hook = $hook;
         $this->messageFactory = $messageFactory;
         $this->streamFactory = $streamFactory;
     }
@@ -76,6 +93,14 @@ final class HaberdasherServer implements RequestHandler
         $ctx = $req->getAttributes();
         $ctx = Context::withPackageName($ctx, 'twitch.twirp.example');
         $ctx = Context::withServiceName($ctx, 'Haberdasher');
+
+        try {
+            $ctx = $this->hook->requestReceived($ctx);
+        } catch (\Twirp\Error $e) {
+            return $this->writeError($ctx, $e);
+        } catch (\Exception $e) {
+            return $this->writeError($ctx, TwirpError::internalErrorWith($e));
+        }
 
         if ($req->getMethod() !== 'POST') {
             $msg = sprintf('unsupported method %q (only POST is allowed)', $req->getMethod());
@@ -121,6 +146,14 @@ final class HaberdasherServer implements RequestHandler
     {
         $ctx = Context::withMethodName($ctx, 'MakeHat');
 
+        try {
+            $ctx = $this->hook->requestRouted($ctx);
+        } catch (\Twirp\Error $e) {
+            return $this->writeError($ctx, $e);
+        } catch (\Exception $e) {
+            return $this->writeError($ctx, TwirpError::internalErrorWith($e));
+        }
+
         $in = new Size();
 
         try {
@@ -131,29 +164,43 @@ final class HaberdasherServer implements RequestHandler
 
         try {
             $out = $this->svc->MakeHat($ctx, $in);
+
+            if ($out === null) {
+                return $this->writeError($ctx, TwirpError::internalError('received a null response while calling MakeHat. null responses are not supported'));
+            }
+
+            $ctx = $this->hook->responsePrepared($ctx);
         } catch (\Twirp\Error $e) {
             return $this->writeError($ctx, $e);
         } catch (\Exception $e) {
             return $this->writeError($ctx, TwirpError::internalErrorWith($e));
         }
 
-        if ($out === null) {
-            return $this->writeError($ctx, TwirpError::internalError('received a null response while calling MakeHat. null responses are not supported'));
-        }
-
         $data = $out->serializeToJsonString();
 
         $body = $this->getStreamFactory()->createStream($data);
 
-        return $this->getMessageFactory()
+        $resp = $this->getMessageFactory()
             ->createResponse(200)
             ->withHeader('Content-Type', 'application/json')
             ->withBody($body);
+
+        $this->callResponseSent($ctx);
+
+        return $resp;
     }
 
     private function handleMakeHatProtobuf(array $ctx, ServerRequestInterface $req)
     {
         $ctx = Context::withMethodName($ctx, 'MakeHat');
+
+        try {
+            $ctx = $this->hook->requestRouted($ctx);
+        } catch (\Twirp\Error $e) {
+            return $this->writeError($ctx, $e);
+        } catch (\Exception $e) {
+            return $this->writeError($ctx, TwirpError::internalErrorWith($e));
+        }
 
         $in = new Size();
 
@@ -165,23 +212,93 @@ final class HaberdasherServer implements RequestHandler
 
         try {
             $out = $this->svc->MakeHat($ctx, $in);
+
+            if ($out === null) {
+                return $this->writeError($ctx, TwirpError::internalError('received a null response while calling MakeHat. null responses are not supported'));
+            }
+
+            $ctx = $this->hook->responsePrepared($ctx);
         } catch (\Twirp\Error $e) {
             return $this->writeError($ctx, $e);
         } catch (\Exception $e) {
             return $this->writeError($ctx, TwirpError::internalErrorWith($e));
         }
 
-        if ($out === null) {
-            return $this->writeError($ctx, TwirpError::internalError('received a null response while calling MakeHat. null responses are not supported'));
-        }
-
         $data = $out->serializeToString();
 
         $body = $this->getStreamFactory()->createStream($data);
 
-        return $this->getMessageFactory()
+        $resp = $this->getMessageFactory()
             ->createResponse(200)
             ->withHeader('Content-Type', 'application/protobuf')
             ->withBody($body);
+
+        $this->callResponseSent($ctx);
+
+        return $resp;
+    }
+
+    /**
+     * Writes Twirp errors in the response and triggers hooks.
+     *
+     * @param array        $ctx
+     * @param \Twirp\Error $e
+     *
+     * @return ResponseInterface
+     */
+    private function writeError(array $ctx, \Twirp\Error $e)
+    {
+        $statusCode = ErrorCode::serverHTTPStatusFromErrorCode($e->code());
+        $ctx = Context::withStatusCode($ctx, $statusCode);
+
+        try {
+            $this->hook->error($ctx, $e);
+        } catch (\Exception $e) {
+            // We have three options here. We could log the error, call the Error
+            // hook, or just silently ignore the error.
+            //
+            // Logging is unacceptable because we don't have a user-controlled
+            // logger; writing out to stderr without permission is too rude.
+            //
+            // Calling the Error hook would confuse users: it would mean the Error
+            // hook got called twice for one request, which is likely to lead to
+            // duplicated log messages and metrics, no matter how well we document
+            // the behavior.
+            //
+            // Silently ignoring the error is our least-bad option. It's highly
+            // likely that the connection is broken and the original 'err' says
+            // so anyway.
+        }
+
+        $this->callResponseSent($ctx);
+
+        return $this->protocolWriteError($ctx, $e);
+    }
+
+    /**
+     * Triggers response sent hook hooks.
+     *
+     * @param array $ctx
+     */
+    private function callResponseSent(array $ctx)
+    {
+        try {
+            $this->hook->responseSent($ctx);
+        } catch (\Exception $e) {
+            // We have three options here. We could log the error, call the Error
+            // hook, or just silently ignore the error.
+            //
+            // Logging is unacceptable because we don't have a user-controlled
+            // logger; writing out to stderr without permission is too rude.
+            //
+            // Calling the Error hook could confuse users: this hook is triggered
+            // by the error hook itself, which is likely to lead to
+            // duplicated log messages and metrics, no matter how well we document
+            // the behavior.
+            //
+            // Silently ignoring the error is our least-bad option. It's highly
+            // likely that the connection is broken and the original 'err' says
+            // so anyway.
+        }
     }
 }
