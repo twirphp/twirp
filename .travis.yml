@@ -24,10 +24,13 @@ before_install:
     - mkdir -p $HOME/bin
     - curl -sL https://get.binhq.io/binbrew | DEST=$HOME/bin NAME=bin bash
     - bin get golang/dep@0.4.1 $HOME/bin
+    - bin get gobuffalo/packr@1.10.7 $HOME/bin
 
 install: dep ensure -vendor-only
 
-script: go test -v ./...
+script:
+    - packr
+    - go test -v ./...
 
 deploy:
     provider: script
