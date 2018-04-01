@@ -234,7 +234,7 @@ final class HaberdasherServer implements RequestHandler
         $ctx = Context::withStatusCode($ctx, $statusCode);
 
         try {
-            $this->hook->error($ctx, $e);
+            $ctx = $this->hook->error($ctx, $e);
         } catch (\Exception $e) {
             // We have three options here. We could log the error, call the Error
             // hook, or just silently ignore the error.
