@@ -140,6 +140,10 @@ final class {{ .Service | php_service_name }}Server implements RequestHandler
             return $this->writeError($ctx, TwirpError::internalErrorWith($e));
         }
 
+        if ($out === null) {
+            return $this->writeError($ctx, TwirpError::internalError('received a null response while calling {{ $method.Name }}. null responses are not supported'));
+        }
+
         $data = $out->serializeToJsonString();
 
         $body = $this->getStreamFactory()->createStream($data);
@@ -168,6 +172,10 @@ final class {{ .Service | php_service_name }}Server implements RequestHandler
             return $this->writeError($ctx, $e);
         } catch (\Exception $e) {
             return $this->writeError($ctx, TwirpError::internalErrorWith($e));
+        }
+
+        if ($out === null) {
+            return $this->writeError($ctx, TwirpError::internalError('received a null response while calling {{ $method.Name }}. null responses are not supported'));
         }
 
         $data = $out->serializeToString();
