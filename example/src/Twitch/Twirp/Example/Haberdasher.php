@@ -4,6 +4,8 @@
 
 namespace Twitch\Twirp\Example;
 
+use Twirp\Error;
+
 /**
  * A Haberdasher makes hats for clients.
  *
@@ -20,6 +22,8 @@ interface Haberdasher
      * @param \Twitch\Twirp\Example\Size $req
      *
      * @return \Twitch\Twirp\Example\Hat
+     *
+     * @throws Error
      */
     public function MakeHat(array $ctx, \Twitch\Twirp\Example\Size $req);
 }

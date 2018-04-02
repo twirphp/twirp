@@ -5,8 +5,6 @@
 namespace Twitch\Twirp\Example;
 
 use Google\Protobuf\Internal\GPBDecodeException;
-use Http\Discovery\MessageFactoryDiscovery;
-use Http\Discovery\StreamFactoryDiscovery;
 use Http\Message\MessageFactory;
 use Http\Message\StreamFactory;
 use Psr\Http\Message\ResponseInterface;
@@ -23,12 +21,8 @@ use Twirp\TwirpError;
  *
  * Generated from protobuf service <code>twitch.twirp.example.Haberdasher</code>
  */
-final class HaberdasherServer implements RequestHandler
+final class HaberdasherServer extends TwirpServer implements RequestHandler
 {
-    use Protocol {
-        writeError as protocolWriteError;
-    }
-
     const PATH_PREFIX = '/twirp/twitch.twirp.example.Haberdasher/';
 
     /**
@@ -63,22 +57,14 @@ final class HaberdasherServer implements RequestHandler
         MessageFactory $messageFactory = null,
         StreamFactory $streamFactory = null
     ) {
+        parent::__construct($messageFactory, $streamFactory);
+
         if ($hook === null) {
             $hook = new BaseServerHook();
         }
 
-        if ($messageFactory === null) {
-            $messageFactory = MessageFactoryDiscovery::find();
-        }
-
-        if ($streamFactory === null) {
-            $streamFactory = StreamFactoryDiscovery::find();
-        }
-
         $this->svc = $svc;
         $this->hook = $hook;
-        $this->messageFactory = $messageFactory;
-        $this->streamFactory = $streamFactory;
     }
 
     /**
@@ -103,9 +89,9 @@ final class HaberdasherServer implements RequestHandler
         }
 
         if ($req->getMethod() !== 'POST') {
-            $msg = sprintf('unsupported method %q (only POST is allowed)', $req->getMethod());
+            $msg = sprintf('unsupported method "%s" (only POST is allowed)', $req->getMethod());
 
-            return $this->writeError($ctx, Error::badRoute($msg, $req->getMethod(), $req->getUri()->getPath()));
+            return $this->writeError($ctx, $this->badRoute($msg, $req->getMethod(), $req->getUri()->getPath()));
         }
 
         switch ($req->getUri()->getPath()) {
@@ -113,9 +99,7 @@ final class HaberdasherServer implements RequestHandler
                 return $this->handleMakeHat($ctx, $req);
 
             default:
-                $msg = sprintf('no handler for path %q', $req->getUri()->getPath());
-
-                return $this->writeError($ctx, Error::badRoute($msg, $req->getMethod(), $req->getUri()->getPath()));
+                return $this->writeError($ctx, $this->noRouteError($req));
         }
     }
 
@@ -136,9 +120,9 @@ final class HaberdasherServer implements RequestHandler
                 return $this->handleMakeHatProtobuf($ctx, $req);
 
             default:
-                $msg = sprintf('unexpected Content-Type: %q', $req->getHeaderLine('Content-Type'));
+                $msg = sprintf('unexpected Content-Type: "%s"', $req->getHeaderLine('Content-Type'));
 
-                return $this->writeError($ctx, Error::badRoute($msg, $req->getMethod(), $req->getUri()->getPath()));
+                return $this->writeError($ctx, $this->badRoute($msg, $req->getMethod(), $req->getUri()->getPath()));
         }
     }
 
@@ -169,9 +153,9 @@ final class HaberdasherServer implements RequestHandler
 
         $data = $out->serializeToJsonString();
 
-        $body = $this->getStreamFactory()->createStream($data);
+        $body = $this->streamFactory->createStream($data);
 
-        $resp = $this->getMessageFactory()
+        $resp = $this->messageFactory
             ->createResponse(200)
             ->withHeader('Content-Type', 'application/json')
             ->withBody($body);
@@ -208,9 +192,9 @@ final class HaberdasherServer implements RequestHandler
 
         $data = $out->serializeToString();
 
-        $body = $this->getStreamFactory()->createStream($data);
+        $body = $this->streamFactory->createStream($data);
 
-        $resp = $this->getMessageFactory()
+        $resp = $this->messageFactory
             ->createResponse(200)
             ->withHeader('Content-Type', 'application/protobuf')
             ->withBody($body);
@@ -254,7 +238,7 @@ final class HaberdasherServer implements RequestHandler
 
         $this->callResponseSent($ctx);
 
-        return $this->protocolWriteError($ctx, $e);
+        return parent::writeError($ctx, $e);
     }
 
     /**

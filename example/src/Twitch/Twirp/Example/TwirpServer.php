@@ -8,13 +8,14 @@ use Http\Discovery\StreamFactoryDiscovery;
 use Http\Message\MessageFactory;
 use Http\Message\StreamFactory;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Twirp\ErrorCode;
 use Twirp\TwirpError;
 
 /**
- * Protocol implements some common, protocol specific logic (like error responses, etc).
+ * Common server implementation.
  */
-trait Protocol
+abstract class TwirpServer
 {
     /**
      * @var MessageFactory
@@ -27,6 +28,40 @@ trait Protocol
     private $streamFactory;
 
     /**
+     * @param MessageFactory|null $messageFactory
+     * @param StreamFactory|null  $streamFactory
+     */
+    public function __construct(
+        MessageFactory $messageFactory = null,
+        StreamFactory $streamFactory = null
+    ) {
+        if ($messageFactory === null) {
+            $messageFactory = MessageFactoryDiscovery::find();
+        }
+
+        if ($streamFactory === null) {
+            $streamFactory = StreamFactoryDiscovery::find();
+        }
+
+        $this->messageFactory = $messageFactory;
+        $this->streamFactory = $streamFactory;
+    }
+
+    /**
+     * Used when there is no route for a request.
+     *
+     * @param ServerRequestInterface $req
+     *
+     * @return TwirpError
+     */
+    final protected function noRouteError(ServerRequestInterface $req)
+    {
+        $msg = sprintf('no handler for path "%s', $req->getUri()->getPath());
+
+        return $this->badRouteError($msg, $req->getMethod(), $req->getUri()->getPath());
+    }
+
+    /**
      * Used when the twirp server cannot route a request.
      *
      * @param string $msg
@@ -35,7 +70,7 @@ trait Protocol
      *
      * @return TwirpError
      */
-    private function badRoute($msg, $method, $url)
+    final protected function badRouteError($msg, $method, $url)
     {
         $e = TwirpError::newError(ErrorCode::BadRoute, $msg);
         $e = $e->withMeta('twirp_invalid_route', $method . ' ' . $url);
@@ -51,47 +86,19 @@ trait Protocol
      *
      * @return ResponseInterface
      */
-    private function writeError(array $ctx, \Twirp\Error $e)
+    protected function writeError(array $ctx, \Twirp\Error $e)
     {
         $statusCode = ErrorCode::serverHTTPStatusFromErrorCode($e->code());
 
-        $body = $this->getStreamFactory()->createStream(json_encode([
+        $body = $this->streamFactory->createStream(json_encode([
             'code' => $e->code(),
             'msg' => $e->msg(),
             'meta' => $e->metaMap(),
         ]));
 
-        return $this->getMessageFactory()
+        return $this->messageFactory
             ->createResponse($statusCode)
             ->withHeader('Content-Type', 'application/json') // Error responses are always JSON (instead of protobuf)
             ->withBody($body);
-    }
-
-    /**
-     * Returns a message factory instance.
-     *
-     * @return MessageFactory
-     */
-    private function getMessageFactory()
-    {
-        if ($this->messageFactory === null) {
-            $this->messageFactory = MessageFactoryDiscovery::find();
-        }
-
-        return $this->messageFactory;
-    }
-
-    /**
-     * Returns a stream factory instance.
-     *
-     * @return StreamFactory
-     */
-    private function getStreamFactory()
-    {
-        if ($this->streamFactory === null) {
-            $this->streamFactory = StreamFactoryDiscovery::find();
-        }
-
-        return $this->streamFactory;
     }
 }

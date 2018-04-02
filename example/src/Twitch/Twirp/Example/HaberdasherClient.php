@@ -12,7 +12,7 @@ use Twirp\Context;
 use Twirp\Error;
 
 /**
- * A Protobuf client that implements the Haberdasher interface.
+ * A Protobuf client that implements the {@see Haberdasher} interface.
  * It communicates using Protobuf and can be configured with a custom HTTP Client.
  *
  * Generated from protobuf service <code>twitch.twirp.example.Haberdasher</code>
@@ -43,8 +43,6 @@ final class HaberdasherClient extends TwirpClient implements Haberdasher
 
     /**
      * {@inheritdoc}
-     *
-     * @throws Error
      */
     public function MakeHat(array $ctx, \Twitch\Twirp\Example\Size $in)
     {
