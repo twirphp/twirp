@@ -4,8 +4,8 @@
 [[projects]]
   name = "github.com/Masterminds/semver"
   packages = ["."]
-  revision = "15d8430ab86497c5c0da827b748823945e1cf1e1"
-  version = "v1.4.0"
+  revision = "8d82589cda2d7b5b9167396841975c4535c9bec6"
+  version = "v1.4.1"
 
 [[projects]]
   name = "github.com/Masterminds/sprig"
@@ -18,12 +18,6 @@
   packages = ["."]
   revision = "3391d3790d23d03408670993e957e8f408993c34"
   version = "v1.0.1"
-
-[[projects]]
-  name = "github.com/davecgh/go-spew"
-  packages = ["spew"]
-  revision = "346938d642f2ec3594ed81d874461961cd0faa76"
-  version = "v1.1.0"
 
 [[projects]]
   name = "github.com/gobuffalo/packr"
@@ -50,8 +44,8 @@
 [[projects]]
   name = "github.com/imdario/mergo"
   packages = ["."]
-  revision = "163f41321a19dd09362d4c63cc2489db2015f1f4"
-  version = "0.3.2"
+  revision = "33882c6bfe701aca0ff1472aa8b4ebd6135a560d"
+  version = "v0.3.3"
 
 [[projects]]
   name = "github.com/pkg/errors"
@@ -60,22 +54,10 @@
   version = "v0.8.0"
 
 [[projects]]
-  name = "github.com/pmezard/go-difflib"
-  packages = ["difflib"]
-  revision = "792786c7400a136282c1664665ae0a8db921c6c2"
-  version = "v1.0.0"
-
-[[projects]]
   name = "github.com/satori/go.uuid"
   packages = ["."]
   revision = "f58768cc1a7a7e77a3bd49e98cdd21419399b6a3"
   version = "v1.2.0"
-
-[[projects]]
-  name = "github.com/stretchr/testify"
-  packages = ["assert"]
-  revision = "12b6f73e6084dad08a7c6e575284b177ecafbc71"
-  version = "v1.2.1"
 
 [[projects]]
   name = "github.com/twitchtv/protogen"
@@ -95,6 +77,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f28f1c2589829f54fb215f8ba9df1f4213e4347c5c09bf8f6eb5ed7e52913840"
+  inputs-digest = "d70431cd2a6a1cb5ef0a4092206fdc647d73645abff6efd678467acd8c2ccfac"
   solver-name = "gps-cdcl"
   solver-version = 1

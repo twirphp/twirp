@@ -4,10 +4,12 @@
 
 namespace {{ .File | phpNamespace }};
 
+use Twirp\Error;
+
 /**
  *{{ .Service | protoComment .File | splitList "\n" | join "\n *" }}
  *
- * Generated from protobuf service <code>{{ .File.Package }}.{{ .Service.Name }}</code>
+ * Generated from protobuf service <code>{{ .Service | protoFullName .File }}</code>
  */
 interface {{ .Service | phpServiceName .File }}
 {
@@ -16,12 +18,14 @@ interface {{ .Service | phpServiceName .File }}
     /**
      *{{ $method | protoComment $.File $.Service | splitList "\n" | join "\n     *" }}
      *
-     * Generated from protobuf method <code>{{ $.File.Package }}.{{ $.Service.Name }}/{{ $method.Name }}</code>
+     * Generated from protobuf method <code>{{ $method | protoFullName $.File $.Service }}</code>
      *
      * @param array $ctx
      * @param {{ $inputType }} $req
      *
      * @return {{ $method.OutputType | phpMessageName }}
+     *
+     * @throws Error
      */
     public function {{ $method.Name }}(array $ctx, {{ $inputType }} $req);
 {{ end -}}

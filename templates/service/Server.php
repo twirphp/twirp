@@ -5,8 +5,6 @@
 namespace {{ .File | phpNamespace }};
 
 use Google\Protobuf\Internal\GPBDecodeException;
-use Http\Discovery\MessageFactoryDiscovery;
-use Http\Discovery\StreamFactoryDiscovery;
 use Http\Message\MessageFactory;
 use Http\Message\StreamFactory;
 use Psr\Http\Message\ResponseInterface;
@@ -21,15 +19,11 @@ use Twirp\TwirpError;
 /**
  * @see {{ .Service | phpServiceName .File }}
  *
- * Generated from protobuf service <code>{{ .File.Package }}.{{ .Service.Name }}</code>
+ * Generated from protobuf service <code>{{ .Service | protoFullName .File }}</code>
  */
-final class {{ .Service | phpServiceName .File }}Server implements RequestHandler
+final class {{ .Service | phpServiceName .File }}Server extends TwirpServer implements RequestHandler
 {
-    use Protocol {
-        writeError as protocolWriteError;
-    }
-
-    const PATH_PREFIX = '/twirp/{{ .File.Package }}.{{ .Service.Name }}/';
+    const PATH_PREFIX = '/twirp/{{ .Service | protoFullName .File }}/';
 
     /**
      * @var {{ .Service | phpServiceName .File }}
@@ -63,22 +57,14 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
         MessageFactory $messageFactory = null,
         StreamFactory $streamFactory = null
     ) {
+        parent::__construct($messageFactory, $streamFactory);
+
         if ($hook === null) {
             $hook = new BaseServerHook();
         }
 
-        if ($messageFactory === null) {
-            $messageFactory = MessageFactoryDiscovery::find();
-        }
-
-        if ($streamFactory === null) {
-            $streamFactory = StreamFactoryDiscovery::find();
-        }
-
         $this->svc = $svc;
         $this->hook = $hook;
-        $this->messageFactory = $messageFactory;
-        $this->streamFactory = $streamFactory;
     }
 
     /**
@@ -103,21 +89,19 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
         }
 
         if ($req->getMethod() !== 'POST') {
-            $msg = sprintf('unsupported method %q (only POST is allowed)', $req->getMethod());
+            $msg = sprintf('unsupported method "%s" (only POST is allowed)', $req->getMethod());
 
-            return $this->writeError($ctx, Error::badRoute($msg, $req->getMethod(), $req->getUri()->getPath()));
+            return $this->writeError($ctx, $this->badRoute($msg, $req->getMethod(), $req->getUri()->getPath()));
         }
 
         switch ($req->getUri()->getPath()) {
             {{- range $method := .Service.Method }}
-            case '/twirp/{{ $.File.Package }}.{{ $.Service.Name }}/{{ $method.Name }}':
+            case '/twirp/{{ $method | protoFullName $.File $.Service }}':
                 return $this->handle{{ $method.Name }}($ctx, $req);
             {{- end }}
 
             default:
-                $msg = sprintf('no handler for path %q', $req->getUri()->getPath());
-
-                return $this->writeError($ctx, Error::badRoute($msg, $req->getMethod(), $req->getUri()->getPath()));
+                return $this->writeError($ctx, $this->noRouteError($req));
         }
     }
 {{ range $method := .Service.Method }}
@@ -139,9 +123,9 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
                 return $this->handle{{ $method.Name }}Protobuf($ctx, $req);
 
             default:
-                $msg = sprintf('unexpected Content-Type: %q', $req->getHeaderLine('Content-Type'));
+                $msg = sprintf('unexpected Content-Type: "%s"', $req->getHeaderLine('Content-Type'));
 
-                return $this->writeError($ctx, Error::badRoute($msg, $req->getMethod(), $req->getUri()->getPath()));
+                return $this->writeError($ctx, $this->badRoute($msg, $req->getMethod(), $req->getUri()->getPath()));
         }
     }
 
@@ -172,9 +156,9 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
 
         $data = $out->serializeToJsonString();
 
-        $body = $this->getStreamFactory()->createStream($data);
+        $body = $this->streamFactory->createStream($data);
 
-        $resp = $this->getMessageFactory()
+        $resp = $this->messageFactory
             ->createResponse(200)
             ->withHeader('Content-Type', 'application/json')
             ->withBody($body);
@@ -211,9 +195,9 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
 
         $data = $out->serializeToString();
 
-        $body = $this->getStreamFactory()->createStream($data);
+        $body = $this->streamFactory->createStream($data);
 
-        $resp = $this->getMessageFactory()
+        $resp = $this->messageFactory
             ->createResponse(200)
             ->withHeader('Content-Type', 'application/protobuf')
             ->withBody($body);
@@ -258,7 +242,7 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
 
         $this->callResponseSent($ctx);
 
-        return $this->protocolWriteError($ctx, $e);
+        return parent::writeError($ctx, $e);
     }
 
     /**

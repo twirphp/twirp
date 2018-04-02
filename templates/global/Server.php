@@ -3,56 +3,18 @@
 
 namespace {{ .Namespace }};
 
-use Http\Discovery\MessageFactoryDiscovery;
-use Http\Discovery\StreamFactoryDiscovery;
-use Http\Message\MessageFactory;
-use Http\Message\StreamFactory;
 use Psr\Http\Message\ServerRequestInterface;
-use Twirp\Context;
 use Twirp\RequestHandler;
 
 /**
- * Server can be used to collect service server implementations and serve them in one.
+ * Collects server implementations and routes requests based on their prefix.
  */
-final class Server implements RequestHandler
+final class Server extends TwirpServer implements RequestHandler
 {
-    use Protocol;
-
     /**
      * @var RequestHandler[]
      */
     private $handlers = [];
-
-    /**
-     * @var MessageFactory
-     */
-    private $messageFactory;
-
-    /**
-     * @var StreamFactory
-     */
-    private $streamFactory;
-
-    /**
-     * @param MessageFactory|null $messageFactory
-     * @param StreamFactory|null  $streamFactory
-     */
-    public function __construct(
-        MessageFactory $messageFactory = null,
-        StreamFactory $streamFactory = null
-    )
-    {
-        if ($messageFactory === null) {
-            $messageFactory = MessageFactoryDiscovery::find();
-        }
-
-        if ($streamFactory === null) {
-            $streamFactory = StreamFactoryDiscovery::find();
-        }
-
-        $this->messageFactory = $messageFactory;
-        $this->streamFactory = $streamFactory;
-    }
 
     /**
      * Registers a server instance for a prefix.
@@ -76,8 +38,6 @@ final class Server implements RequestHandler
             }
         }
 
-        $msg = sprintf('no handler for path %q', $req->getUri()->getPath());
-
-        return $this->writeError($ctx, Error::badRoute($msg, $req->getMethod(), $req->getUri()->getPath()));
+        return $this->writeError([], $this->noRouteError($req));
     }
 }

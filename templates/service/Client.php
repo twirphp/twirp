@@ -12,10 +12,10 @@ use Twirp\Context;
 use Twirp\Error;
 
 /**
- * A Protobuf client that implements the {{ .Service | phpServiceName .File }} interface.
+ * A Protobuf client that implements the {@see {{ .Service | phpServiceName .File }}} interface.
  * It communicates using Protobuf and can be configured with a custom HTTP Client.
  *
- * Generated from protobuf service <code>{{ .File.Package }}.{{ .Service.Name }}</code>
+ * Generated from protobuf service <code>{{ .Service | protoFullName .File }}</code>
  */
 final class {{ .Service | phpServiceName .File }}Client extends TwirpClient implements {{ .Service | phpServiceName .File }}
 {
@@ -44,8 +44,6 @@ final class {{ .Service | phpServiceName .File }}Client extends TwirpClient impl
 {{- $inputType := $method.InputType | phpMessageName }}
     /**
      * {@inheritdoc}
-     *
-     * @throws Error
      */
     public function {{ $method.Name }}(array $ctx, {{ $inputType }} $in)
     {
@@ -55,7 +53,7 @@ final class {{ .Service | phpServiceName .File }}Client extends TwirpClient impl
 
         $out = new {{ $method.OutputType | phpMessageName }}();
 
-        $url = (string)$this->addr->withPath('/twirp/{{ $.File.Package }}.{{ $.Service.Name }}/{{ $method.Name }}');
+        $url = (string)$this->addr->withPath('/twirp/{{ $method | protoFullName $.File $.Service }}');
 
         $this->doProtobufRequest($ctx, $url, $in, $out);
 

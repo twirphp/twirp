@@ -6,14 +6,16 @@ import (
 	"text/template"
 
 	"github.com/Masterminds/sprig"
-	"github.com/twirphp/protoc-gen-twirp_php/php"
+	"github.com/twirphp/protoc-gen-twirp_php/internal/php"
+	"github.com/twirphp/protoc-gen-twirp_php/internal/proto"
 )
 
 // TxtFuncMap wraps sprig.TxtFuncMap and adds some proto generation specific ones.
 func TxtFuncMap(ctx *generatorContext) template.FuncMap {
 	funcMap := sprig.TxtFuncMap()
 
-	funcMap["protoComment"] = ProtoComment
+	funcMap["protoComment"] = proto.Comment
+	funcMap["protoFullName"] = proto.FullName
 
 	funcMap["phpNamespace"] = php.Namespace
 	funcMap["phpServiceName"] = php.ServiceName

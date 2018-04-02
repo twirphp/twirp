@@ -49,8 +49,8 @@ func Main(in io.Reader, out io.Writer, templates string) error {
 	greq := &gen.Request{
 		CodeGeneratorRequest: req,
 		GlobalFiles: []string{
-			"global/Protocol.php",
 			"global/Server.php",
+			"global/TwirpServer.php",
 			"global/TwirpClient.php",
 		},
 		ServiceFiles: []string{

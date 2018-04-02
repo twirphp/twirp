@@ -19,7 +19,7 @@ use Twirp\ErrorCode;
 use Twirp\TwirpError;
 
 /**
- * Common client implementation
+ * Common client implementation.
  */
 abstract class TwirpClient
 {
@@ -97,7 +97,7 @@ abstract class TwirpClient
     }
 
     /**
-     * Makes an HTTP request from adding common headers.
+     * Makes an HTTP request and adds common headers.
      *
      * @param array  $ctx
      * @param string $url
@@ -131,10 +131,10 @@ abstract class TwirpClient
     }
 
     /**
-     * Builds a twirp.Error from a non-200 HTTP response.
+     * Builds a twirp Error from a non-200 HTTP response.
      * If the response has a valid serialized Twirp error, then it's returned.
      * If not, the response status code is used to generate a similar twirp
-     * error. See twirpErrorFromIntermediary for more info on intermediary errors.
+     * error. {@see self::twirpErrorFromIntermediary} for more info on intermediary errors.
      *
      * @param ResponseInterface $resp
      *
@@ -164,7 +164,7 @@ abstract class TwirpClient
 
         $rawError = json_decode($body, true);
         if ($rawError === null) {
-            $msg = sprintf('Error from intermediary with HTTP status code %d "%s"', $statusCode, $statusText);
+            $msg = sprintf('error from intermediary with HTTP status code %d "%s"', $statusCode, $statusText);
 
             return $this->twirpErrorFromIntermediary($statusCode, $msg, $body);
         }
@@ -172,7 +172,7 @@ abstract class TwirpClient
         $rawError = $rawError + ['code' => '', 'msg' => '', 'meta' => []];
 
         if (ErrorCode::isValid($rawError['code']) === false) {
-            $msg = "invalid type returned from server error response: ".$rawError['code'];
+            $msg = 'invalid type returned from server error response: '.$rawError['code'];
 
             return TwirpError::internalError($msg);
         }

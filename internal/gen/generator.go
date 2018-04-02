@@ -9,7 +9,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/protoc-gen-go/descriptor"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
-	"github.com/twirphp/protoc-gen-twirp_php/php"
+	"github.com/twirphp/protoc-gen-twirp_php/internal/php"
 	"github.com/twitchtv/protogen/typemap"
 )
 
