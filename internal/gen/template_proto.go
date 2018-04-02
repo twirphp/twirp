@@ -1,4 +1,4 @@
-package main
+package gen
 
 import (
 	"fmt"
@@ -27,7 +27,7 @@ func ProtoComment(desc ...interface{}) (string, error) {
 		return ProtoMethodComment(file, svc, method), nil
 
 	default:
-		return "", errors.New("unexpected amount of arguments (expected 2 or 3, got "+strconv.Itoa(len(desc)))
+		return "", errors.New("unexpected amount of arguments (expected 2 or 3, got " + strconv.Itoa(len(desc)))
 	}
 }
 

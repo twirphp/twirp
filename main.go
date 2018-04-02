@@ -12,6 +12,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 	"github.com/pkg/errors"
+	"github.com/twirphp/protoc-gen-twirp_php/internal/gen"
 )
 
 // Provisioned by ldflags
@@ -43,9 +44,23 @@ func Main(in io.Reader, out io.Writer, templates string) error {
 	}
 
 	box := packr.NewBox(templates)
-	g := newGenerator(box)
+	g := gen.New(box)
 
-	resp, err := g.generate(req)
+	greq := &gen.Request{
+		CodeGeneratorRequest: req,
+		GlobalFiles: []string{
+			"global/Protocol.php",
+			"global/Server.php",
+			"global/TwirpClient.php",
+		},
+		ServiceFiles: []string{
+			"service/_Service_.php",
+			"service/Client.php",
+			"service/Server.php",
+		},
+	}
+
+	resp, err := g.Generate(greq)
 	if err != nil {
 		return err
 	}

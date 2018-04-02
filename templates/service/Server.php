@@ -19,11 +19,11 @@ use Twirp\ServerHook;
 use Twirp\TwirpError;
 
 /**
- * @see {{ .Service | phpServiceName }}
+ * @see {{ .Service | phpServiceName .File }}
  *
  * Generated from protobuf service <code>{{ .File.Package }}.{{ .Service.Name }}</code>
  */
-final class {{ .Service | phpServiceName }}Server implements RequestHandler
+final class {{ .Service | phpServiceName .File }}Server implements RequestHandler
 {
     use Protocol {
         writeError as protocolWriteError;
@@ -32,7 +32,7 @@ final class {{ .Service | phpServiceName }}Server implements RequestHandler
     const PATH_PREFIX = '/twirp/{{ .File.Package }}.{{ .Service.Name }}/';
 
     /**
-     * @var {{ .Service | phpServiceName }}
+     * @var {{ .Service | phpServiceName .File }}
      */
     private $svc;
 
@@ -52,13 +52,13 @@ final class {{ .Service | phpServiceName }}Server implements RequestHandler
     private $streamFactory;
 
     /**
-     * @param {{ .Service | phpServiceName }} $svc
+     * @param {{ .Service | phpServiceName .File }} $svc
      * @param ServerHook|null     $hook
      * @param MessageFactory|null $messageFactory
      * @param StreamFactory|null  $streamFactory
      */
     public function __construct(
-        {{ .Service | phpServiceName }} $svc,
+        {{ .Service | phpServiceName .File }} $svc,
         ServerHook $hook = null,
         MessageFactory $messageFactory = null,
         StreamFactory $streamFactory = null
@@ -121,7 +121,7 @@ final class {{ .Service | phpServiceName }}Server implements RequestHandler
         }
     }
 {{ range $method := .Service.Method }}
-    {{- $inputType := $method.InputType | trimPrefix (printf ".%s." ($.File.Package | trim)) | phpFqn }}
+    {{- $inputType := $method.InputType | phpMessageName }}
     private function handle{{ $method.Name }}(array $ctx, ServerRequestInterface $req)
     {
         $header = $req->getHeaderLine('Content-Type');

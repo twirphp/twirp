@@ -149,7 +149,7 @@ final class HaberdasherServer implements RequestHandler
         try {
             $ctx = $this->hook->requestRouted($ctx);
 
-            $in = new Size();
+            $in = new \Twitch\Twirp\Example\Size();
             $in->mergeFromJsonString((string)$req->getBody());
 
             $out = $this->svc->MakeHat($ctx, $in);
@@ -188,7 +188,7 @@ final class HaberdasherServer implements RequestHandler
         try {
             $ctx = $this->hook->requestRouted($ctx);
 
-            $in = new Size();
+            $in = new \Twitch\Twirp\Example\Size();
             $in->mergeFromString((string)$req->getBody());
 
             $out = $this->svc->MakeHat($ctx, $in);

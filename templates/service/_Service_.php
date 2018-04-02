@@ -9,10 +9,10 @@ namespace {{ .File | phpNamespace }};
  *
  * Generated from protobuf service <code>{{ .File.Package }}.{{ .Service.Name }}</code>
  */
-interface {{ .Service | phpServiceName }}
+interface {{ .Service | phpServiceName .File }}
 {
 {{- range $method := .Service.Method }}
-{{- $inputType := $method.InputType | protoRelativeToPackage $.File | phpFqn }}
+{{- $inputType := $method.InputType | phpMessageName }}
     /**
      *{{ $method | protoComment $.File $.Service | splitList "\n" | join "\n     *" }}
      *
@@ -21,7 +21,7 @@ interface {{ .Service | phpServiceName }}
      * @param array $ctx
      * @param {{ $inputType }} $req
      *
-     * @return {{ $method.OutputType | protoRelativeToPackage $.File | phpFqn }}
+     * @return {{ $method.OutputType | phpMessageName }}
      */
     public function {{ $method.Name }}(array $ctx, {{ $inputType }} $req);
 {{ end -}}

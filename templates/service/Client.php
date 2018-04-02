@@ -12,12 +12,12 @@ use Twirp\Context;
 use Twirp\Error;
 
 /**
- * A Protobuf client that implements the {{ .Service | phpServiceName }} interface.
+ * A Protobuf client that implements the {{ .Service | phpServiceName .File }} interface.
  * It communicates using Protobuf and can be configured with a custom HTTP Client.
  *
  * Generated from protobuf service <code>{{ .File.Package }}.{{ .Service.Name }}</code>
  */
-final class {{ .Service | phpServiceName }}Client extends TwirpClient implements {{ .Service | phpServiceName }}
+final class {{ .Service | phpServiceName .File }}Client extends TwirpClient implements {{ .Service | phpServiceName .File }}
 {
     /**
      * @var UriInterface
@@ -41,7 +41,7 @@ final class {{ .Service | phpServiceName }}Client extends TwirpClient implements
         $this->addr = $this->urlBase($addr);
     }
 {{ range $method := .Service.Method }}
-{{- $inputType := $method.InputType | trimPrefix (printf ".%s." ($.File.Package | trim)) | phpFqn }}
+{{- $inputType := $method.InputType | phpMessageName }}
     /**
      * {@inheritdoc}
      *
@@ -53,7 +53,7 @@ final class {{ .Service | phpServiceName }}Client extends TwirpClient implements
         $ctx = Context::withServiceName($ctx, '{{ $.Service.Name }}');
         $ctx = Context::withMethodName($ctx, '{{ $method.Name }}');
 
-        $out = new {{ $method.OutputType | protoRelativeToPackage $.File | phpFqn }}();
+        $out = new {{ $method.OutputType | phpMessageName }}();
 
         $url = (string)$this->addr->withPath('/twirp/{{ $.File.Package }}.{{ $.Service.Name }}/{{ $method.Name }}');
 

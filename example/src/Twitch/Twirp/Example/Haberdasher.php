@@ -17,9 +17,9 @@ interface Haberdasher
      * Generated from protobuf method <code>twitch.twirp.example.Haberdasher/MakeHat</code>
      *
      * @param array $ctx
-     * @param Size $req
+     * @param \Twitch\Twirp\Example\Size $req
      *
-     * @return Hat
+     * @return \Twitch\Twirp\Example\Hat
      */
-    public function MakeHat(array $ctx, Size $req);
+    public function MakeHat(array $ctx, \Twitch\Twirp\Example\Size $req);
 }

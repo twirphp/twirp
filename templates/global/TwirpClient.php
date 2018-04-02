@@ -162,8 +162,14 @@ abstract class TwirpClient
 
         $body = (string)$resp->getBody();
 
-        // TODO: handle JSON error
-        $rawError = ['code' => '', 'msg' => '', 'meta' => []] + json_decode($body, true);
+        $rawError = json_decode($body, true);
+        if ($rawError === null) {
+            $msg = sprintf('Error from intermediary with HTTP status code %d "%s"', $statusCode, $statusText);
+
+            return $this->twirpErrorFromIntermediary($statusCode, $msg, $body);
+        }
+
+        $rawError = $rawError + ['code' => '', 'msg' => '', 'meta' => []];
 
         if (ErrorCode::isValid($rawError['code']) === false) {
             $msg = "invalid type returned from server error response: ".$rawError['code'];

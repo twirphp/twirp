@@ -46,13 +46,13 @@ final class HaberdasherClient extends TwirpClient implements Haberdasher
      *
      * @throws Error
      */
-    public function MakeHat(array $ctx, Size $in)
+    public function MakeHat(array $ctx, \Twitch\Twirp\Example\Size $in)
     {
         $ctx = Context::withPackageName($ctx, 'twitch.twirp.example');
         $ctx = Context::withServiceName($ctx, 'Haberdasher');
         $ctx = Context::withMethodName($ctx, 'MakeHat');
 
-        $out = new Hat();
+        $out = new \Twitch\Twirp\Example\Hat();
 
         $url = (string)$this->addr->withPath('/twirp/twitch.twirp.example.Haberdasher/MakeHat');
 
