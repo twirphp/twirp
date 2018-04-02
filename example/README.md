@@ -13,3 +13,6 @@ In case of using Docker on Mac the client command is:
 ```bash
 $ docker run --rm -it twirphpexample php client.php http://docker.for.mac.localhost:8080
 ```
+
+
+For reference implementations in go check [go/server](go/server) and [go/client](go/client) directories.
