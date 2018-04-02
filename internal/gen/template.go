@@ -3,7 +3,6 @@ package gen
 import (
 	"bytes"
 	"errors"
-	"strings"
 	"text/template"
 
 	"github.com/Masterminds/sprig"
@@ -13,8 +12,6 @@ import (
 // TxtFuncMap wraps sprig.TxtFuncMap and adds some proto generation specific ones.
 func TxtFuncMap(ctx *generatorContext) template.FuncMap {
 	funcMap := sprig.TxtFuncMap()
-
-	funcMap["eachTitle"] = eachFunc(strings.Title)
 
 	funcMap["protoComment"] = ProtoComment
 
@@ -30,22 +27,6 @@ func TxtFuncMap(ctx *generatorContext) template.FuncMap {
 	}
 
 	return funcMap
-}
-
-// each applies a function to each string in a slice.
-func each(s []string, fn func(string) string) []string {
-	for key, value := range s {
-		s[key] = fn(value)
-	}
-
-	return s
-}
-
-// eachFunc makes a simple string transformation function to an each function.
-func eachFunc(fn func(string) string) func([]string) []string {
-	return func(s []string) []string {
-		return each(s, fn)
-	}
 }
 
 // executeTemplate executes a template and returns the result.
