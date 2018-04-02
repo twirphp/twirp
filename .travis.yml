@@ -1,10 +1,11 @@
 language: go
 
-sudo: false
-
 os:
     - linux
     - osx
+
+services:
+    - docker
 
 go:
     - 1.9.x
@@ -25,12 +26,14 @@ before_install:
     - curl -sL https://get.binhq.io/binbrew | DEST=$HOME/bin NAME=bin bash
     - bin get golang/dep@0.4.1 $HOME/bin
     - bin get gobuffalo/packr@1.10.7 $HOME/bin
+    - bin get google/protobuf@3.5.1 $HOME/bin
 
 install: dep ensure -vendor-only
 
 script:
     - packr
     - go test -v ./...
+    - if [[ $TRAVIS_OS_NAME == "linux" ]]; then cd clientcompat && ./travis.sh; fi
 
 deploy:
     provider: script
