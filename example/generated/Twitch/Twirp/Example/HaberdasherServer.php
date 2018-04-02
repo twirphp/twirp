@@ -36,16 +36,6 @@ final class HaberdasherServer extends TwirpServer implements RequestHandler
     private $hook;
 
     /**
-     * @var MessageFactory
-     */
-    private $messageFactory;
-
-    /**
-     * @var StreamFactory
-     */
-    private $streamFactory;
-
-    /**
      * @param Haberdasher $svc
      * @param ServerHook|null     $hook
      * @param MessageFactory|null $messageFactory
@@ -212,7 +202,7 @@ final class HaberdasherServer extends TwirpServer implements RequestHandler
      *
      * @return ResponseInterface
      */
-    private function writeError(array $ctx, \Twirp\Error $e)
+    protected function writeError(array $ctx, \Twirp\Error $e)
     {
         $statusCode = ErrorCode::serverHTTPStatusFromErrorCode($e->code());
         $ctx = Context::withStatusCode($ctx, $statusCode);

@@ -40,7 +40,7 @@ $ protoc -I example/ --plugin=protoc-gen-twirp_php=path/to/protoc-gen-twirp_php 
 
 ### Server
 
-In order to use the server you have to install some dependencies to your PHP project via [Composer](https://getcomposer.org/):
+In order to use the server you have to install some dependencies in your PHP project via [Composer](https://getcomposer.org/):
 
 ```bash
 $ composer require twirp/twirp

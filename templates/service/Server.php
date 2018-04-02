@@ -36,16 +36,6 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
     private $hook;
 
     /**
-     * @var MessageFactory
-     */
-    private $messageFactory;
-
-    /**
-     * @var StreamFactory
-     */
-    private $streamFactory;
-
-    /**
      * @param {{ .Service | phpServiceName .File }} $svc
      * @param ServerHook|null     $hook
      * @param MessageFactory|null $messageFactory
@@ -216,7 +206,7 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
      *
      * @return ResponseInterface
      */
-    private function writeError(array $ctx, \Twirp\Error $e)
+    protected function writeError(array $ctx, \Twirp\Error $e)
     {
         $statusCode = ErrorCode::serverHTTPStatusFromErrorCode($e->code());
         $ctx = Context::withStatusCode($ctx, $statusCode);

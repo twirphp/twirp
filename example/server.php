@@ -5,7 +5,7 @@ require __DIR__.'/vendor/autoload.php';
 $request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
 
 $server = new \Twitch\Twirp\Example\Server();
-$handler = new \Twitch\Twirp\Example\HaberdasherServer(new \Twirp\ServerExperiment\HaberdasherHandler());
+$handler = new \Twitch\Twirp\Example\HaberdasherServer(new \Twirphp\Example\Haberdasher());
 $server->registerServer(\Twitch\Twirp\Example\HaberdasherServer::PATH_PREFIX, $handler);
 
 $response = $server->handle($request);

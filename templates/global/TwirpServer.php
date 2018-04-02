@@ -20,12 +20,12 @@ abstract class TwirpServer
     /**
      * @var MessageFactory
      */
-    private $messageFactory;
+    protected $messageFactory;
 
     /**
      * @var StreamFactory
      */
-    private $streamFactory;
+    protected $streamFactory;
 
     /**
      * @param MessageFactory|null $messageFactory
