@@ -54,7 +54,24 @@ $ composer require guzzlehttp/psr7 php-http/message
 
 The code generator creates a service interface which you need to implement.
 
-TODO: create and example an link it here
+See the [example](example) directory for the implementation details.
+
+
+### Client
+
+In order to use the client you have to install some dependencies in your PHP project via [Composer](https://getcomposer.org/):
+
+```bash
+$ composer require twirp/twirp
+```
+
+You need to choose a [PSR-7](http://www.php-fig.org/psr/psr-7/) implementation along with it's [factory](https://github.com/php-http/message-factory) and an [HTTPlug](https://packagist.org/providers/php-http/client-implementation) compatible client:
+
+```bash
+$ composer require guzzlehttp/psr7 php-http/message php-http/guzzle6-adapter
+```
+
+See the [example](example) directory for the implementation details.
 
 
 ## License
