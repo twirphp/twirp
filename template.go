@@ -14,12 +14,12 @@ func TxtFuncMap() template.FuncMap {
 
 	funcMap["eachTitle"] = eachFunc(strings.Title)
 
-	funcMap["service_comment"] = ServiceComment
-	funcMap["method_comment"] = MethodComment
+	funcMap["protoComment"] = ProtoComment
+	funcMap["protoRelativeToPackage"] = ProtoRelativeToPackage
 
-	funcMap["php_namespace"] = PhpNamespace
-	funcMap["php_fqn"] = PhpFQN
-	funcMap["php_service_name"] = PhpServiceName
+	funcMap["phpNamespace"] = PhpNamespace
+	funcMap["phpFqn"] = PhpFQN
+	funcMap["phpServiceName"] = PhpServiceName
 
 	return funcMap
 }
