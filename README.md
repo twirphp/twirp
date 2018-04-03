@@ -1,7 +1,7 @@
 # PHP code generator for [Twirp](https://twitchtv.github.io/twirp/)
 
 [![Build Status](https://img.shields.io/travis/twirphp/protoc-gen-twirp_php.svg?style=flat-square)](https://travis-ci.org/twirphp/protoc-gen-twirp_php)
-[![Twirp Version](http://img.shields.io/badge/twirp--version-v5.3.0-orange.svg?style=flat-square)](https://godoc.org/github.com/twirphp/protoc-gen-twirp_php)
+[![Twirp Version](http://img.shields.io/badge/twirp--version-v5.3.0-orange.svg?style=flat-square)](https://github.com/twitchtv/twirp/releases/tag/v5.3.0)
 [![Go Report Card](https://goreportcard.com/badge/github.com/twirphp/protoc-gen-twirp_php?style=flat-square)](https://goreportcard.com/report/github.com/twirphp/protoc-gen-twirp_php)
 [![GoDoc](http://img.shields.io/badge/godoc-reference-5272B4.svg?style=flat-square)](https://godoc.org/github.com/twirphp/protoc-gen-twirp_php)
 
