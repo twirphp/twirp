@@ -9,7 +9,7 @@ use Http\Message\MessageFactory;
 use Http\Message\StreamFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Twirp\BaseServerHook;
+use Twirp\BaseServerHooks;
 use Twirp\Context;
 use Twirp\ErrorCode;
 use Twirp\RequestHandler;
@@ -37,7 +37,7 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
 
     /**
      * @param {{ .Service | phpServiceName .File }} $svc
-     * @param ServerHook|null     $hook
+     * @param ServerHooks|null    $hook
      * @param MessageFactory|null $messageFactory
      * @param StreamFactory|null  $streamFactory
      */
@@ -50,7 +50,7 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
         parent::__construct($messageFactory, $streamFactory);
 
         if ($hook === null) {
-            $hook = new BaseServerHook();
+            $hook = new BaseServerHooks();
         }
 
         $this->svc = $svc;
@@ -74,6 +74,8 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
             $ctx = $this->hook->requestReceived($ctx);
         } catch (\Twirp\Error $e) {
             return $this->writeError($ctx, $e);
+        } catch (\Twirp\Exception $e) {
+            return $this->writeError($ctx, $e->getError());
         } catch (\Exception $e) {
             return $this->writeError($ctx, TwirpError::internalErrorWith($e));
         }
@@ -140,6 +142,8 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
             return $this->writeError($ctx, TwirpError::internalError('failed to parse request json'));
         } catch (\Twirp\Error $e) {
             return $this->writeError($ctx, $e);
+        } catch (\Twirp\Exception $e) {
+            return $this->writeError($ctx, $e->getError());
         } catch (\Exception $e) {
             return $this->writeError($ctx, TwirpError::internalErrorWith($e));
         }
@@ -179,6 +183,8 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
             return $this->writeError($ctx, TwirpError::internalError('failed to parse request proto'));
         } catch (\Twirp\Error $e) {
             return $this->writeError($ctx, $e);
+        } catch (\Twirp\Exception $e) {
+            return $this->writeError($ctx, $e->getError());
         } catch (\Exception $e) {
             return $this->writeError($ctx, TwirpError::internalErrorWith($e));
         }
