@@ -127,7 +127,7 @@ abstract class TwirpClient
      */
     final protected function clientError($desc, \Exception $e)
     {
-        return TwirpError::internalError(sprintf('%s: %s', $desc, $e->getMessage()));
+        return TwirpError::newError(ErrorCode::Internal, sprintf('%s: %s', $desc, $e->getMessage()));
     }
 
     /**
@@ -174,7 +174,7 @@ abstract class TwirpClient
         if (ErrorCode::isValid($rawError['code']) === false) {
             $msg = 'invalid type returned from server error response: '.$rawError['code'];
 
-            return TwirpError::internalError($msg);
+            return TwirpError::newError(ErrorCode::Internal, $msg);
         }
 
         $error = TwirpError::newError($rawError['code'], $rawError['msg']);

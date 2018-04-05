@@ -50,8 +50,9 @@ func Main(in io.Reader, out io.Writer, templates string) error {
 		CodeGeneratorRequest: req,
 		GlobalFiles: []string{
 			"global/Server.php",
-			"global/TwirpServer.php",
 			"global/TwirpClient.php",
+			"global/TwirpError.php",
+			"global/TwirpServer.php",
 		},
 		ServiceFiles: []string{
 			"service/_Service_.php",

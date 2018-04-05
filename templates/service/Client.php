@@ -9,7 +9,6 @@ use Http\Message\MessageFactory;
 use Http\Message\StreamFactory;
 use Psr\Http\Message\UriInterface;
 use Twirp\Context;
-use Twirp\Error;
 
 /**
  * A Protobuf client that implements the {@see {{ .Service | phpServiceName .File }}} interface.

@@ -14,7 +14,6 @@ use Twirp\Context;
 use Twirp\ErrorCode;
 use Twirp\RequestHandler;
 use Twirp\ServerHook;
-use Twirp\TwirpError;
 
 /**
  * @see Haberdasher
@@ -77,7 +76,7 @@ final class HaberdasherServer extends TwirpServer implements RequestHandler
         } catch (\Twirp\Exception $e) {
             return $this->writeError($ctx, $e->getError());
         } catch (\Exception $e) {
-            return $this->writeError($ctx, TwirpError::internalErrorWith($e));
+            return $this->writeError($ctx, TwirpError::errorFromException($e));
         }
 
         if ($req->getMethod() !== 'POST') {
@@ -131,18 +130,18 @@ final class HaberdasherServer extends TwirpServer implements RequestHandler
             $out = $this->svc->MakeHat($ctx, $in);
 
             if ($out === null) {
-                return $this->writeError($ctx, TwirpError::internalError('received a null response while calling MakeHat. null responses are not supported'));
+                return $this->writeError($ctx, TwirpError::newError(ErrorCode::Internal, 'received a null response while calling MakeHat. null responses are not supported'));
             }
 
             $ctx = $this->hook->responsePrepared($ctx);
         } catch (GPBDecodeException $e) {
-            return $this->writeError($ctx, TwirpError::internalError('failed to parse request json'));
+            return $this->writeError($ctx, TwirpError::newError(ErrorCode::Internal, 'failed to parse request json'));
         } catch (\Twirp\Error $e) {
             return $this->writeError($ctx, $e);
         } catch (\Twirp\Exception $e) {
             return $this->writeError($ctx, $e->getError());
         } catch (\Exception $e) {
-            return $this->writeError($ctx, TwirpError::internalErrorWith($e));
+            return $this->writeError($ctx, TwirpError::errorFromException($e));
         }
 
         $data = $out->serializeToJsonString();
@@ -172,18 +171,18 @@ final class HaberdasherServer extends TwirpServer implements RequestHandler
             $out = $this->svc->MakeHat($ctx, $in);
 
             if ($out === null) {
-                return $this->writeError($ctx, TwirpError::internalError('received a null response while calling MakeHat. null responses are not supported'));
+                return $this->writeError($ctx, TwirpError::newError(ErrorCode::Internal, 'received a null response while calling MakeHat. null responses are not supported'));
             }
 
             $ctx = $this->hook->responsePrepared($ctx);
         } catch (GPBDecodeException $e) {
-            return $this->writeError($ctx, TwirpError::internalError('failed to parse request proto'));
+            return $this->writeError($ctx, TwirpError::newError(ErrorCode::Internal, 'failed to parse request proto'));
         } catch (\Twirp\Error $e) {
             return $this->writeError($ctx, $e);
         } catch (\Twirp\Exception $e) {
             return $this->writeError($ctx, $e->getError());
         } catch (\Exception $e) {
-            return $this->writeError($ctx, TwirpError::internalErrorWith($e));
+            return $this->writeError($ctx, TwirpError::errorFromException($e));
         }
 
         $data = $out->serializeToString();
