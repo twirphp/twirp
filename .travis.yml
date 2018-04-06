@@ -36,7 +36,7 @@ script:
     - go test -v ./...
     - ./gen.sh
     - docker build -t twirphp .
-    - if [[ $TRAVIS_OS_NAME == "linux" ]]; then cd docker run --rm -it twirphp clientcompat -client clientcompat/compat.sh; fi
+    - if [[ $TRAVIS_OS_NAME == "linux" ]]; then docker run --rm -it twirphp clientcompat -client clientcompat/compat.sh; fi
 
 deploy:
     provider: script

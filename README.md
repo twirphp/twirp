@@ -1,15 +1,15 @@
-# PHP code generator for [Twirp](https://twitchtv.github.io/twirp/)
+# PHP port of [Twirp](https://twitchtv.github.io/twirp/)
 
-[![Build Status](https://img.shields.io/travis/twirphp/protoc-gen-twirp_php.svg?style=flat-square)](https://travis-ci.org/twirphp/protoc-gen-twirp_php)
+[![Build Status](https://img.shields.io/travis/twirphp/twirp.svg?style=flat-square)](https://travis-ci.org/twirphp/twirp)
 [![Twirp Version](http://img.shields.io/badge/twirp%20version-v5.3.0-orange.svg?style=flat-square)](https://github.com/twitchtv/twirp/releases/tag/v5.3.0)
-[![Go Report Card](https://goreportcard.com/badge/github.com/twirphp/protoc-gen-twirp_php?style=flat-square)](https://goreportcard.com/report/github.com/twirphp/protoc-gen-twirp_php)
-[![GoDoc](http://img.shields.io/badge/godoc-reference-5272B4.svg?style=flat-square)](https://godoc.org/github.com/twirphp/protoc-gen-twirp_php)
+[![Go Report Card](https://goreportcard.com/badge/github.com/twirphp/twirp?style=flat-square)](https://goreportcard.com/report/github.com/twirphp/twirp)
+[![GoDoc](http://img.shields.io/badge/godoc-reference-5272B4.svg?style=flat-square)](https://godoc.org/github.com/twirphp/twirp)
 
 **Work in progress! First estimated preview: end of April**
 
 ## Installation
 
-Download the [latest](https://github.com/twirphp/protoc-gen-twirp_php/releases/latest) release from the Releases page
+Download the [latest](https://github.com/twirphp/twirp/releases/latest) release from the Releases page
 and put it into your `$PATH` prefix (or any location, but that requires some configuration, see later).
 
 This is a [protoc](https://github.com/golang/protobuf), so you will have to install that as well.
@@ -17,8 +17,8 @@ This is a [protoc](https://github.com/golang/protobuf), so you will have to inst
 Alternatively you can manually download and build the project. For that, you are going to need [dep](https://golang.github.io/dep/).
 
 ```bash
-$ go get github.com/twirphp/protoc-gen-twirp_php
-$ cd $GOROOT/src/github.com/twirphp/protoc-gen-twirp_php
+$ go get github.com/twirphp/twirp/protoc-gen-twirp_php
+$ cd $GOROOT/src/github.com/twirphp/twirp/protoc-gen-twirp_php
 $ dep ensure
 $ go install
 ```
