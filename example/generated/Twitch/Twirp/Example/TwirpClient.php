@@ -16,7 +16,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use Twirp\Error;
 use Twirp\ErrorCode;
-use Twirp\TwirpError;
 
 /**
  * Common client implementation.

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/protoc-gen-twirp_php.iml" filepath="$PROJECT_DIR$/.idea/protoc-gen-twirp_php.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/twirp.iml" filepath="$PROJECT_DIR$/.idea/twirp.iml" />
     </modules>
   </component>
 </project>

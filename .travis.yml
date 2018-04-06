@@ -34,7 +34,9 @@ install: dep ensure -vendor-only
 script:
     - packr
     - go test -v ./...
-    - if [[ $TRAVIS_OS_NAME == "linux" ]]; then cd clientcompat && ./travis.sh; fi
+    - ./gen.sh
+    - docker build -t twirphp .
+    - if [[ $TRAVIS_OS_NAME == "linux" ]]; then cd docker run --rm -it twirphp clientcompat -client clientcompat/compat.sh; fi
 
 deploy:
     provider: script

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__.'/../vendorphp/autoload.php';
 
 use Google\Protobuf\Internal\GPBDecodeException;
 use Twirp\Clientcompat\ClientCompatMessage;

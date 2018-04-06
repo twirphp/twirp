@@ -10,7 +10,6 @@ use Http\Message\StreamFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twirp\ErrorCode;
-use Twirp\TwirpError;
 
 /**
  * Common server implementation.

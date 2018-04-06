@@ -1,0 +1,22 @@
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/5.7/phpunit.xsd"
+         backupGlobals="false"
+         colors="true"
+         bootstrap="vendorphp/autoload.php"
+>
+
+    <testsuites>
+        <testsuite name="Twirp Test Suite">
+            <directory>./php/tests/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./php/src/</directory>
+            <exclude>
+                <directory>./vendor/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>

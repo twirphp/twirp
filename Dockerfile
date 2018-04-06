@@ -1,8 +1,15 @@
+FROM golang:1.10 as builder
+
+RUN go get github.com/twitchtv/twirp/clientcompat
+
+
 FROM php:7.2-cli
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends git zip unzip zlib1g-dev \
     && docker-php-ext-install -j$(nproc) bcmath zip
+
+COPY --from=builder /go/bin/clientcompat /usr/bin
 
 WORKDIR /app
 
@@ -12,6 +19,4 @@ COPY . /app
 
 RUN php composer.phar install
 
-CMD echo "Usage for server: docker run --rm -it twirphpexample php -S 0.0.0.0:8080 server.php\nUsage for client: docker run --rm -it twirphpexample php client.php http://localhost:8080]"
-
-EXPOSE 8080
+CMD ["echo", "Please see the readme for help"]

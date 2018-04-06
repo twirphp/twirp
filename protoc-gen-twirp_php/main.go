@@ -12,7 +12,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 	"github.com/pkg/errors"
-	"github.com/twirphp/protoc-gen-twirp_php/internal/gen"
+	"github.com/twirphp/twirp/protoc-gen-twirp_php/internal/gen"
 )
 
 // Provisioned by ldflags

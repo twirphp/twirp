@@ -1,5 +1,7 @@
 builds:
   -
+    main: ./protoc-gen-twirp_php/main.go
+    binary: protoc-gen-twirp_php
     env:
       - CGO_ENABLED=0
     goos:

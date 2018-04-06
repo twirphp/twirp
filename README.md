@@ -75,6 +75,11 @@ $ composer require guzzlehttp/psr7 php-http/message php-http/guzzle6-adapter
 See the [example](example) directory for the implementation details.
 
 
+## Security
+
+If you discover any security related issues, please contact us at [mark.sagikazar@gmail.com](mailto:mark.sagikazar@gmail.com).
+
+
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.

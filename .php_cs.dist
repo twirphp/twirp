@@ -1,0 +1,14 @@
+<?php
+
+$finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__.'/php')
+;
+
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony' => true,
+        'array_syntax' => ['syntax' => 'short'],
+        'yoda_style' => false,
+    ])
+    ->setFinder($finder)
+;

@@ -9,3 +9,10 @@
 !/.idea/go.imports.xml
 !/.idea/modules.xml
 !/.idea/*.iml
+
+# PHP
+.php_cs
+.php_cs.cache
+/composer.lock
+/phpunit.xml
+/vendorphp/
