@@ -3,10 +3,13 @@
 .gitignore        export-ignore
 /.flintci.yml     export-ignore
 /.github/         export-ignore
+/.idea/           export-ignore
 /.php_cs.dist     export-ignore
 /.scrutinizer.yml export-ignore
 /.travis.yml      export-ignore
 /clientcompat/    export-ignore
 /example/         export-ignore
+/goreleaser.yml   export-ignore
+/gen.sh           export-ignore
 /phpunit.xml.dist export-ignore
 /php/tests/       export-ignore
