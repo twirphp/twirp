@@ -1,19 +1,10 @@
-FROM golang:1.10 as builder
+FROM quay.io/twirphp/go-dependencies as godeps
 
-RUN go get github.com/twitchtv/twirp/clientcompat
+FROM quay.io/twirphp/php-base
 
-
-FROM php:7.2-cli
-
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends git zip unzip zlib1g-dev \
-    && docker-php-ext-install -j$(nproc) bcmath zip
-
-COPY --from=builder /go/bin/clientcompat /usr/bin
-
-WORKDIR /app
-
-RUN curl --silent --show-error https://getcomposer.org/installer | php
+COPY --from=godeps /go/bin/clientcompat /usr/bin
+COPY --from=godeps /go/bin/client /usr/bin
+COPY --from=godeps /go/bin/server /usr/bin
 
 COPY . /app
 

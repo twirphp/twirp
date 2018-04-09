@@ -75,6 +75,15 @@ $ composer require guzzlehttp/psr7 php-http/message php-http/guzzle6-adapter
 See the [example](example) directory for the implementation details.
 
 
+## Example
+
+To use the example and run certain test suites you need to build a Docker image from this directory:
+
+```bash
+$ docker build -t twirphp .
+```
+
+
 ## Security
 
 If you discover any security related issues, please contact us at [mark.sagikazar@gmail.com](mailto:mark.sagikazar@gmail.com).
