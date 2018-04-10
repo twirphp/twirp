@@ -32,7 +32,8 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\Twirp\\": "php/tests/",
-            "": ["clientcompat/generated/", "example/generated/", "example/src/"]
+            "": ["clientcompat/generated/", "example/generated/", "example/src/"],
+            "Tests\\Twitch\\Twirp\\Example\\": "example/tests/"
         }
     },
     "config": {

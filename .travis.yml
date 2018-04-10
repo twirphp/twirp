@@ -35,7 +35,7 @@ script:
     - packr
     - go test -v ./...
     - ./gen.sh
-    - if [[ $TRAVIS_OS_NAME == "linux" ]]; then docker build -t twirphp . && docker run --rm -it twirphp clientcompat -client clientcompat/compat.sh; fi
+    - if [[ $TRAVIS_OS_NAME == "linux" ]]; then docker build -t twirphp . && docker run --rm -it twirphp clientcompat -client clientcompat/compat.sh && docker run --rm -it twirphp vendorphp/bin/phpunit -v && docker run --rm -it twirphp vendorphp/bin/phpunit -v --group example; fi
 
 deploy:
     provider: script
