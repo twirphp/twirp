@@ -28,7 +28,7 @@ build:
                         use_website_config: true
 
 filter:
-    paths: [php/src/*]
+    paths: [php/src/*, protoc-gen-twirp_php/*]
 
 #tools:
 #    external_code_coverage: true
