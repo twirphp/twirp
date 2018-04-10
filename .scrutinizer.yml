@@ -1,9 +1,31 @@
+checks:
+    go: true
+    php: true
+
+coding_style:
+    php:
+        spaces:
+            other:
+                after_type_cast: false
+
 build:
     nodes:
         analysis:
+            project_setup:
+                override:
+                    - 'true'
+            environment:
+                go:
+                    version: go1.9.2
             tests:
                 override:
+                    - go-scrutinizer-run
+                    - govet-run
+                    - golint-run
                     - php-scrutinizer-run
+                    -
+                        command: phpcs-run
+                        use_website_config: true
 
 filter:
     paths: [php/src/*]
