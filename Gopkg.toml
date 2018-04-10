@@ -1,3 +1,5 @@
+ignored = ["github.com/google/protobuf/examples/tutorial"]
+
 [[constraint]]
   name = "github.com/Masterminds/sprig"
   version = "2.14.1"
