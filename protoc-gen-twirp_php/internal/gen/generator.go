@@ -32,6 +32,7 @@ type Request struct {
 	ServiceFiles []string
 }
 
+// New creates a new generator instance.
 func New(box packr.Box) Generator {
 	return &generator{box}
 }

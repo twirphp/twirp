@@ -29,6 +29,8 @@ build:
 
 filter:
     paths: [php/src/*, protoc-gen-twirp_php/*]
+    excluded_paths:
+        - protoc-gen-twirp_php/templates/*
 
 #tools:
 #    external_code_coverage: true
