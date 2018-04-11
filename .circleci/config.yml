@@ -28,6 +28,6 @@ jobs:
             - run:
                 name: Test generated code
                 command: vendorphp/bin/phpunit -v --group example
-#            - run:
-#                name: Test client compatibility
-#                command: clientcompat -client clientcompat/client.sh
+            - run:
+                name: Test client compatibility
+                command: clientcompat -client clientcompat/compat.sh
