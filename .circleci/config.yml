@@ -31,3 +31,10 @@ jobs:
             - run:
                 name: Test client compatibility
                 command: clientcompat -client clientcompat/compat.sh
+            - deploy:
+                name: Release to Github
+                command: |
+                  if [[ "${CIRCLE_TAG}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+                    goreleaser
+                  fi
+                when: on_success
