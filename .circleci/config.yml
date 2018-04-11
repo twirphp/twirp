@@ -1,0 +1,33 @@
+version: 2
+
+jobs:
+    build:
+        docker:
+            - image: quay.io/twirphp/build
+        working_directory: /go/src/github.com/twirphp/twirp
+        steps:
+            - checkout
+            - run:
+                name: Install PHP dependencies
+                command: composer install
+            - run:
+                name: Install Go dependencies
+                command: dep ensure -v -vendor-only
+            - run:
+                name: Pack template files
+                command: packr
+            - run:
+                name: Test code generator
+                command: go test -v ./protoc-gen-twirp_php/...
+            - run:
+                name: Test shared library
+                command: vendorphp/bin/phpunit -v
+            - run:
+                name: Generate code
+                command: ./gen.sh
+            - run:
+                name: Test generated code
+                command: vendorphp/bin/phpunit -v --group example
+#            - run:
+#                name: Test client compatibility
+#                command: clientcompat -client clientcompat/client.sh
