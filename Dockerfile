@@ -1,13 +1,11 @@
-FROM quay.io/twirphp/go-dependencies as godeps
+FROM quay.io/twirphp/build
 
-FROM quay.io/twirphp/php-base
+WORKDIR /go/src/github.com/twirphp/twirp
 
-COPY --from=godeps /go/bin/clientcompat /usr/bin
-COPY --from=godeps /go/bin/client /usr/bin
-COPY --from=godeps /go/bin/server /usr/bin
+COPY . .
 
-COPY . /app
-
-RUN php composer.phar install
+RUN set -xe \
+    && composer install \
+    && dep ensure -vendor-only
 
 CMD ["echo", "Please see the readme for help"]

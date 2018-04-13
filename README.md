@@ -10,6 +10,7 @@
 
 **Work in progress! First estimated preview: end of April**
 
+
 ## Installation
 
 Download the [latest](https://github.com/twirphp/twirp/releases/latest) release from the Releases page
@@ -84,6 +85,19 @@ To use the example and run certain test suites you need to build a Docker image 
 
 ```bash
 $ docker build -t twirphp .
+```
+
+
+## Tests
+
+The following set of commands runs the complete test suite for the project:
+
+```bash
+$ docker run --rm -it twirphp go test -v ./protoc-gen-twirp_php/...
+$ docker run --rm -it twirphp vendorphp/bin/phpunit -v
+$ docker run --rm -it twirphp ./gen.sh
+$ docker run --rm -it twirphp vendorphp/bin/phpunit -v --group example
+$ docker run --rm -it twirphp clientcompat -client clientcompat/compat.sh
 ```
 
 
