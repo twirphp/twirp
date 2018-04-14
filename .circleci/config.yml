@@ -1,10 +1,13 @@
 version: 2
 
+defaults: &defaults
+    docker:
+        - image: quay.io/twirphp/build
+    working_directory: /go/src/github.com/twirphp/twirp
+
 jobs:
     build:
-        docker:
-            - image: quay.io/twirphp/build
-        working_directory: /go/src/github.com/twirphp/twirp
+        <<: *defaults
         steps:
             - checkout
             - run:
@@ -31,10 +34,35 @@ jobs:
             - run:
                 name: Test client compatibility
                 command: clientcompat -client clientcompat/compat.sh
+            - persist_to_workspace:
+                root: .
+                paths: .
+
+    release:
+        <<: *defaults
+        steps:
+            - attach_workspace:
+                at: /go/src/github.com/twirphp/twirp
             - deploy:
                 name: Release to Github
-                command: |
-                  if [[ "${CIRCLE_TAG}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-                    goreleaser
-                  fi
-                when: on_success
+                command: goreleaser
+
+workflows:
+    version: 2
+
+    build:
+        jobs:
+            - build:
+                filters:
+                    tags:
+                        only: /.*/
+
+            - release:
+                context: org-global
+                requires:
+                    - build
+                filters:
+                    branches:
+                        ignore: /.*/
+                    tags:
+                        only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
