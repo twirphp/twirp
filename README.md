@@ -1,6 +1,5 @@
 # PHP port of [Twirp](https://twitchtv.github.io/twirp/)
 
-[![Build Status](https://img.shields.io/travis/twirphp/twirp.svg?style=flat-square)](https://travis-ci.org/twirphp/twirp)
 [![CircleCI](https://circleci.com/gh/twirphp/twirp.svg?style=svg)](https://circleci.com/gh/twirphp/twirp)
 [![Twirp Version](http://img.shields.io/badge/twirp%20version-v5.3.0-orange.svg?style=flat-square)](https://github.com/twitchtv/twirp/releases/tag/v5.3.0)
 [![Go Report Card](https://goreportcard.com/badge/github.com/twirphp/twirp?style=flat-square)](https://goreportcard.com/report/github.com/twirphp/twirp)
