@@ -22,5 +22,13 @@ resources published by the Twirp developers themselves:
 
     TwirPHP <self>
 
-.. _`Twirp`: https://twitchtv.github.io/twirp/
-.. _`protobuf`: https://developers.google.com/protocol-buffers/
+.. toctree::
+    :hidden:
+    :caption: Getting started
+
+    getting-started/overview
+    getting-started/installation
+
+
+.. _Twirp: https://twitchtv.github.io/twirp/
+.. _protobuf: https://developers.google.com/protocol-buffers/
