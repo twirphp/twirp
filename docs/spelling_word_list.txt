@@ -11,3 +11,6 @@ versioned
 lifecycle
 Pecl
 Quickstart
+quickstart
+metapackage
+entrypoint
