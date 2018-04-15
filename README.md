@@ -108,3 +108,5 @@ If you discover any security related issues, please contact us at [mark.sagikaza
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
+
+The original Twirp library is licensed under the Apache 2.0 License.
