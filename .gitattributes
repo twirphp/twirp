@@ -8,6 +8,7 @@
 /.php_cs.dist     export-ignore
 /.scrutinizer.yml export-ignore
 /clientcompat/    export-ignore
+/docs/            export-ignore
 /example/         export-ignore
 /goreleaser.yml   export-ignore
 /gen.sh           export-ignore
