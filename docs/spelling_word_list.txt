@@ -9,3 +9,5 @@ protoc:
 Versioning
 versioned
 lifecycle
+Pecl
+Quickstart

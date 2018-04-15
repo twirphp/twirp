@@ -102,7 +102,7 @@ $ docker run --rm -it twirphp clientcompat -client clientcompat/compat.sh
 
 ## Security
 
-If you discover any security related issues, please contact us at [mark.sagikazar@gmail.com](mailto:mark.sagikazar@gmail.com).
+If you discover any security related issues, please contact us at [mark.sagikazar+twirphp@gmail.com](mailto:mark.sagikazar+twirphp@gmail.com).
 
 
 ## License

@@ -3,14 +3,12 @@ Installation
 
 You'll need a few things to install TwirPHP:
 
-* The protobuf compiler: ``protoc``
-* TwirPHP plugin for protobuf to generate code
-* TwirPHP shared PHP library
-* An HTTP client and PSR-7 implementation of your choice
+.. contents::
+    :local:
 
 
-Install protoc
---------------
+Protobuf compiler
+-----------------
 
 ``protoc`` is used to generate code from protobuf definitions.
 The easiest way to install it is downloading the precompiled binary from the
@@ -23,8 +21,8 @@ You can also install it via Homebrew on MacOS:
     $ brew install protobuf
 
 
-Install TwirPHP protoc plugin
------------------------------
+TwirPHP protoc plugin
+---------------------
 
 Just like in case of ``protoc``, the easiest way to install the plugin
 by downloading it from the `Github Releases <https://github.com/twirphp/twirp/releases>`_ page.
@@ -53,8 +51,33 @@ The commands above will put the binary in your ``$GOBIN`` path which is usually 
 in your ``$PATH`` prefix.
 
 
-Install the shared library
---------------------------
+Protobuf PHP library
+--------------------
+
+As described in the `protobuf PHP library README <https://github.com/google/protobuf/tree/master/php>`_
+there are two ways to install protobuf:
+
+* C extension
+* native PHP package
+
+The C extension provides better performance obviously, so it is recommended to be used,
+on the other hand the PHP package provides better portability.
+
+The extension can be installed from the linked repository above or via Pecl:
+
+.. code-block:: bash
+
+    $ sudo pecl install protobuf-{VERSION}
+
+The PHP package can be installed via `Composer`_:
+
+.. code-block:: bash
+
+    $ composer require google/protobuf
+
+
+Shared PHP library
+------------------
 
 In order to make the generated code work (in a PHP project) you need to install the shared library
 via `Composer`_.
@@ -90,6 +113,24 @@ You can find packages that implement the above interfaces on `Packagist`_:
 * `PSR-7 implementation <https://packagist.org/providers/psr/http-message-implementation>`_
 * `Message Factory implementation <https://packagist.org/providers/php-http/message-factory-implementation>`_
 * `HTTP Client implementation <https://packagist.org/providers/php-http/client-implementation>`_
+
+
+Quickstart
+----------
+
+From the above guide it is clear that installing TwirPHP is not a trivial thing. It has multiple components and
+external dependencies. To make installing these dependencies easier, there is a quickstart metapackage which
+can be installed via `Composer`_:
+
+.. code-block:: bash
+
+    $ composer require twirp/quickstart
+
+It installs:
+
+* the protobuf runtime library
+* Guzzle PSR-7 (and it's factories)
+* Guzzle HTTP Client
 
 
 .. _dep: https://golang.github.io/dep/

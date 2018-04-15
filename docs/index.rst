@@ -28,6 +28,7 @@ resources published by the Twirp developers themselves:
 
     getting-started/overview
     getting-started/installation
+    getting-started/usage
 
 
 .. _Twirp: https://twitchtv.github.io/twirp/
