@@ -97,11 +97,11 @@ works perfectly as well:
     <?php
 
     require __DIR__.'/vendor/autoload.php';
-    require __DIR__.'/server.php';
+
+    $server = new \Twitch\Twirp\Example\HaberdasherServer(new \Twirphp\Example\Haberdasher());
 
     $request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
 
-    // $server defined in server.php
     $response = $server->handle($request);
 
     if (!headers_sent()) {
@@ -115,22 +115,6 @@ works perfectly as well:
         }
     }
     echo $response->getBody();
-
-In your ``server.php`` you have a number of choices: if there is only one service to be served from this application,
-you can just use the generated server. If you want to serve multiple services, you need to register all of them in a single
-server.
-
-The following example covers both scenarios:
-
-.. code-block:: php
-
-    <?php
-
-    $server = new \Twitch\Twirp\Example\HaberdasherServer(new \Twirphp\Example\Haberdasher());
-    // Uncomment the following lines if you want to serve multiple services from this app
-    // $handler = $server;
-    // $server = new \Twitch\Twirp\Example\Server();
-    // $server->registerServer(\Twitch\Twirp\Example\HaberdasherServer::PATH_PREFIX, $handler);
 
 
 Use the client
