@@ -124,6 +124,8 @@ The following example covers both scenarios:
 
 .. code-block:: php
 
+    <?php
+
     $server = new \Twitch\Twirp\Example\HaberdasherServer(new \Twirphp\Example\Haberdasher());
     // Uncomment the following lines if you want to serve multiple services from this app
     // $handler = $server;
@@ -142,6 +144,8 @@ This library only offers Protobuf as per the official recommendation.
 Using the client is quite trivial, you only need to pass an endpoint to the generated client:
 
 .. code-block:: php
+
+    <?php
 
     $client = new \Twitch\Twirp\Example\HaberdasherClient('http://localhost:8080');
 
