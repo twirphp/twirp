@@ -6,6 +6,8 @@ The generated code contains a simple server implementation which lets you mux di
 
 .. code-block:: php
 
+    <?php
+
     $server = new \Twitch\Twirp\Example\Server();
 
     // register services
@@ -20,6 +22,8 @@ Both the server and service server implement the same ``RequestHandler`` interfa
 as in the :ref:`run-server` usage example:
 
 .. code-block:: php
+
+    <?php
 
     // ...
     $response = $server->handle($request);
