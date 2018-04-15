@@ -15,7 +15,7 @@ There are three types of "resources" to consider in case of a PHP projects using
 
 Following common PHP packaging practice the recommended folder structure is:
 
-.. code-block::
+.. code-block:: text
 
     /generated
         /<namespace>

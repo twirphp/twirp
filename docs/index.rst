@@ -31,6 +31,12 @@ resources published by the Twirp developers themselves:
     getting-started/usage
     getting-started/best-practices
 
+.. toctree::
+    :hidden:
+    :caption: Beyond the basics
+
+    advanced/other-services
+
 
 .. _Twirp: https://twitchtv.github.io/twirp/
 .. _protobuf: https://developers.google.com/protocol-buffers/
