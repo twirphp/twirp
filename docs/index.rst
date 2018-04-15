@@ -1,7 +1,7 @@
 TwirPHP: PHP port of Twirp, Twitch's RPC framework
 ==================================================
 
-`Twirp`_ is a "Twirp is a simple RPC framework built on `protobuf`_."
+`Twirp`_ is a "a simple RPC framework built on `protobuf`_."
 Unfortunately (or not?) it only supports Go and Python officially.
 While in the modern world it may be enough for most of the projects,
 there is still a considerable number of PHP-based softwares out there.
