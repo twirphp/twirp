@@ -10,7 +10,9 @@ final class Context
     const METHOD_NAME = 'method_name';
     const SERVICE_NAME = 'service_name';
     const PACKAGE_NAME = 'package_name';
-    const STATUS_CODE = 'status_code';
+	const STATUS_CODE = 'status_code';
+	const REQUEST_HEADER = 'request_header_key';
+	const RESPONSE_HEADER = 'response_header_key';
 
     /**
      * Extracts the name of the method being handled in the given
@@ -145,4 +147,65 @@ final class Context
 
         return $ctx;
     }
+
+	/**
+	 * Retrieves the HTTP headers sent as part of the request.
+	 * If there are no headers, it returns an empty array.
+	 *
+	 * @param array $ctx
+	 *
+	 * @return array
+	 */
+	public static function httpRequestHeaders(array $ctx)
+	{
+		if (isset($ctx[self::REQUEST_HEADER])) {
+			return $ctx[self::REQUEST_HEADER];
+		}
+
+		return [];
+	}
+
+	/**
+	 * Stores an HTTP headers in a context. When
+	 * using a Twirp-generated client, you can pass the returned context
+	 * into any of the request methods, and the stored header will be
+	 * included in outbound HTTP requests.
+	 *
+	 * This can be used to set custom HTTP headers like authorization tokens or
+	 * client IDs. But note that HTTP headers are a Twirp implementation detail,
+	 * only visible by middleware, not by the server implementation.
+	 *
+	 * Throws an exception if the provided headers
+	 * would overwrite a header that is needed by Twirp, like "Content-Type".
+	 *
+	 *
+	 * @param array $ctx
+	 * @param array $headers
+	 *
+	 * @return array
+	 *
+	 * @throws \InvalidArgumentException when any of the following headers are included: Accept, Content-Type, Twirp-Version
+	 */
+	public static function withHttpRequestHeaders(array $ctx, array $headers)
+	{
+		foreach ($headers as $key => $value) {
+			$key = strtolower($key);
+			$msg = 'provided header cannot set %s';
+
+			switch ($key) {
+				case 'accept':
+					throw new \InvalidArgumentException(sprintf($msg, 'Accept'));
+
+				case 'content-type':
+					throw new \InvalidArgumentException(sprintf($msg, 'Content-Type'));
+
+				case 'twirp-version':
+					throw new \InvalidArgumentException(sprintf($msg, 'Twirp-Version'));
+			}
+		}
+
+		$ctx[self::REQUEST_HEADER] = $headers;
+
+		return $ctx;
+	}
 }
