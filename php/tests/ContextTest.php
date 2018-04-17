@@ -202,7 +202,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
 
 	/**
 	 * @test
-	 * @dataProvider twirpHeaderProvider
+	 * @dataProvider twirpRequestHeaderProvider
 	 */
 	public function it_throws_an_exception_when_http_request_headers_contain_a_header_used_by_twirp(array $headers, $expectedMessage)
 	{
@@ -212,7 +212,25 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
 		Context::withHttpRequestHeaders([], $headers);
 	}
 
-	public function twirpHeaderProvider()
+	/**
+	 * @test
+	 */
+	public function it_adds_http_response_header()
+	{
+		$key = 'Authorization';
+		$value = 'Bearer 0123456789qwertzuiopasdfghjklyxcvbnm';
+		$expected = [
+			$key => $value,
+		];
+
+		$ctx = Context::withHttpResponseHeader([], $key, $value);
+
+		$actual = $ctx[Context::RESPONSE_HEADER];
+
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function twirpRequestHeaderProvider()
 	{
 		return [
 			[

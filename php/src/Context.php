@@ -208,4 +208,39 @@ final class Context
 
 		return $ctx;
 	}
+
+	/**
+	 * Sets an HTTP header key-value pair using a context
+	 * provided by a twirp-generated server, or a child of that context.
+	 * The server will include the header in its response for that request context.
+	 *
+	 * This can be used to respond with custom HTTP headers like "Cache-Control".
+	 * But note that HTTP headers are a Twirp implementation detail,
+	 * only visible by middleware, not by the clients or their responses.
+	 *
+	 * If called multiple times with the same key, it replaces any existing values
+	 * associated with that key.
+	 *
+	 * Throws an exception if the provided headers
+	 * would overwrite a header that is needed by Twirp, like "Content-Type".
+	 *
+	 *
+	 * @param array  $ctx
+	 * @param string $key
+	 * @param string $value
+	 *
+	 * @return array
+	 *
+	 * @throws \InvalidArgumentException when any of the following headers are included: Content-Type
+	 */
+	public static function withHttpResponseHeader(array $ctx, $key, $value)
+	{
+		if (strtolower($key) === 'content-type') {
+			throw new \InvalidArgumentException('header key can not be Content-Type');
+		}
+
+		$ctx[self::RESPONSE_HEADER][$key] = $value;
+
+		return $ctx;
+	}
 }
