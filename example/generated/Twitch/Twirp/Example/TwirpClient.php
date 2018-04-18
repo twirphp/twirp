@@ -14,6 +14,7 @@ use Http\Message\StreamFactory;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
+use Twirp\Context;
 use Twirp\Error;
 use Twirp\ErrorCode;
 
@@ -109,7 +110,15 @@ abstract class TwirpClient
     {
         $body = $this->streamFactory->createStream($reqBody);
 
-        return $this->messageFactory->createRequest('POST', $url)
+        $request = $this->messageFactory->createRequest('POST', $url);
+
+        $headers = Context::httpRequestHeaders($ctx);
+
+        foreach ($headers as $key => $value) {
+            $request = $request->withHeader($key, $value);
+        }
+
+        return $request
             ->withBody($body)
             ->withHeader('Accept', $contentType)
             ->withHeader('Content-Type', $contentType)
