@@ -110,15 +110,15 @@ abstract class TwirpClient
     {
         $body = $this->streamFactory->createStream($reqBody);
 
-        $request = $this->messageFactory->createRequest('POST', $url);
+        $req = $this->messageFactory->createRequest('POST', $url);
 
         $headers = Context::httpRequestHeaders($ctx);
 
         foreach ($headers as $key => $value) {
-            $request = $request->withHeader($key, $value);
+            $req = $req->withHeader($key, $value);
         }
 
-        return $request
+        return $req
             ->withBody($body)
             ->withHeader('Accept', $contentType)
             ->withHeader('Content-Type', $contentType)

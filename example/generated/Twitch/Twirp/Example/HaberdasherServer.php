@@ -103,18 +103,27 @@ final class HaberdasherServer extends TwirpServer implements RequestHandler
             $i = strlen($header);
         }
 
+        $respHeaders = [];
+        $ctx[Context::RESPONSE_HEADER] = &$respHeaders;
+
         switch (trim(strtolower(substr($header, 0, $i)))) {
             case 'application/json':
-                return $this->handleMakeHatJson($ctx, $req);
+                $resp = $this->handleMakeHatJson($ctx, $req);
 
             case 'application/protobuf':
-                return $this->handleMakeHatProtobuf($ctx, $req);
+                $resp = $this->handleMakeHatProtobuf($ctx, $req);
 
             default:
                 $msg = sprintf('unexpected Content-Type: "%s"', $req->getHeaderLine('Content-Type'));
 
                 return $this->writeError($ctx, $this->badRoute($msg, $req->getMethod(), $req->getUri()->getPath()));
         }
+
+        foreach ($respHeaders as $key => $value) {
+            $resp = $resp->withHeader($key, $value);
+        }
+
+        return $resp;
     }
 
     private function handleMakeHatJson(array $ctx, ServerRequestInterface $req)

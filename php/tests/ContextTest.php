@@ -230,6 +230,18 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals($expected, $actual);
 	}
 
+	/**
+	 * @test
+	 * @dataProvider twirpResponseHeaderProvider
+	 */
+	public function it_throws_an_exception_when_http_response_header_is_used_by_twirp($key, $value, $expectedMessage)
+	{
+		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage($expectedMessage);
+
+		Context::withHttpResponseHeader([], $key, $value);
+	}
+
 	public function twirpRequestHeaderProvider()
 	{
 		return [
@@ -250,6 +262,17 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
 					'Twirp-Version' => '1.0.0',
 				],
 				'provided header cannot set Twirp-Version',
+			],
+		];
+	}
+
+	public function twirpResponseHeaderProvider()
+	{
+		return [
+			[
+				'Content-Type',
+				'application/json',
+				'header key can not be Content-Type',
 			],
 		];
 	}

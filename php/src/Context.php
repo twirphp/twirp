@@ -11,8 +11,8 @@ final class Context
     const SERVICE_NAME = 'service_name';
     const PACKAGE_NAME = 'package_name';
 	const STATUS_CODE = 'status_code';
-	const REQUEST_HEADER = 'request_header_key';
-	const RESPONSE_HEADER = 'response_header_key';
+	const REQUEST_HEADER = 'request_header';
+	const RESPONSE_HEADER = 'response_header';
 
     /**
      * Extracts the name of the method being handled in the given

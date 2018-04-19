@@ -106,18 +106,27 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
             $i = strlen($header);
         }
 
+        $respHeaders = [];
+        $ctx[Context::RESPONSE_HEADER] = &$respHeaders;
+
         switch (trim(strtolower(substr($header, 0, $i)))) {
             case 'application/json':
-                return $this->handle{{ $method.Name }}Json($ctx, $req);
+                $resp = $this->handle{{ $method.Name }}Json($ctx, $req);
 
             case 'application/protobuf':
-                return $this->handle{{ $method.Name }}Protobuf($ctx, $req);
+                $resp = $this->handle{{ $method.Name }}Protobuf($ctx, $req);
 
             default:
                 $msg = sprintf('unexpected Content-Type: "%s"', $req->getHeaderLine('Content-Type'));
 
                 return $this->writeError($ctx, $this->badRoute($msg, $req->getMethod(), $req->getUri()->getPath()));
         }
+
+        foreach ($respHeaders as $key => $value) {
+            $resp = $resp->withHeader($key, $value);
+        }
+
+        return $resp;
     }
 
     private function handle{{ $method.Name }}Json(array $ctx, ServerRequestInterface $req)
