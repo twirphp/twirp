@@ -157,4 +157,123 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * @test
+     */
+    public function it_retrieves_http_request_headers()
+    {
+        $expected = [
+            'Authorization' => 'Bearer 0123456789qwertzuiopasdfghjklyxcvbnm',
+        ];
+
+        $ctx = [
+            Context::REQUEST_HEADER => $expected,
+        ];
+
+        $actual = Context::httpRequestHeaders($ctx);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_null_when_there_is_not_http_request_headers()
+    {
+        $this->assertEquals([], Context::httpRequestHeaders([]));
+    }
+
+    /**
+     * @test
+     */
+    public function it_adds_http_request_headers()
+    {
+        $expected = [
+            'Authorization' => 'Bearer 0123456789qwertzuiopasdfghjklyxcvbnm',
+        ];
+
+        $ctx = Context::withHttpRequestHeaders([], $expected);
+
+        $actual = $ctx[Context::REQUEST_HEADER];
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @test
+     * @dataProvider twirpRequestHeaderProvider
+     */
+    public function it_throws_an_exception_when_http_request_headers_contain_a_header_used_by_twirp(array $headers, $expectedMessage)
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($expectedMessage);
+
+        Context::withHttpRequestHeaders([], $headers);
+    }
+
+    /**
+     * @test
+     */
+    public function it_adds_http_response_header()
+    {
+        $key = 'Authorization';
+        $value = 'Bearer 0123456789qwertzuiopasdfghjklyxcvbnm';
+        $expected = [
+            $key => $value,
+        ];
+
+        $ctx = Context::withHttpResponseHeader([], $key, $value);
+
+        $actual = $ctx[Context::RESPONSE_HEADER];
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @test
+     * @dataProvider twirpResponseHeaderProvider
+     */
+    public function it_throws_an_exception_when_http_response_header_is_used_by_twirp($key, $value, $expectedMessage)
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($expectedMessage);
+
+        Context::withHttpResponseHeader([], $key, $value);
+    }
+
+    public function twirpRequestHeaderProvider()
+    {
+        return [
+            [
+                [
+                    'Accept' => 'application/json',
+                ],
+                'provided header cannot set Accept',
+            ],
+            [
+                [
+                    'Content-Type' => 'application/json',
+                ],
+                'provided header cannot set Content-Type',
+            ],
+            [
+                [
+                    'Twirp-Version' => '1.0.0',
+                ],
+                'provided header cannot set Twirp-Version',
+            ],
+        ];
+    }
+
+    public function twirpResponseHeaderProvider()
+    {
+        return [
+            [
+                'Content-Type',
+                'application/json',
+                'header key can not be Content-Type',
+            ],
+        ];
+    }
 }
