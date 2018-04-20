@@ -36,6 +36,7 @@ resources published by the Twirp developers themselves:
     :caption: Beyond the basics
 
     advanced/other-services
+    advanced/http-headers
 
 
 .. _Twirp: https://twitchtv.github.io/twirp/
