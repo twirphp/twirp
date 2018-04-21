@@ -20,7 +20,7 @@ Use ``Twirp\Context::withHttpRequestHeaders`` to attach a map of headers to the 
     <?php
 
     // Given a client ...
-    $client = new HaberdasherClient($addr);
+    $client = new \Twitch\Twirp\Example\HaberdasherClient($addr);
 
     // Given some headers ...
     $headers = [
@@ -30,10 +30,10 @@ Use ``Twirp\Context::withHttpRequestHeaders`` to attach a map of headers to the 
 
     // Attach the headers to a context
     $ctx = [];
-    $ctx = Twirp\Context::withHttpRequestHeaders($ctx, $headers);
+    $ctx = \Twirp\Context::withHttpRequestHeaders($ctx, $headers);
 
     // And use the context in the request. Headers will be included in the request!
-    $resp = $client—>MakeHat($ctx, new Size());
+    $resp = $client—>MakeHat($ctx, new \Twitch\Twirp\Example\Size());
 
 
 Read HTTP Headers from responses
@@ -59,11 +59,11 @@ In your server implementation you can set HTTP headers using ``Twirp\Context::wi
 
     <?php
 
-    public function makeHat(array $ctx, Size $size)
+    public function makeHat(array $ctx, \Twitch\Twirp\Example\Size $size)
     {
-        Twirp\Context::withHttpResponseHeader($ctx, 'Cache-Control', 'public, max-age=60');
+        \Twirp\Context::withHttpResponseHeader($ctx, 'Cache-Control', 'public, max-age=60');
 
-        $hat = new Hat();
+        $hat = new \Twitch\Twirp\Example\Hat();
 
         return $hat;
     }
@@ -85,6 +85,8 @@ You might write this middleware:
     <?php
 
     use Psr\Http\Message\ServerRequestInterface;
+
+    // class UserAgentMiddleware...
 
     public function handle(ServerRequestInterface $request)
     {

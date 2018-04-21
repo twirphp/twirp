@@ -37,6 +37,7 @@ resources published by the Twirp developers themselves:
 
     advanced/other-services
     advanced/http-headers
+    advanced/psr15
 
 
 .. _Twirp: https://twitchtv.github.io/twirp/
