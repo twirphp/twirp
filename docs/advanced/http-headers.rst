@@ -13,7 +13,7 @@ Client side
 Send HTTP Headers with client requests
 ++++++++++++++++++++++++++++++++++++++
 
-Use `Twirp\Context::withHttpRequestHeaders` to attach a map of headers to the context:
+Use ``Twirp\Context::withHttpRequestHeaders`` to attach a map of headers to the context:
 
 .. code-block:: php
 
@@ -53,7 +53,7 @@ Server side
 Send HTTP Headers on server responses
 +++++++++++++++++++++++++++++++++++++
 
-In your server implementation you can set HTTP headers using `Twirp\Context::withHttpResponseHeader`.
+In your server implementation you can set HTTP headers using ``Twirp\Context::withHttpResponseHeader``.
 
 
 .. code-block:: php
