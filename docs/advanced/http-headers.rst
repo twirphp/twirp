@@ -55,7 +55,6 @@ Send HTTP Headers on server responses
 
 In your server implementation you can set HTTP headers using ``Twirp\Context::withHttpResponseHeader``.
 
-
 .. code-block:: php
 
     <?php

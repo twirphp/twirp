@@ -1,5 +1,5 @@
-Serving TwirPHP with other services
-===================================
+Serving multiple Twirp services together
+========================================
 
 In some cases you might want to serve not just one, but multiple services from one application.
 The generated code contains a simple server implementation which lets you mux different services.
@@ -18,7 +18,7 @@ The generated code contains a simple server implementation which lets you mux di
         )
     );
 
-Both the server and service server implement the same ``RequestHandler`` interface, so you can use the same code
+Both the server and service server implement the same ``Twirp\RequestHandler`` interface, so you can use the same code
 as in the :ref:`run-server` usage example:
 
 .. code-block:: php

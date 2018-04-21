@@ -4,6 +4,7 @@ Best Practices
 This page contains some best practices related to using TwirPHP in general.
 Make sure to check out the `official best practices guide`_ as well for Twirp and protobuf related practices.
 
+
 Folder/Package Structure
 ------------------------
 

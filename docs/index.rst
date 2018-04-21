@@ -6,7 +6,7 @@ Unfortunately (or not?) it only supports Go and Python officially.
 While in the modern world it may be enough for most of the projects,
 there is still a considerable number of PHP-based softwares out there.
 
-This project is a PHP port of Twirp supporting both server and client side.
+TwirPHP is a PHP port of Twirp supporting both server and client side.
 It generates code the same way as Twirp does and follows the same conventions.
 Because of that this documentation only contains minimal information about how
 Twirp works internally. To learn more about it, you should check the following

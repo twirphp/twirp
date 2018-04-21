@@ -25,9 +25,9 @@ TwirPHP protoc plugin
 ---------------------
 
 Just like in case of ``protoc``, the easiest way to install the plugin
-by downloading it from the `Github Releases <https://github.com/twirphp/twirp/releases>`_ page.
+is downloading it from the `Github Releases <https://github.com/twirphp/twirp/releases>`_ page.
 
-Make sure to save the binary exactly it is found in the downloaded archive.
+Make sure to save the binary with the same name as it is found in the downloaded archive.
 Also, make sure you place the binary in your ``$PATH``, otherwise you will have to
 tell ``protoc`` where you saved the plugin:
 
@@ -79,7 +79,7 @@ The PHP package can be installed via `Composer`_:
 Shared PHP library
 ------------------
 
-In order to make the generated code work (in a PHP project) you need to install the shared library
+In order to make the generated code work (in a PHP project) you need to install the (minimal) shared library
 via `Composer`_.
 
 .. code-block:: bash

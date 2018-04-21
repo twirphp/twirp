@@ -4,18 +4,20 @@ Usage Example
 This page contains a full example about using TwirPHP on both server and client side.
 Much of it is based on the `original usage example <https://twitchtv.github.io/twirp/docs/example.html>`_,
 so you might want to check that out as well.
-The complete example is available under the `examples <https://github.com/twirphp/twirp/tree/master/example>`_ directory of the project git repository.
+The complete example is available under the `example <https://github.com/twirphp/twirp/tree/master/example>`_
+directory of the project's git repository.
 
 Before moving forward, make sure to check the :doc:`installation` guide as well.
 
 .. contents::
     :local:
 
+
 Write a Protobuf service definition
 -----------------------------------
 
 Write a protobuf definition for your messages and your service and put it in ``proto/service.proto``.
-The following example is taken from the `original usage example <https://twitchtv.github.io/twirp/docs/example.html#write-a-protobuf-service-definition>`_.
+The following example is taken from the `original Twirp documentation <https://twitchtv.github.io/twirp/docs/example.html#write-a-protobuf-service-definition>`_.
 
 .. code-block:: protobuf
 
@@ -91,7 +93,8 @@ Run the server
 --------------
 
 To run the server you need to setup some sort of application entrypoint that processes incoming requests as `PSR-7`_
-messages. It is recommended that you use some sort of dispatcher, like `Zend Diactoros`_, but the following example
+messages. It is recommended that you use some sort of dispatcher/emitter,
+like the ``SapiEmitter`` bundled with `Zend Diactoros`_, but the following example
 works perfectly as well:
 
 .. code-block:: php
@@ -108,7 +111,15 @@ works perfectly as well:
 
     if (!headers_sent()) {
         // status
-        header(sprintf('HTTP/%s %s %s', $response->getProtocolVersion(), $response->getStatusCode(), $response->getReasonPhrase()), true, $response->getStatusCode());
+        header(sprintf(
+            'HTTP/%s %s %s',
+            $response->getProtocolVersion(),
+            $response->getStatusCode(),
+            $response->getReasonPhrase()),
+            true,
+            $response->getStatusCode()
+        );
+
         // headers
         foreach ($response->getHeaders() as $header => $values) {
             foreach ($values as $value) {
@@ -116,6 +127,7 @@ works perfectly as well:
             }
         }
     }
+
     echo $response->getBody();
 
 
@@ -126,6 +138,8 @@ Client stubs are automatically generated, hooray!
 
 The original library offers two clients to be generated differing in the underlying serialization: JSON and Protobuf.
 This library only offers Protobuf as per the official recommendation.
+
+.. note:: This may change in the future based on demand.
 
 Using the client is quite trivial, you only need to pass an endpoint to the generated client:
 
@@ -149,6 +163,8 @@ Using the client is quite trivial, you only need to pass an endpoint to the gene
             'meta' => $e->metaMap(),
         ]));
     }
+
+.. warning:: When no scheme is present in the endpoint, the client falls back to `HTTP`.
 
 
 .. _PSR-7: http://www.php-fig.org/psr/psr-7/
