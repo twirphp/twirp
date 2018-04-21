@@ -16,6 +16,7 @@ Send HTTP Headers with client requests
 Use `Twirp\Context::withHttpRequestHeaders` to attach a map of headers to the context:
 
 .. code-block:: php
+
     <?php
 
     // Given a client ...
