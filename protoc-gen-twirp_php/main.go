@@ -30,20 +30,19 @@ func main() {
 		os.Exit(0)
 	}
 
-	err := Main(os.Stdin, os.Stdout, "./templates")
+	err := Main(os.Stdin, os.Stdout, packr.NewBox("./templates"))
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
 // Main does the hard work. It is called by the main func.
-func Main(in io.Reader, out io.Writer, templates string) error {
+func Main(in io.Reader, out io.Writer, box packr.Box) error {
 	req, err := readCodeGeneratorRequest(in)
 	if err != nil {
 		return err
 	}
 
-	box := packr.NewBox(templates)
 	g := gen.New(box)
 
 	greq := &gen.Request{
