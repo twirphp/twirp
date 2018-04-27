@@ -16,3 +16,5 @@
 /composer.lock
 /phpunit.xml
 /vendorphp/
+
+*-packr.go
