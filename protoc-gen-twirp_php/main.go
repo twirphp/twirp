@@ -60,6 +60,7 @@ func Main(in io.Reader, out io.Writer, box packr.Box) error {
 			"service/Client.php",
 			"service/Server.php",
 		},
+		Version: Version,
 	}
 
 	resp, err := g.Generate(greq)
