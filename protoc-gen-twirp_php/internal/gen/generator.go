@@ -30,6 +30,9 @@ type Request struct {
 
 	// ServiceFiles are generated once per service with the service name as a prefix.
 	ServiceFiles []string
+
+	// Version is the compiler's version.
+	Version string
 }
 
 // New creates a new generator instance.
@@ -89,6 +92,7 @@ func (g *generator) Generate(req *Request) (*plugin.CodeGeneratorResponse, error
 type serviceFileData struct {
 	File    *descriptor.FileDescriptorProto
 	Service *descriptor.ServiceDescriptorProto
+	Version string
 }
 
 func (g *generator) generateServiceFile(
@@ -100,6 +104,7 @@ func (g *generator) generateServiceFile(
 	data := &serviceFileData{
 		File:    file,
 		Service: svc,
+		Version: ctx.request.Version,
 	}
 
 	tpl, err := g.box.MustString(serviceFile)
@@ -123,15 +128,17 @@ func (g *generator) generateServiceFile(
 	}, nil
 }
 
-type twirpClientDefinition struct {
+type globalFileData struct {
 	Namespace    string
 	TwirpVersion string
+	Version      string
 }
 
 func (g *generator) generateGlobalFile(ctx *generatorContext, file string, namespace string) (*plugin.CodeGeneratorResponse_File, error) {
-	data := &twirpClientDefinition{
+	data := &globalFileData{
 		Namespace:    namespace,
 		TwirpVersion: twirpVersion,
+		Version:      ctx.request.Version,
 	}
 
 	tpl, err := g.box.MustString(file)
