@@ -52,7 +52,7 @@ final class {{ .Service | phpServiceName .File }}Client extends TwirpClient impl
 
         $out = new {{ $method.OutputType | phpMessageName }}();
 
-        $url = (string)$this->addr->withPath('/twirp/{{ $method | protoFullName $.File $.Service }}');
+        $url = $this->addr.'/twirp/{{ $method | protoFullName $.File $.Service }}';
 
         $this->doProtobufRequest($ctx, $url, $in, $out);
 

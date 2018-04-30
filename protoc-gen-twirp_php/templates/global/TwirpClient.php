@@ -267,12 +267,18 @@ abstract class TwirpClient
      */
     final protected function urlBase($addr)
     {
-        $url = $this->messageFactory->createRequest('POST', $addr)->getUri();
+        $scheme = parse_url($addr, PHP_URL_SCHEME);
 
-        if ($url->getScheme() == '') {
-            $url = $url->withScheme('http');
+        // If parse_url fails, return the addr unchanged.
+        if ($scheme === false) {
+            return $addr;
         }
 
-        return $url;
+        // If the addr does not specify a scheme, default to http.
+        if (empty($scheme)) {
+            $addr = 'http://'.ltrim($addr, ':/');
+        }
+
+        return $addr;
     }
 }
