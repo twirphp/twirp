@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 
@@ -11,6 +12,8 @@ import (
 func main() {
 	b := builder.New(context.Background(), os.Args[1])
 	b.Compress = true
+
+	fmt.Println("Generating Packr boxes")
 
 	err := b.Run()
 	if err != nil {
