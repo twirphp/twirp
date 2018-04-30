@@ -21,7 +21,10 @@
 
 [[projects]]
   name = "github.com/gobuffalo/packr"
-  packages = ["."]
+  packages = [
+    ".",
+    "builder"
+  ]
   revision = "3402a167bccf1bdd5c93ca820be9f27bba46261e"
   version = "v1.10.7"
 
@@ -74,9 +77,21 @@
   ]
   revision = "12892e8c234f4fe6f6803f052061de9057903bb2"
 
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/net"
+  packages = ["context"]
+  revision = "5f9ae10d9af5b1c89ae6904293b14b064d4ada23"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/sync"
+  packages = ["errgroup"]
+  revision = "1d60e4601c6fd243af51cc01ddf169918a5407ca"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "71df81e6a12339c4ebb238f19e2abc0053d381a0f46887a0cb12e66845409668"
+  inputs-digest = "79aed22bd69d48f656a5842a8c08f3b92bea9727222d70a53d5592049e066ce5"
   solver-name = "gps-cdcl"
   solver-version = 1

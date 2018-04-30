@@ -15,7 +15,7 @@ import (
 	"github.com/twirphp/twirp/protoc-gen-twirp_php/internal/gen"
 )
 
-//go:generate sh -c "CGO_ENABLED=0 go run .packr/main.go $PWD"
+//go:generate sh -c "CGO_ENABLED=0 go run build/packr.go $PWD"
 
 // Provisioned by ldflags
 var (
