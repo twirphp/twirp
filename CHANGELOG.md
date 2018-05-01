@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+
+## [0.3.0] - 2018-05-01
+
 ### Added
 
 - Compiler name and version to the generated files
@@ -40,7 +43,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Initial release
 
 
-[Unreleased]: https://github.com/goph/nest/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/goph/nest/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/goph/nest/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/goph/nest/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/goph/nest/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/goph/nest/compare/v0.1.0...v0.1.1
