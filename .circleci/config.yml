@@ -45,7 +45,7 @@ jobs:
                 at: /go/src/github.com/twirphp/twirp
             - deploy:
                 name: Release to Github
-                command: goreleaser
+                command: goreleaser --skip-validate
 
 workflows:
     version: 2
