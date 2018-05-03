@@ -1,4 +1,4 @@
-# PHP port of [Twirp](https://twitchtv.github.io/twirp/)
+# [Twirp](https://twitchtv.github.io/twirp/) PHP port
 
 [![CircleCI](https://circleci.com/gh/twirphp/twirp.svg?style=svg)](https://circleci.com/gh/twirphp/twirp)
 [![Twirp Version](http://img.shields.io/badge/twirp%20version-v5.3.0-orange.svg?style=flat-square)](https://github.com/twitchtv/twirp/releases/tag/v5.3.0)
