@@ -1,5 +1,5 @@
 ---
-name: Support request
+name: :question: Support request
 about: Ask for help here if you can't find answer to your question anywhere.
 ---
 
