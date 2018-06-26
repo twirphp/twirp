@@ -82,7 +82,7 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
         if ($req->getMethod() !== 'POST') {
             $msg = sprintf('unsupported method "%s" (only POST is allowed)', $req->getMethod());
 
-            return $this->writeError($ctx, $this->badRoute($msg, $req->getMethod(), $req->getUri()->getPath()));
+            return $this->writeError($ctx, $this->badRouteError($msg, $req->getMethod(), $req->getUri()->getPath()));
         }
 
         switch ($req->getUri()->getPath()) {
@@ -119,7 +119,7 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
             default:
                 $msg = sprintf('unexpected Content-Type: "%s"', $req->getHeaderLine('Content-Type'));
 
-                return $this->writeError($ctx, $this->badRoute($msg, $req->getMethod(), $req->getUri()->getPath()));
+                return $this->writeError($ctx, $this->badRouteError($msg, $req->getMethod(), $req->getUri()->getPath()));
         }
 
         foreach ($respHeaders as $key => $value) {
