@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Composer conflict for protobuf versions lower than 3.5
+
+### Fixed
+
+- Add missing break statements
+- Fix wrong method name
+
 
 ## [0.3.1] - 2018-05-02
 
