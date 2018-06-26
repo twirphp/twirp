@@ -112,9 +112,11 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
         switch (trim(strtolower(substr($header, 0, $i)))) {
             case 'application/json':
                 $resp = $this->handle{{ $method.Name }}Json($ctx, $req);
+                break;
 
             case 'application/protobuf':
                 $resp = $this->handle{{ $method.Name }}Protobuf($ctx, $req);
+                break;
 
             default:
                 $msg = sprintf('unexpected Content-Type: "%s"', $req->getHeaderLine('Content-Type'));
