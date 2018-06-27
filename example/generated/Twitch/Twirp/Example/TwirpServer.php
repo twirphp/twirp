@@ -55,7 +55,7 @@ abstract class TwirpServer
      */
     final protected function noRouteError(ServerRequestInterface $req)
     {
-        $msg = sprintf('no handler for path "%s', $req->getUri()->getPath());
+        $msg = sprintf('no handler for path "%s"', $req->getUri()->getPath());
 
         return $this->badRouteError($msg, $req->getMethod(), $req->getUri()->getPath());
     }
