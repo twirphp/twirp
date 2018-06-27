@@ -13,7 +13,7 @@ use Twirp\BaseServerHooks;
 use Twirp\Context;
 use Twirp\ErrorCode;
 use Twirp\RequestHandler;
-use Twirp\ServerHook;
+use Twirp\ServerHooks;
 
 /**
  * @see {{ .Service | phpServiceName .File }}
@@ -30,7 +30,7 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
     private $svc;
 
     /**
-     * @var ServerHook
+     * @var ServerHooks
      */
     private $hook;
 
@@ -42,7 +42,7 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
      */
     public function __construct(
         {{ .Service | phpServiceName .File }} $svc,
-        ServerHook $hook = null,
+        ServerHooks $hook = null,
         MessageFactory $messageFactory = null,
         StreamFactory $streamFactory = null
     ) {

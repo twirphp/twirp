@@ -13,7 +13,7 @@ use Twirp\BaseServerHooks;
 use Twirp\Context;
 use Twirp\ErrorCode;
 use Twirp\RequestHandler;
-use Twirp\ServerHook;
+use Twirp\ServerHooks;
 
 /**
  * @see Haberdasher
@@ -30,7 +30,7 @@ final class HaberdasherServer extends TwirpServer implements RequestHandler
     private $svc;
 
     /**
-     * @var ServerHook
+     * @var ServerHooks
      */
     private $hook;
 
@@ -42,7 +42,7 @@ final class HaberdasherServer extends TwirpServer implements RequestHandler
      */
     public function __construct(
         Haberdasher $svc,
-        ServerHook $hook = null,
+        ServerHooks $hook = null,
         MessageFactory $messageFactory = null,
         StreamFactory $streamFactory = null
     ) {
