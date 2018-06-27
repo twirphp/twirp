@@ -85,5 +85,19 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(ErrorCode::Internal, $error->code());
         $this->assertEquals('msg', $error->msg());
+        $this->assertEquals('msg', $error->meta('cause'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_creates_an_error_from_an_exception_with_a_custom_message()
+    {
+        $exception = new \Exception('msg');
+        $error = TwirpError::errorFromException($exception, 'custom msg');
+
+        $this->assertEquals(ErrorCode::Internal, $error->code());
+        $this->assertEquals('custom msg', $error->msg());
+        $this->assertEquals('msg', $error->meta('cause'));
     }
 }

@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- The builtin generated error now receives the previous exceptions
+
 ### Fixed
 
 - Wrong type hint (`ServerHook`)

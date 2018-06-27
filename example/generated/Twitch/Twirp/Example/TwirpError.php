@@ -26,12 +26,12 @@ final class TwirpError extends \Exception implements Error
      */
     private $meta = [];
 
-    public function __construct($code, $msg)
+    public function __construct($code, $msg, $code = 0, \Exception $previous = null)
     {
         $this->errorCode = $code;
         $this->msg = $msg;
 
-        parent::__construct($msg);
+        parent::__construct($msg, $code, $previous);
     }
 
     /**
@@ -111,9 +111,10 @@ final class TwirpError extends \Exception implements Error
      *
      * @return self
      */
-    public static function errorFromException(\Exception $e)
+    public static function errorFromException(\Exception $e, $msg = '')
     {
-        $err = new self(ErrorCode::Internal, $e->getMessage());
+        $msg = empty($msg) ? $e->getMessage() : $msg;
+        $err = new self(ErrorCode::Internal, $msg, 0, $e);
 
         $err = $err->withMeta('cause', $e->getMessage());
 

@@ -76,7 +76,7 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
         } catch (\Twirp\Exception $e) {
             return $this->writeError($ctx, $e->getError());
         } catch (\Exception $e) {
-            return $this->writeError($ctx, TwirpError::errorFromException($e));
+            return $this->writeError($ctx, TwirpError::errorFromException($e, 'internal error'));
         }
 
         if ($req->getMethod() !== 'POST') {
@@ -155,7 +155,7 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
         } catch (\Twirp\Exception $e) {
             return $this->writeError($ctx, $e->getError());
         } catch (\Exception $e) {
-            return $this->writeError($ctx, TwirpError::errorFromException($e));
+            return $this->writeError($ctx, TwirpError::errorFromException($e, 'internal error'));
         }
 
         $data = $out->serializeToJsonString();
@@ -196,7 +196,7 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
         } catch (\Twirp\Exception $e) {
             return $this->writeError($ctx, $e->getError());
         } catch (\Exception $e) {
-            return $this->writeError($ctx, TwirpError::errorFromException($e));
+            return $this->writeError($ctx, TwirpError::errorFromException($e, 'internal error'));
         }
 
         $data = $out->serializeToString();
