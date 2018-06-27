@@ -72,27 +72,27 @@ abstract class TwirpServer
     final protected function badRouteError($msg, $method, $url)
     {
         $e = TwirpError::newError(ErrorCode::BadRoute, $msg);
-        $e = $e->withMeta('twirp_invalid_route', $method . ' ' . $url);
+        $e->setMeta('twirp_invalid_route', $method . ' ' . $url);
 
         return $e;
     }
 
     /**
-     * Writes Twirp errors in the response and triggers hooks.
+     * Writes Twirp errors in the response.
      *
      * @param array        $ctx
      * @param \Twirp\Error $e
      *
      * @return ResponseInterface
      */
-    protected function writeError(array $ctx, \Twirp\Error $e)
+    final protected function writeError(array $ctx, \Twirp\Error $e)
     {
-        $statusCode = ErrorCode::serverHTTPStatusFromErrorCode($e->code());
+        $statusCode = ErrorCode::serverHTTPStatusFromErrorCode($e->getErrorCode());
 
         $body = $this->streamFactory->createStream(json_encode([
-            'code' => $e->code(),
-            'msg' => $e->msg(),
-            'meta' => $e->metaMap(),
+            'code' => $e->getErrorCode(),
+            'msg' => $e->getMessage(),
+            'meta' => $e->getMetaMap(),
         ]));
 
         return $this->messageFactory

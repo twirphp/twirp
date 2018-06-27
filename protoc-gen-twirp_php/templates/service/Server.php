@@ -71,18 +71,16 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
 
         try {
             $ctx = $this->hook->requestReceived($ctx);
-        } catch (\Twirp\Error $e) {
-            return $this->writeError($ctx, $e);
-        } catch (\Twirp\Exception $e) {
-            return $this->writeError($ctx, $e->getError());
-        } catch (\Exception $e) {
-            return $this->writeError($ctx, TwirpError::errorFromException($e));
+        } catch (\Throwable $e) {
+            return $this->handleError($ctx, $e);
+        } catch (\Exception $e) { // For PHP 5.6 compatibility
+            return $this->handleError($ctx, $e);
         }
 
         if ($req->getMethod() !== 'POST') {
             $msg = sprintf('unsupported method "%s" (only POST is allowed)', $req->getMethod());
 
-            return $this->writeError($ctx, $this->badRouteError($msg, $req->getMethod(), $req->getUri()->getPath()));
+            return $this->handleError($ctx, $this->badRouteError($msg, $req->getMethod(), $req->getUri()->getPath()));
         }
 
         switch ($req->getUri()->getPath()) {
@@ -92,7 +90,7 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
             {{- end }}
 
             default:
-                return $this->writeError($ctx, $this->noRouteError($req));
+                return $this->handleError($ctx, $this->noRouteError($req));
         }
     }
 {{ range $method := .Service.Method }}
@@ -121,7 +119,7 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
             default:
                 $msg = sprintf('unexpected Content-Type: "%s"', $req->getHeaderLine('Content-Type'));
 
-                return $this->writeError($ctx, $this->badRouteError($msg, $req->getMethod(), $req->getUri()->getPath()));
+                return $this->handleError($ctx, $this->badRouteError($msg, $req->getMethod(), $req->getUri()->getPath()));
         }
 
         foreach ($respHeaders as $key => $value) {
@@ -144,18 +142,16 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
             $out = $this->svc->{{ $method.Name }}($ctx, $in);
 
             if ($out === null) {
-                return $this->writeError($ctx, TwirpError::newError(ErrorCode::Internal, 'received a null response while calling {{ $method.Name }}. null responses are not supported'));
+                return $this->handleError($ctx, TwirpError::newError(ErrorCode::Internal, 'received a null response while calling {{ $method.Name }}. null responses are not supported'));
             }
 
             $ctx = $this->hook->responsePrepared($ctx);
         } catch (GPBDecodeException $e) {
-            return $this->writeError($ctx, TwirpError::newError(ErrorCode::Internal, 'failed to parse request json'));
-        } catch (\Twirp\Error $e) {
-            return $this->writeError($ctx, $e);
-        } catch (\Twirp\Exception $e) {
-            return $this->writeError($ctx, $e->getError());
-        } catch (\Exception $e) {
-            return $this->writeError($ctx, TwirpError::errorFromException($e));
+            return $this->handleError($ctx, TwirpError::newError(ErrorCode::Internal, 'failed to parse request json'));
+        } catch (\Throwable $e) {
+            return $this->handleError($ctx, $e);
+        } catch (\Exception $e) { // For PHP 5.6 compatibility
+            return $this->handleError($ctx, $e);
         }
 
         $data = $out->serializeToJsonString();
@@ -185,18 +181,16 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
             $out = $this->svc->{{ $method.Name }}($ctx, $in);
 
             if ($out === null) {
-                return $this->writeError($ctx, TwirpError::newError(ErrorCode::Internal, 'received a null response while calling {{ $method.Name }}. null responses are not supported'));
+                return $this->handleError($ctx, TwirpError::newError(ErrorCode::Internal, 'received a null response while calling {{ $method.Name }}. null responses are not supported'));
             }
 
             $ctx = $this->hook->responsePrepared($ctx);
         } catch (GPBDecodeException $e) {
-            return $this->writeError($ctx, TwirpError::newError(ErrorCode::Internal, 'failed to parse request proto'));
-        } catch (\Twirp\Error $e) {
-            return $this->writeError($ctx, $e);
-        } catch (\Twirp\Exception $e) {
-            return $this->writeError($ctx, $e->getError());
-        } catch (\Exception $e) {
-            return $this->writeError($ctx, TwirpError::errorFromException($e));
+            return $this->handleError($ctx, TwirpError::newError(ErrorCode::Internal, 'failed to parse request proto'));
+        } catch (\Throwable $e) {
+            return $this->handleError($ctx, $e);
+        } catch (\Exception $e) { // For PHP 5.6 compatibility
+            return $this->handleError($ctx, $e);
         }
 
         $data = $out->serializeToString();
@@ -215,21 +209,28 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
 {{- end }}
 
     /**
-     * Writes Twirp errors in the response and triggers hooks.
+     * Writes errors in the response and triggers hooks.
      *
-     * @param array        $ctx
-     * @param \Twirp\Error $e
+     * @param array                 $ctx
+     * @param \Throwable|\Exception $e
      *
      * @return ResponseInterface
      */
-    protected function writeError(array $ctx, \Twirp\Error $e)
+    protected function handleError(array $ctx, $e)
     {
-        $statusCode = ErrorCode::serverHTTPStatusFromErrorCode($e->code());
+        // Non-twirp errors are mapped to be internal errors
+        if ($e instanceof \Twirp\Error) {
+            $statusCode = $e->getErrorCode();
+        } else {
+            $statusCode = ErrorCode::Internal;
+        }
+
+        $statusCode = ErrorCode::serverHTTPStatusFromErrorCode($statusCode);
         $ctx = Context::withStatusCode($ctx, $statusCode);
 
         try {
             $ctx = $this->hook->error($ctx, $e);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // We have three options here. We could log the error, call the Error
             // hook, or just silently ignore the error.
             //
@@ -244,11 +245,17 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
             // Silently ignoring the error is our least-bad option. It's highly
             // likely that the connection is broken and the original 'err' says
             // so anyway.
-        }
+        } catch (\Exception $e) {
+             // For PHP 5.6 compatibility. Same as above.
+         }
 
         $this->callResponseSent($ctx);
 
-        return parent::writeError($ctx, $e);
+        if (!$e instanceof \Twirp\Error) {
+            $e = TwirpError::errorFrom($e, 'internal error');
+        }
+
+        return $this->writeError($ctx, $e);
     }
 
     /**
@@ -260,7 +267,7 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
     {
         try {
             $this->hook->responseSent($ctx);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // We have three options here. We could log the error, call the Error
             // hook, or just silently ignore the error.
             //
@@ -275,6 +282,8 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
             // Silently ignoring the error is our least-bad option. It's highly
             // likely that the connection is broken and the original 'err' says
             // so anyway.
+        } catch (\Exception $e) {
+            // For PHP 5.6 compatibility. Same as above.
         }
     }
 }

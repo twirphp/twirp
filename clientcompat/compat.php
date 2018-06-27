@@ -52,7 +52,7 @@ function doNoop(CompatServiceClient $client, $in)
 
         echo $resp->serializeToString();
     } catch (\Twirp\Error $e) {
-        file_put_contents('php://stderr', $e->code());
+        file_put_contents('php://stderr', $e->getErrorCode());
     }
 }
 
@@ -66,6 +66,6 @@ function doMethod(CompatServiceClient $client, $in)
 
         echo $resp->serializeToString();
     } catch (\Twirp\Error $e) {
-        file_put_contents('php://stderr', $e->code());
+        file_put_contents('php://stderr', $e->getErrorCode());
     }
 }

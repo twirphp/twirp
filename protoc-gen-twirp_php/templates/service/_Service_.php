@@ -4,8 +4,6 @@
 
 namespace {{ .File | phpNamespace }};
 
-use Twirp\Error;
-
 /**
  *{{ .Service | protoComment .File | splitList "\n" | join "\n *" }}
  *
@@ -25,7 +23,7 @@ interface {{ .Service | phpServiceName .File }}
      *
      * @return {{ $method.OutputType | phpMessageName }}
      *
-     * @throws Error
+     * @throws \Twirp\Error
      */
     public function {{ $method.Name }}(array $ctx, {{ $inputType }} $req);
 {{ end -}}

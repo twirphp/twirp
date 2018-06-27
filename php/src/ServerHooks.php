@@ -31,6 +31,8 @@ interface ServerHooks
      * @param array $ctx
      *
      * @return array
+     *
+     * @throws \Throwable|\Exception
      */
     public function requestReceived(array $ctx);
 
@@ -41,6 +43,8 @@ interface ServerHooks
      * @param array $ctx
      *
      * @return array
+     *
+     * @throws \Throwable|\Exception
      */
     public function requestRouted(array $ctx);
 
@@ -51,6 +55,8 @@ interface ServerHooks
      * @param array $ctx
      *
      * @return array
+     *
+     * @throws \Throwable|\Exception
      */
     public function responsePrepared(array $ctx);
 
@@ -58,6 +64,8 @@ interface ServerHooks
      * Called when all bytes of a response (including an error
      * response) have been returned. Because the responseSent hook is terminal, it
      * does not return a context.
+     *
+     * For the same reason, it MUST NOT throw any exceptions.
      *
      * @param array $ctx
      */
@@ -67,10 +75,10 @@ interface ServerHooks
      * Called when an error occurs while handling a request. The
      * Error is passed as argument to the hook.
      *
-     * @param array $ctx
-     * @param Error $error
+     * @param array                 $ctx
+     * @param \Throwable|\Exception $error
      *
      * @return array
      */
-    public function error(array $ctx, Error $error);
+    public function error(array $ctx, $error);
 }
