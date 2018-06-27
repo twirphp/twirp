@@ -3,36 +3,30 @@
 namespace Twirp;
 
 /**
- * Base interface for Twirp errors.
+ * Interface for Twirp errors.
+ *
+ * @extends \Throwable This interface should extend \Throwable once we reach PHP 7.x.
  */
 interface Error
 {
     /**
      * One of the valid error codes.
      *
+     * getErrorCode is used to avoid collision with \Throwable::getCode.
+     *
      * @see ErrorCode
      *
      * @return string
      */
-    public function code();
+    public function getErrorCode();
 
     /**
-     * Returns a human-readable, unstructured messages describing the error.
-     *
-     * @return string
-     */
-    public function msg();
-
-    /**
-     * Returns a copy of the Error with the given key-value pair attached
-     * as metadata. If the key is already set, it is overwritten.
-     *
+     * Sets or overwrites metadata.
+	 *
      * @param string $key
-     * @param string $val
-     *
-     * @return Error
+     * @param string $value
      */
-    public function withMeta($key, $val);
+    public function setMeta($key, $value);
 
     /**
      * Returns the stored value for the given key. If the key has no set
@@ -43,12 +37,12 @@ interface Error
      *
      * @return string
      */
-    public function meta($key);
+    public function getMeta($key);
 
     /**
      * Returns the complete key-value metadata map stored on the error.
      *
      * @return array
      */
-    public function metaMap();
+    public function getMetaMap();
 }

@@ -81,8 +81,10 @@ abstract class TwirpClient
 
         try {
             $resp = $this->httpClient->sendRequest($req);
-        } catch (\Exception $e) {
-            throw $this->clientError("failed to do request", $e);
+        } catch (\Throwable $e) {
+            throw $this->clientError('failed to send request', $e);
+        } catch (\Exception $e) { // For PHP 5.6 compatibility
+            throw $this->clientError('failed to send request', $e);
         }
 
         if ($resp->getStatusCode() !== 200) {
@@ -92,7 +94,7 @@ abstract class TwirpClient
         try {
             $out->mergeFromString((string)$resp->getBody());
         } catch (GPBDecodeException $e) {
-            throw $this->clientError("failed to unmarshal proto response", $e);
+            throw $this->clientError('failed to unmarshal proto response', $e);
         }
     }
 
@@ -188,7 +190,7 @@ abstract class TwirpClient
         $error = TwirpError::newError($rawError['code'], $rawError['msg']);
 
         foreach ($rawError['meta'] as $key => $value) {
-            $error = $error->withMeta($key, $value);
+           $error->setMeta($key, $value);
         }
 
         return $error;
@@ -236,13 +238,13 @@ abstract class TwirpClient
         }
 
         $error = TwirpError::newError($code, $msg);
-        $error = $error->withMeta('http_error_from_intermediary', 'true');
-        $error = $error->withMeta('status_code', (string)$status);
+        $error->setMeta('http_error_from_intermediary', 'true');
+        $error->setMeta('status_code', (string)$status);
 
         if ($this->isHttpRedirect($status)) {
-            $error = $error->withMeta('location', $bodyOrLocation);
+            $error->setMeta('location', $bodyOrLocation);
         } else {
-            $error = $error->withMeta('body', $bodyOrLocation);
+            $error->setMeta('body', $bodyOrLocation);
         }
 
         return $error;

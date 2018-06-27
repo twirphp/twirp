@@ -66,7 +66,7 @@ final class ChainServerHooks implements ServerHooks
     /**
      * {@inheritdoc}
      */
-    public function error(array $ctx, Error $error)
+    public function error(array $ctx, $error)
     {
         foreach ($this->hooks as $hook) {
             $ctx = $hook->error($ctx, $error);

@@ -17,7 +17,7 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
     {
         $error = new TwirpError('code', 'msg');
 
-        $this->assertEquals('code', $error->code());
+        $this->assertEquals('code', $error->getErrorCode());
     }
 
     /**
@@ -27,7 +27,7 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
     {
         $error = new TwirpError('code', 'msg');
 
-        $this->assertEquals('msg', $error->msg());
+        $this->assertEquals('msg', $error->getMessage());
     }
 
     /**
@@ -36,10 +36,10 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
     public function it_has_metadata()
     {
         $error = new TwirpError('code', 'msg');
-        $error->withMeta('key', 'value');
+        $error->setMeta('key', 'value');
 
-        $this->assertEquals('value', $error->meta('key'));
-        $this->assertEquals('', $error->meta('invalid_key'));
+        $this->assertEquals('value', $error->getMeta('key'));
+        $this->assertEquals('', $error->getMeta('invalid_key'));
     }
 
     /**
@@ -48,9 +48,9 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
     public function it_has_a_map_of_metadata()
     {
         $error = new TwirpError('code', 'msg');
-        $error->withMeta('key', 'value');
+        $error->setMeta('key', 'value');
 
-        $this->assertEquals(['key' => 'value'], $error->metaMap());
+        $this->assertEquals(['key' => 'value'], $error->getMetaMap());
     }
 
     /**
@@ -60,8 +60,8 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
     {
         $error = TwirpError::newError(ErrorCode::Unauthenticated, 'msg');
 
-        $this->assertEquals(ErrorCode::Unauthenticated, $error->code());
-        $this->assertEquals('msg', $error->msg());
+        $this->assertEquals(ErrorCode::Unauthenticated, $error->getErrorCode());
+        $this->assertEquals('msg', $error->getMessage());
     }
 
     /**
@@ -71,8 +71,8 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
     {
         $error = TwirpError::newError('code', 'msg');
 
-        $this->assertEquals(ErrorCode::Internal, $error->code());
-        $this->assertEquals('invalid error type code', $error->msg());
+        $this->assertEquals(ErrorCode::Internal, $error->getErrorCode());
+        $this->assertEquals('invalid error type code', $error->getMessage());
     }
 
     /**
@@ -81,11 +81,11 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
     public function it_creates_an_error_from_an_exception()
     {
         $exception = new \Exception('msg');
-        $error = TwirpError::errorFromException($exception);
+        $error = TwirpError::errorFrom($exception);
 
-        $this->assertEquals(ErrorCode::Internal, $error->code());
-        $this->assertEquals('msg', $error->msg());
-        $this->assertEquals('msg', $error->meta('cause'));
+        $this->assertEquals(ErrorCode::Internal, $error->getErrorCode());
+        $this->assertEquals('msg', $error->getMessage());
+        $this->assertEquals('msg', $error->getMeta('cause'));
     }
 
     /**
@@ -94,10 +94,10 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
     public function it_creates_an_error_from_an_exception_with_a_custom_message()
     {
         $exception = new \Exception('msg');
-        $error = TwirpError::errorFromException($exception, 'custom msg');
+        $error = TwirpError::errorFrom($exception, 'custom msg');
 
-        $this->assertEquals(ErrorCode::Internal, $error->code());
-        $this->assertEquals('custom msg', $error->msg());
-        $this->assertEquals('msg', $error->meta('cause'));
+        $this->assertEquals(ErrorCode::Internal, $error->getErrorCode());
+        $this->assertEquals('custom msg', $error->getMessage());
+        $this->assertEquals('msg', $error->getMeta('cause'));
     }
 }

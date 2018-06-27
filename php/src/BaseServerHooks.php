@@ -42,7 +42,7 @@ class BaseServerHooks implements ServerHooks
     /**
      * {@inheritdoc}
      */
-    public function error(array $ctx, Error $error)
+    public function error(array $ctx, $error)
     {
         return $ctx;
     }
