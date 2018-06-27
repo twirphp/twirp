@@ -113,10 +113,10 @@ final class TwirpError extends \Exception implements Error
      */
     public static function errorFromException(\Exception $e)
     {
-        $e = new self(ErrorCode::Internal, $e->getMessage());
+        $err = new self(ErrorCode::Internal, $e->getMessage());
 
-        $e = $e->withMeta('cause', $e->getMessage());
+        $err = $err->withMeta('cause', $e->getMessage());
 
-        return $e;
+        return $err;
     }
 }
