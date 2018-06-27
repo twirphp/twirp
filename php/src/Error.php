@@ -22,7 +22,7 @@ interface Error
 
     /**
      * Sets or overwrites metadata.
-	 *
+     *
      * @param string $key
      * @param string $value
      */

@@ -218,7 +218,14 @@ final class {{ .Service | phpServiceName .File }}Server extends TwirpServer impl
      */
     protected function handleError(array $ctx, $e)
     {
-        $statusCode = ErrorCode::serverHTTPStatusFromErrorCode($e->getErrorCode());
+        // Non-twirp errors are mapped to be internal errors
+        if ($e instanceof \Twirp\Error) {
+            $statusCode = $e->getErrorCode();
+        } else {
+            $statusCode = ErrorCode::Internal;
+        }
+
+        $statusCode = ErrorCode::serverHTTPStatusFromErrorCode($statusCode);
         $ctx = Context::withStatusCode($ctx, $statusCode);
 
         try {
