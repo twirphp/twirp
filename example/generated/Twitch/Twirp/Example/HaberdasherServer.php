@@ -231,7 +231,7 @@ final class HaberdasherServer implements RequestHandler
      *
      * @return TwirpError
      */
-    final protected function noRouteError(ServerRequestInterface $req)
+    private function noRouteError(ServerRequestInterface $req)
     {
         $msg = sprintf('no handler for path "%s"', $req->getUri()->getPath());
 
@@ -247,7 +247,7 @@ final class HaberdasherServer implements RequestHandler
      *
      * @return TwirpError
      */
-    final protected function badRouteError($msg, $method, $url)
+    private function badRouteError($msg, $method, $url)
     {
         $e = TwirpError::newError(ErrorCode::BadRoute, $msg);
         $e->setMeta('twirp_invalid_route', $method . ' ' . $url);

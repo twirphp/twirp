@@ -4,11 +4,20 @@
 
 namespace {{ .File | phpNamespace }};
 
+use Google\Protobuf\Internal\GPBDecodeException;
+use Google\Protobuf\Internal\Message;
 use Http\Client\HttpClient;
+use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\MessageFactoryDiscovery;
+use Http\Discovery\StreamFactoryDiscovery;
 use Http\Message\MessageFactory;
 use Http\Message\StreamFactory;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use Twirp\Context;
+use Twirp\Error;
+use Twirp\ErrorCode;
 
 /**
  * A Protobuf client that implements the {@see {{ .Service | phpServiceName .File }}} interface.
@@ -16,12 +25,27 @@ use Twirp\Context;
  *
  * Generated from protobuf service <code>{{ .Service | protoFullName .File }}</code>
  */
-final class {{ .Service | phpServiceName .File }}Client extends TwirpClient implements {{ .Service | phpServiceName .File }}
+final class {{ .Service | phpServiceName .File }}Client implements {{ .Service | phpServiceName .File }}
 {
     /**
      * @var UriInterface
      */
     private $addr;
+
+    /**
+     * @var HttpClient
+     */
+    private $httpClient;
+
+    /**
+     * @var MessageFactory
+     */
+    private $messageFactory;
+
+    /**
+     * @var StreamFactory
+     */
+    private $streamFactory;
 
     /**
      * @param string              $addr
@@ -35,9 +59,22 @@ final class {{ .Service | phpServiceName .File }}Client extends TwirpClient impl
         MessageFactory $messageFactory = null,
         StreamFactory $streamFactory = null
     ) {
-        parent::__construct($httpClient, $messageFactory, $streamFactory);
+        if ($httpClient === null) {
+            $httpClient = HttpClientDiscovery::find();
+        }
+
+        if ($messageFactory === null) {
+            $messageFactory = MessageFactoryDiscovery::find();
+        }
+
+        if ($streamFactory === null) {
+            $streamFactory = StreamFactoryDiscovery::find();
+        }
 
         $this->addr = $this->urlBase($addr);
+        $this->httpClient = $httpClient;
+        $this->messageFactory = $messageFactory;
+        $this->streamFactory = $streamFactory;
     }
 {{ range $method := .Service.Method }}
 {{- $inputType := $method.InputType | phpMessageName }}
@@ -59,4 +96,223 @@ final class {{ .Service | phpServiceName .File }}Client extends TwirpClient impl
         return $out;
     }
 {{ end -}}
+
+    /**
+     * Common code to make a request to the remote twirp service.
+     *
+     * @param array   $ctx
+     * @param string  $url
+     * @param Message $in
+     * @param Message $out
+     */
+    private function doProtobufRequest(array $ctx, $url, Message $in, Message $out)
+    {
+        $body = $in->serializeToString();
+
+        $req = $this->newRequest($ctx, $url, $body, 'application/protobuf');
+
+        try {
+            $resp = $this->httpClient->sendRequest($req);
+        } catch (\Throwable $e) {
+            throw $this->clientError('failed to send request', $e);
+        } catch (\Exception $e) { // For PHP 5.6 compatibility
+            throw $this->clientError('failed to send request', $e);
+        }
+
+        if ($resp->getStatusCode() !== 200) {
+            throw $this->errorFromResponse($resp);
+        }
+
+        try {
+            $out->mergeFromString((string)$resp->getBody());
+        } catch (GPBDecodeException $e) {
+            throw $this->clientError('failed to unmarshal proto response', $e);
+        }
+    }
+
+    /**
+     * Makes an HTTP request and adds common headers.
+     *
+     * @param array  $ctx
+     * @param string $url
+     * @param string $reqBody
+     * @param string $contentType
+     *
+     * @return RequestInterface
+     */
+    private function newRequest(array $ctx, $url, $reqBody, $contentType)
+    {
+        $body = $this->streamFactory->createStream($reqBody);
+
+        $req = $this->messageFactory->createRequest('POST', $url);
+
+        $headers = Context::httpRequestHeaders($ctx);
+
+        foreach ($headers as $key => $value) {
+            $req = $req->withHeader($key, $value);
+        }
+
+        return $req
+            ->withBody($body)
+            ->withHeader('Accept', $contentType)
+            ->withHeader('Content-Type', $contentType)
+            ->withHeader('Twirp-Version', '{{ .TwirpVersion }}');
+    }
+
+    /**
+     * Adds consistency to errors generated in the client.
+     *
+     * @param string                $desc
+     * @param \Throwable|\Exception $e
+     *
+     * @return TwirpError
+     */
+    private function clientError($desc, $e)
+    {
+        return TwirpError::newError(ErrorCode::Internal, sprintf('%s: %s', $desc, $e->getMessage()));
+    }
+
+    /**
+     * Builds a twirp Error from a non-200 HTTP response.
+     * If the response has a valid serialized Twirp error, then it's returned.
+     * If not, the response status code is used to generate a similar twirp
+     * error. {@see self::twirpErrorFromIntermediary} for more info on intermediary errors.
+     *
+     * @param ResponseInterface $resp
+     *
+     * @return TwirpError
+     */
+    private function errorFromResponse(ResponseInterface $resp)
+    {
+        $statusCode = $resp->getStatusCode();
+        $statusText = $resp->getReasonPhrase();
+
+        if ($this->isHttpRedirect($statusCode)) {
+            // Unexpected redirect: it must be an error from an intermediary.
+            // Twirp clients don't follow redirects automatically, Twirp only handles
+            // POST requests, redirects should only happen on GET and HEAD requests.
+            $location = $resp->getHeaderLine('Location');
+            $msg = sprintf(
+                'unexpected HTTP status code %d "%s" received, Location="%s"',
+                $statusCode,
+                $statusText,
+                $location
+            );
+
+            return $this->twirpErrorFromIntermediary($statusCode, $msg, $location);
+        }
+
+        $body = (string)$resp->getBody();
+
+        $rawError = json_decode($body, true);
+        if ($rawError === null) {
+            $msg = sprintf('error from intermediary with HTTP status code %d "%s"', $statusCode, $statusText);
+
+            return $this->twirpErrorFromIntermediary($statusCode, $msg, $body);
+        }
+
+        $rawError = $rawError + ['code' => '', 'msg' => '', 'meta' => []];
+
+        if (ErrorCode::isValid($rawError['code']) === false) {
+            $msg = 'invalid type returned from server error response: '.$rawError['code'];
+
+            return TwirpError::newError(ErrorCode::Internal, $msg);
+        }
+
+        $error = TwirpError::newError($rawError['code'], $rawError['msg']);
+
+        foreach ($rawError['meta'] as $key => $value) {
+           $error->setMeta($key, $value);
+        }
+
+        return $error;
+    }
+
+    /**
+     * Maps HTTP errors from non-twirp sources to twirp errors.
+     * The mapping is similar to gRPC: https://github.com/grpc/grpc/blob/master/doc/http-grpc-status-mapping.md.
+     * Returned twirp Errors have some additional metadata for inspection.
+     *
+     * @param int    $status
+     * @param string $msg
+     * @param string $bodyOrLocation
+     *
+     * @return TwirpError
+     */
+    private function twirpErrorFromIntermediary($status, $msg, $bodyOrLocation)
+    {
+        if ($this->isHttpRedirect($status)) {
+            $code = ErrorCode::Internal;
+        } else {
+            switch ($status) {
+                case 400: // Bad Request
+                    $code = ErrorCode::Internal;
+                    break;
+                case 401: // Unauthorized
+                    $code = ErrorCode::Unauthenticated;
+                    break;
+                case 403: // Forbidden
+                    $code = ErrorCode::PermissionDenied;
+                    break;
+                case 404: // Not Found
+                    $code = ErrorCode::BadRoute;
+                    break;
+                case 429: // Too Many Requests
+                case 502: // Bad Gateway
+                case 503: // Service Unavailable
+                case 504: // Gateway Timeout
+                    $code = ErrorCode::Unavailable;
+                    break;
+                default: // All other codes
+                    $code = ErrorCode::Unknown;
+                    break;
+            }
+        }
+
+        $error = TwirpError::newError($code, $msg);
+        $error->setMeta('http_error_from_intermediary', 'true');
+        $error->setMeta('status_code', (string)$status);
+
+        if ($this->isHttpRedirect($status)) {
+            $error->setMeta('location', $bodyOrLocation);
+        } else {
+            $error->setMeta('body', $bodyOrLocation);
+        }
+
+        return $error;
+    }
+
+    /**
+     * @param int $status
+     *
+     * @return bool
+     */
+    private function isHttpRedirect($status)
+    {
+        return $status >= 300 && $status <= 399;
+    }
+
+    /**
+     * Creates base URL for the client.
+     *
+     * @param string $addr
+     *
+     * @return UriInterface
+     */
+    private function urlBase($addr)
+    {
+        $scheme = parse_url($addr, PHP_URL_SCHEME);
+
+        // If parse_url fails, return the addr unchanged.
+        if ($scheme === false) {
+            return $addr;
+        }
+
+        // If the addr does not specify a scheme, default to http.
+        if (empty($scheme)) {
+            $addr = 'http://'.ltrim($addr, ':/');
+        }
+
+        return $addr;
+    }
 }
