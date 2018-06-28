@@ -90,9 +90,10 @@ func (g *generator) Generate(req *Request) (*plugin.CodeGeneratorResponse, error
 }
 
 type serviceFileData struct {
-	File    *descriptor.FileDescriptorProto
-	Service *descriptor.ServiceDescriptorProto
-	Version string
+	File         *descriptor.FileDescriptorProto
+	Service      *descriptor.ServiceDescriptorProto
+	TwirpVersion string
+	Version      string
 }
 
 func (g *generator) generateServiceFile(
@@ -102,9 +103,10 @@ func (g *generator) generateServiceFile(
 	serviceFile string,
 ) (*plugin.CodeGeneratorResponse_File, error) {
 	data := &serviceFileData{
-		File:    file,
-		Service: svc,
-		Version: ctx.request.Version,
+		File:         file,
+		Service:      svc,
+		TwirpVersion: twirpVersion,
+		Version:      ctx.request.Version,
 	}
 
 	tpl, err := g.box.MustString(serviceFile)
@@ -129,16 +131,14 @@ func (g *generator) generateServiceFile(
 }
 
 type globalFileData struct {
-	Namespace    string
-	TwirpVersion string
-	Version      string
+	Namespace string
+	Version   string
 }
 
 func (g *generator) generateGlobalFile(ctx *generatorContext, file string, namespace string) (*plugin.CodeGeneratorResponse_File, error) {
 	data := &globalFileData{
-		Namespace:    namespace,
-		TwirpVersion: twirpVersion,
-		Version:      ctx.request.Version,
+		Namespace: namespace,
+		Version:   ctx.request.Version,
 	}
 
 	tpl, err := g.box.MustString(file)

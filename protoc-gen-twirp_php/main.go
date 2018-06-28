@@ -50,9 +50,7 @@ func Main(in io.Reader, out io.Writer, box packr.Box) error {
 	greq := &gen.Request{
 		CodeGeneratorRequest: req,
 		GlobalFiles: []string{
-			"global/TwirpClient.php",
 			"global/TwirpError.php",
-			"global/TwirpServer.php",
 		},
 		ServiceFiles: []string{
 			"service/_Service_.php",

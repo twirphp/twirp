@@ -5,6 +5,8 @@
 namespace Twitch\Twirp\Example;
 
 use Google\Protobuf\Internal\GPBDecodeException;
+use Http\Discovery\MessageFactoryDiscovery;
+use Http\Discovery\StreamFactoryDiscovery;
 use Http\Message\MessageFactory;
 use Http\Message\StreamFactory;
 use Psr\Http\Message\ResponseInterface;
@@ -20,9 +22,19 @@ use Twirp\ServerHooks;
  *
  * Generated from protobuf service <code>twitch.twirp.example.Haberdasher</code>
  */
-final class HaberdasherServer extends TwirpServer implements RequestHandler
+final class HaberdasherServer implements RequestHandler
 {
     const PATH_PREFIX = '/twirp/twitch.twirp.example.Haberdasher/';
+
+    /**
+     * @var MessageFactory
+     */
+    private $messageFactory;
+
+    /**
+     * @var StreamFactory
+     */
+    private $streamFactory;
 
     /**
      * @var Haberdasher
@@ -46,14 +58,22 @@ final class HaberdasherServer extends TwirpServer implements RequestHandler
         MessageFactory $messageFactory = null,
         StreamFactory $streamFactory = null
     ) {
-        parent::__construct($messageFactory, $streamFactory);
-
         if ($hook === null) {
             $hook = new BaseServerHooks();
         }
 
+        if ($messageFactory === null) {
+            $messageFactory = MessageFactoryDiscovery::find();
+        }
+
+        if ($streamFactory === null) {
+            $streamFactory = StreamFactoryDiscovery::find();
+        }
+
         $this->svc = $svc;
         $this->hook = $hook;
+        $this->messageFactory = $messageFactory;
+        $this->streamFactory = $streamFactory;
     }
 
     /**
@@ -72,15 +92,15 @@ final class HaberdasherServer extends TwirpServer implements RequestHandler
         try {
             $ctx = $this->hook->requestReceived($ctx);
         } catch (\Throwable $e) {
-            return $this->handleError($ctx, $e);
+            return $this->writeError($ctx, $e);
         } catch (\Exception $e) { // For PHP 5.6 compatibility
-            return $this->handleError($ctx, $e);
+            return $this->writeError($ctx, $e);
         }
 
         if ($req->getMethod() !== 'POST') {
             $msg = sprintf('unsupported method "%s" (only POST is allowed)', $req->getMethod());
 
-            return $this->handleError($ctx, $this->badRouteError($msg, $req->getMethod(), $req->getUri()->getPath()));
+            return $this->writeError($ctx, $this->badRouteError($msg, $req->getMethod(), $req->getUri()->getPath()));
         }
 
         switch ($req->getUri()->getPath()) {
@@ -88,7 +108,7 @@ final class HaberdasherServer extends TwirpServer implements RequestHandler
                 return $this->handleMakeHat($ctx, $req);
 
             default:
-                return $this->handleError($ctx, $this->noRouteError($req));
+                return $this->writeError($ctx, $this->noRouteError($req));
         }
     }
 
@@ -116,7 +136,7 @@ final class HaberdasherServer extends TwirpServer implements RequestHandler
             default:
                 $msg = sprintf('unexpected Content-Type: "%s"', $req->getHeaderLine('Content-Type'));
 
-                return $this->handleError($ctx, $this->badRouteError($msg, $req->getMethod(), $req->getUri()->getPath()));
+                return $this->writeError($ctx, $this->badRouteError($msg, $req->getMethod(), $req->getUri()->getPath()));
         }
 
         foreach ($respHeaders as $key => $value) {
@@ -139,16 +159,16 @@ final class HaberdasherServer extends TwirpServer implements RequestHandler
             $out = $this->svc->MakeHat($ctx, $in);
 
             if ($out === null) {
-                return $this->handleError($ctx, TwirpError::newError(ErrorCode::Internal, 'received a null response while calling MakeHat. null responses are not supported'));
+                return $this->writeError($ctx, TwirpError::newError(ErrorCode::Internal, 'received a null response while calling MakeHat. null responses are not supported'));
             }
 
             $ctx = $this->hook->responsePrepared($ctx);
         } catch (GPBDecodeException $e) {
-            return $this->handleError($ctx, TwirpError::newError(ErrorCode::Internal, 'failed to parse request json'));
+            return $this->writeError($ctx, TwirpError::newError(ErrorCode::Internal, 'failed to parse request json'));
         } catch (\Throwable $e) {
-            return $this->handleError($ctx, $e);
+            return $this->writeError($ctx, $e);
         } catch (\Exception $e) { // For PHP 5.6 compatibility
-            return $this->handleError($ctx, $e);
+            return $this->writeError($ctx, $e);
         }
 
         $data = $out->serializeToJsonString();
@@ -178,16 +198,16 @@ final class HaberdasherServer extends TwirpServer implements RequestHandler
             $out = $this->svc->MakeHat($ctx, $in);
 
             if ($out === null) {
-                return $this->handleError($ctx, TwirpError::newError(ErrorCode::Internal, 'received a null response while calling MakeHat. null responses are not supported'));
+                return $this->writeError($ctx, TwirpError::newError(ErrorCode::Internal, 'received a null response while calling MakeHat. null responses are not supported'));
             }
 
             $ctx = $this->hook->responsePrepared($ctx);
         } catch (GPBDecodeException $e) {
-            return $this->handleError($ctx, TwirpError::newError(ErrorCode::Internal, 'failed to parse request proto'));
+            return $this->writeError($ctx, TwirpError::newError(ErrorCode::Internal, 'failed to parse request proto'));
         } catch (\Throwable $e) {
-            return $this->handleError($ctx, $e);
+            return $this->writeError($ctx, $e);
         } catch (\Exception $e) { // For PHP 5.6 compatibility
-            return $this->handleError($ctx, $e);
+            return $this->writeError($ctx, $e);
         }
 
         $data = $out->serializeToString();
@@ -205,6 +225,37 @@ final class HaberdasherServer extends TwirpServer implements RequestHandler
     }
 
     /**
+     * Used when there is no route for a request.
+     *
+     * @param ServerRequestInterface $req
+     *
+     * @return TwirpError
+     */
+    private function noRouteError(ServerRequestInterface $req)
+    {
+        $msg = sprintf('no handler for path "%s"', $req->getUri()->getPath());
+
+        return $this->badRouteError($msg, $req->getMethod(), $req->getUri()->getPath());
+    }
+
+    /**
+     * Used when the twirp server cannot route a request.
+     *
+     * @param string $msg
+     * @param string $method
+     * @param string $url
+     *
+     * @return TwirpError
+     */
+    private function badRouteError($msg, $method, $url)
+    {
+        $e = TwirpError::newError(ErrorCode::BadRoute, $msg);
+        $e->setMeta('twirp_invalid_route', $method . ' ' . $url);
+
+        return $e;
+    }
+
+    /**
      * Writes errors in the response and triggers hooks.
      *
      * @param array                 $ctx
@@ -212,7 +263,7 @@ final class HaberdasherServer extends TwirpServer implements RequestHandler
      *
      * @return ResponseInterface
      */
-    protected function handleError(array $ctx, $e)
+    private function writeError(array $ctx, $e)
     {
         // Non-twirp errors are mapped to be internal errors
         if ($e instanceof \Twirp\Error) {
@@ -251,7 +302,16 @@ final class HaberdasherServer extends TwirpServer implements RequestHandler
             $e = TwirpError::errorFrom($e, 'internal error');
         }
 
-        return $this->writeError($ctx, $e);
+        $body = $this->streamFactory->createStream(json_encode([
+            'code' => $e->getErrorCode(),
+            'msg' => $e->getMessage(),
+            'meta' => $e->getMetaMap(),
+        ]));
+
+        return $this->messageFactory
+            ->createResponse($statusCode)
+            ->withHeader('Content-Type', 'application/json') // Error responses are always JSON (instead of protobuf)
+            ->withBody($body);
     }
 
     /**
