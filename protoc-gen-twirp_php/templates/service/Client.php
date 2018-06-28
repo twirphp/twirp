@@ -95,8 +95,7 @@ final class {{ .Service | phpServiceName .File }}Client implements {{ .Service |
 
         return $out;
     }
-{{ end -}}
-
+{{ end }}
     /**
      * Common code to make a request to the remote twirp service.
      *

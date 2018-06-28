@@ -94,7 +94,8 @@ final class HaberdasherClient implements Haberdasher
 
         return $out;
     }
-/**
+
+    /**
      * Common code to make a request to the remote twirp service.
      *
      * @param array   $ctx
