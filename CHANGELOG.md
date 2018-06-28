@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Server class to the shared library
+
 ### Changed
 
 - The builtin generated error now receives the previous exceptions
@@ -17,6 +21,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - Wrong type hint (`ServerHook`)
+
+### Removed
+
+- Generated server class
 
 
 ## [0.3.2] - 2018-06-26
