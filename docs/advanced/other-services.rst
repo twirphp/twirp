@@ -2,13 +2,13 @@ Serving multiple Twirp services together
 ========================================
 
 In some cases you might want to serve not just one, but multiple services from one application.
-The generated code contains a simple server implementation which lets you mux different services.
+The shared library contains a simple server implementation which lets you mux different services.
 
 .. code-block:: php
 
     <?php
 
-    $server = new \Twitch\Twirp\Example\Server();
+    $server = new \Twirp\Server();
 
     // register services
     $server->registerServer(

@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Server class to the shared library
+
 ### Changed
 
 - The builtin generated error now receives the previous exceptions
