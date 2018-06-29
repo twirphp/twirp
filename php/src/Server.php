@@ -66,7 +66,7 @@ final class Server implements RequestHandler
     public function handle(ServerRequestInterface $req)
     {
         foreach ($this->handlers as $prefix => $handler) {
-            if (strpos($req->getUri()->getPath(), $prefix) == 0) {
+            if (strpos($req->getUri()->getPath(), $prefix) === 0) {
                 return $handler->handle($req);
             }
         }
