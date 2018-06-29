@@ -4,6 +4,7 @@ namespace Tests\Twirp;
 
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
+use GuzzleHttp\Psr7\Uri;
 use Prophecy\Argument;
 use Psr\Http\Message\ServerRequestInterface;
 use Twirp\ErrorCode;
@@ -21,13 +22,13 @@ final class ServerTest extends \PHPUnit\Framework\TestCase
 
         $server = new Server();
 
-        $server->registerServer('/prefix', $handler->reveal());
+        $server->registerServer('/twirp/prefix', $handler->reveal());
 
         $response = new Response();
 
         $handler->handle(Argument::type(ServerRequestInterface::class))->willReturn($response);
 
-        $request = ServerRequest::fromGlobals();
+        $request = (ServerRequest::fromGlobals())->withUri(new Uri('http://localhost/twirp/prefix'));
 
         $actualResponse = $server->handle($request);
 
