@@ -31,47 +31,6 @@ How is this connected to PSR-15? In PHP, routing is often a step of a middleware
 For example you could use `FastRoute`_ together with its `middleware <https://github.com/middlewares/fast-route>`_.
 
 
-Middlewares
------------
-
-When Twirp `is` the primary target of requests, it can simply be the last element in your middleware chain
-to be the final request handler.
-To make a Twirp server compatible with PSR-15 you need a simple wrapper class that implements the PSR-15
-request handler interface.
-
-.. code-block:: php
-
-    <?php
-
-    use Psr\Http\Message\ResponseInterface;
-    use Psr\Http\Message\ServerRequestInterface;
-    use Psr\Http\Server\RequestHandlerInterface;
-    use Twirp\RequestHandler;
-
-    final class Psr15RequestHandler implements RequestHandlerInterface
-    {
-        /**
-         * @var RequestHandler
-         */
-        private $server;
-
-        public function __construct(RequestHandler $server)
-        {
-            $this->server = $server;
-        }
-
-        public function handle(ServerRequestInterface $request): ResponseInterface
-        {
-            return $this->server->handle($request);
-        }
-    }
-
-.. note:: TwirPHP's ``RequestHandler`` interface is a backport from PSR-15 to make it PHP 5.x compatible.
-
-    It may eventually be deprecated in favor of the original interface.
-
-The wrapper class can easily be registered in any PSR-15 compatible middleware chain.
-
 
 .. _PSR-15: https://www.php-fig.org/psr/psr-15/
 .. _FastRoute: https://github.com/nikic/FastRoute
