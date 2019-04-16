@@ -35,9 +35,24 @@ class Hat extends \Google\Protobuf\Internal\Message
      */
     private $name = '';
 
-    public function __construct() {
+    /**
+     * Constructor.
+     *
+     * @param array $data {
+     *     Optional. Data for populating the Message object.
+     *
+     *     @type int $size
+     *           The size of a hat should always be in inches.
+     *     @type string $color
+     *           The color of a hat will never be 'invisible', but other than
+     *           that, anything is fair game.
+     *     @type string $name
+     *           The name of a hat is it's type. Like, 'bowler', or something.
+     * }
+     */
+    public function __construct($data = NULL) {
         \GPBMetadata\Service::initOnce();
-        parent::__construct();
+        parent::__construct($data);
     }
 
     /**
