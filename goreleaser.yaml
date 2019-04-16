@@ -14,5 +14,8 @@ builds:
 archive:
     name_template: "protoc-gen-twirp_php_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
 
+checksum:
+    name_template: "protoc-gen-twirp_php_checksums.txt"
+
 changelog:
     skip: true
