@@ -5,12 +5,11 @@
 namespace {{ .File | phpNamespace }};
 
 use Google\Protobuf\Internal\GPBDecodeException;
-use Http\Discovery\MessageFactoryDiscovery;
-use Http\Discovery\StreamFactoryDiscovery;
-use Http\Message\MessageFactory;
-use Http\Message\StreamFactory;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Twirp\BaseServerHooks;
 use Twirp\Context;
 use Twirp\ErrorCode;
@@ -27,12 +26,12 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
     const PATH_PREFIX = '/twirp/{{ .Service | protoFullName .File }}/';
 
     /**
-     * @var MessageFactory
+     * @var ResponseFactoryInterface
      */
-    private $messageFactory;
+    private $responseFactory;
 
     /**
-     * @var StreamFactory
+     * @var StreamFactoryInterface
      */
     private $streamFactory;
 
@@ -48,31 +47,31 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
 
     /**
      * @param {{ .Service | phpServiceName .File }} $svc
-     * @param ServerHooks|null    $hook
-     * @param MessageFactory|null $messageFactory
-     * @param StreamFactory|null  $streamFactory
+     * @param ServerHooks|null $hook
+     * @param ResponseFactoryInterface|null $responseFactory
+     * @param StreamFactoryInterface|null $streamFactory
      */
     public function __construct(
         {{ .Service | phpServiceName .File }} $svc,
         ServerHooks $hook = null,
-        MessageFactory $messageFactory = null,
-        StreamFactory $streamFactory = null
+        ResponseFactoryInterface $responseFactory = null,
+        StreamFactoryInterface $streamFactory = null
     ) {
         if ($hook === null) {
             $hook = new BaseServerHooks();
         }
 
-        if ($messageFactory === null) {
-            $messageFactory = MessageFactoryDiscovery::find();
+        if ($responseFactory === null) {
+            $responseFactory = Psr17FactoryDiscovery::findResponseFactory();
         }
 
         if ($streamFactory === null) {
-            $streamFactory = StreamFactoryDiscovery::find();
+            $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
         }
 
         $this->svc = $svc;
         $this->hook = $hook;
-        $this->messageFactory = $messageFactory;
+        $this->responseFactory = $responseFactory;
         $this->streamFactory = $streamFactory;
     }
 
@@ -178,7 +177,7 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
 
         $body = $this->streamFactory->createStream($data);
 
-        $resp = $this->messageFactory
+        $resp = $this->responseFactory
             ->createResponse(200)
             ->withHeader('Content-Type', 'application/json')
             ->withBody($body);
@@ -217,7 +216,7 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
 
         $body = $this->streamFactory->createStream($data);
 
-        $resp = $this->messageFactory
+        $resp = $this->responseFactory
             ->createResponse(200)
             ->withHeader('Content-Type', 'application/protobuf')
             ->withBody($body);
@@ -312,7 +311,7 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
             'meta' => $e->getMetaMap(),
         ]));
 
-        return $this->messageFactory
+        return $this->responseFactory
             ->createResponse($statusCode)
             ->withHeader('Content-Type', 'application/json') // Error responses are always JSON (instead of protobuf)
             ->withBody($body);
