@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Twitch\Twirp\Example;
 
 use Twirp\ErrorCode;
@@ -13,7 +15,7 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_has_a_code()
+    public function it_has_a_code(): void
     {
         $error = new TwirpError('code', 'msg');
 
@@ -23,7 +25,7 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_has_a_message()
+    public function it_has_a_message(): void
     {
         $error = new TwirpError('code', 'msg');
 
@@ -33,7 +35,7 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_has_metadata()
+    public function it_has_metadata(): void
     {
         $error = new TwirpError('code', 'msg');
         $error->setMeta('key', 'value');
@@ -45,7 +47,7 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_has_a_map_of_metadata()
+    public function it_has_a_map_of_metadata(): void
     {
         $error = new TwirpError('code', 'msg');
         $error->setMeta('key', 'value');
@@ -56,7 +58,7 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_creates_a_new_error()
+    public function it_creates_a_new_error(): void
     {
         $error = TwirpError::newError(ErrorCode::Unauthenticated, 'msg');
 
@@ -67,7 +69,7 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_creates_an_internal_error_when_code_is_invalid()
+    public function it_creates_an_internal_error_when_code_is_invalid(): void
     {
         $error = TwirpError::newError('code', 'msg');
 
@@ -78,7 +80,7 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_creates_an_error_from_an_exception()
+    public function it_creates_an_error_from_an_exception(): void
     {
         $exception = new \Exception('msg');
         $error = TwirpError::errorFrom($exception);
@@ -91,7 +93,7 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_creates_an_error_from_an_exception_with_a_custom_message()
+    public function it_creates_an_error_from_an_exception_with_a_custom_message(): void
     {
         $exception = new \Exception('msg');
         $error = TwirpError::errorFrom($exception, 'custom msg');

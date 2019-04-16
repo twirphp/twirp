@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Twirp;
 
 use Psr\Http\Message\ResponseInterface;
@@ -16,8 +18,6 @@ interface RequestHandler
 {
     /**
      * Handle the request and return a response.
-     *
-     * @return ResponseInterface
      */
-    public function handle(ServerRequestInterface $request);
+    public function handle(ServerRequestInterface $request): ResponseInterface;
 }

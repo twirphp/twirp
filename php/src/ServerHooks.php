@@ -28,37 +28,25 @@ interface ServerHooks
      * Called as soon as a request enters the Twirp
      * server at the earliest available moment.
      *
-     * @param array $ctx
-     *
-     * @return array
-     *
-     * @throws \Throwable|\Exception
+     * @throws \Throwable
      */
-    public function requestReceived(array $ctx);
+    public function requestReceived(array $ctx): array;
 
     /**
      * Called when a request has been routed to a
      * particular method of the Twirp server.
      *
-     * @param array $ctx
-     *
-     * @return array
-     *
-     * @throws \Throwable|\Exception
+     * @throws \Throwable
      */
-    public function requestRouted(array $ctx);
+    public function requestRouted(array $ctx): array;
 
     /**
      * Called when a request has been handled and a
      * response is ready to be sent to the client.
      *
-     * @param array $ctx
-     *
-     * @return array
-     *
-     * @throws \Throwable|\Exception
+     * @throws \Throwable
      */
-    public function responsePrepared(array $ctx);
+    public function responsePrepared(array $ctx): array;
 
     /**
      * Called when all bytes of a response (including an error
@@ -66,19 +54,12 @@ interface ServerHooks
      * does not return a context.
      *
      * For the same reason, it MUST NOT throw any exceptions.
-     *
-     * @param array $ctx
      */
-    public function responseSent(array $ctx);
+    public function responseSent(array $ctx): void;
 
     /**
      * Called when an error occurs while handling a request. The
      * Error is passed as argument to the hook.
-     *
-     * @param array                 $ctx
-     * @param \Throwable|\Exception $error
-     *
-     * @return array
      */
-    public function error(array $ctx, $error);
+    public function error(array $ctx, \Throwable $error): array;
 }

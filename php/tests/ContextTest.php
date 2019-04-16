@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Twirp;
 
 use Twirp\Context;
@@ -9,7 +11,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_retrieves_method_name()
+    public function it_retrieves_method_name(): void
     {
         $expected = 'method_name';
 
@@ -25,7 +27,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_returns_null_when_there_is_not_method_name()
+    public function it_returns_null_when_there_is_not_method_name(): void
     {
         $this->assertNull(Context::methodName([]));
     }
@@ -33,7 +35,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_adds_method_name()
+    public function it_adds_method_name(): void
     {
         $expected = 'method_name';
 
@@ -47,7 +49,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_retrieves_service_name()
+    public function it_retrieves_service_name(): void
     {
         $expected = 'service_name';
 
@@ -63,7 +65,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_returns_null_when_there_is_not_service_name()
+    public function it_returns_null_when_there_is_not_service_name(): void
     {
         $this->assertNull(Context::serviceName([]));
     }
@@ -71,7 +73,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_adds_service_name()
+    public function it_adds_service_name(): void
     {
         $expected = 'service_name';
 
@@ -85,7 +87,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_retrieves_package_name()
+    public function it_retrieves_package_name(): void
     {
         $expected = 'package_name';
 
@@ -101,7 +103,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_returns_null_when_there_is_not_package_name()
+    public function it_returns_null_when_there_is_not_package_name(): void
     {
         $this->assertNull(Context::packageName([]));
     }
@@ -109,7 +111,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_adds_package_name()
+    public function it_adds_package_name(): void
     {
         $expected = 'package_name';
 
@@ -123,7 +125,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_retrieves_status_code()
+    public function it_retrieves_status_code(): void
     {
         $expected = 200;
 
@@ -139,7 +141,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_returns_null_when_there_is_not_status_code()
+    public function it_returns_null_when_there_is_not_status_code(): void
     {
         $this->assertNull(Context::statusCode([]));
     }
@@ -147,7 +149,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_adds_status_code()
+    public function it_adds_status_code(): void
     {
         $expected = 200;
 
@@ -161,7 +163,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_retrieves_http_request_headers()
+    public function it_retrieves_http_request_headers(): void
     {
         $expected = [
             'Authorization' => 'Bearer 0123456789qwertzuiopasdfghjklyxcvbnm',
@@ -179,7 +181,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_returns_null_when_there_is_not_http_request_headers()
+    public function it_returns_null_when_there_is_not_http_request_headers(): void
     {
         $this->assertEquals([], Context::httpRequestHeaders([]));
     }
@@ -187,7 +189,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_adds_http_request_headers()
+    public function it_adds_http_request_headers(): void
     {
         $expected = [
             'Authorization' => 'Bearer 0123456789qwertzuiopasdfghjklyxcvbnm',
@@ -204,7 +206,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
      * @test
      * @dataProvider twirpRequestHeaderProvider
      */
-    public function it_throws_an_exception_when_http_request_headers_contain_a_header_used_by_twirp(array $headers, $expectedMessage)
+    public function it_throws_an_exception_when_http_request_headers_contain_a_header_used_by_twirp(array $headers, string $expectedMessage): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedMessage);
@@ -215,7 +217,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_adds_http_response_header()
+    public function it_adds_http_response_header(): void
     {
         $key = 'Authorization';
         $value = 'Bearer 0123456789qwertzuiopasdfghjklyxcvbnm';
@@ -234,7 +236,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
      * @test
      * @dataProvider twirpResponseHeaderProvider
      */
-    public function it_throws_an_exception_when_http_response_header_is_used_by_twirp($key, $value, $expectedMessage)
+    public function it_throws_an_exception_when_http_response_header_is_used_by_twirp(string $key, string $value, string $expectedMessage): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedMessage);
@@ -242,7 +244,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
         Context::withHttpResponseHeader([], $key, $value);
     }
 
-    public function twirpRequestHeaderProvider()
+    public function twirpRequestHeaderProvider(): array
     {
         return [
             [
@@ -266,7 +268,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function twirpResponseHeaderProvider()
+    public function twirpResponseHeaderProvider(): array
     {
         return [
             [

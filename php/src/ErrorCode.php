@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Twirp;
 
 /**
@@ -101,12 +103,8 @@ final class ErrorCode
      * Maps a Twirp error type into a similar HTTP
      * response status. It is used by the Twirp server handler to set the HTTP
      * response status code. Returns 0 if the error code is invalid.
-     *
-     * @param string $code
-     *
-     * @return int
      */
-    public static function serverHTTPStatusFromErrorCode($code)
+    public static function serverHTTPStatusFromErrorCode(string $code): int
     {
         switch ($code) {
             case self::Canceled:
@@ -152,12 +150,8 @@ final class ErrorCode
 
     /**
      * Returns true if is one of the valid predefined constants.
-     *
-     * @param string $code
-     *
-     * @return bool
      */
-    public static function isValid($code)
+    public static function isValid(string $code): bool
     {
         return self::serverHTTPStatusFromErrorCode($code) != 0;
     }

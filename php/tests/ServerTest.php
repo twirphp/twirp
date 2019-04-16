@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Twirp;
 
 use GuzzleHttp\Psr7\Response;
@@ -16,7 +18,7 @@ final class ServerTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_handles_a_request()
+    public function it_handles_a_request(): void
     {
         $handler = $this->prophesize(RequestHandler::class);
 
@@ -38,7 +40,7 @@ final class ServerTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_returns_no_route_error_when_a_request_cannot_be_routed_to_a_service()
+    public function it_returns_no_route_error_when_a_request_cannot_be_routed_to_a_service(): void
     {
         $server = new Server();
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Twitch\Twirp\Example;
 
 use GuzzleHttp\Psr7\ServerRequest;
@@ -19,7 +21,7 @@ final class HaberdasherServerTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_returns_an_internal_error_when_the_service_throws_an_exception()
+    public function it_returns_an_internal_error_when_the_service_throws_an_exception(): void
     {
         $haberdasher = $this->prophesize(Haberdasher::class);
         $hooks = new ServerHooksErrorStub();
