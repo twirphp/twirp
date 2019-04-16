@@ -19,7 +19,7 @@ import (
 
 // Provisioned by ldflags
 var (
-	Version string
+	version string
 )
 
 func main() {
@@ -28,7 +28,7 @@ func main() {
 	flag.Parse()
 
 	if *version {
-		fmt.Println(Version)
+		fmt.Println(version)
 		os.Exit(0)
 	}
 
@@ -57,7 +57,7 @@ func Main(in io.Reader, out io.Writer, box packr.Box) error {
 			"service/Client.php",
 			"service/Server.php",
 		},
-		Version: Version,
+		Version: version,
 	}
 
 	resp, err := g.Generate(greq)

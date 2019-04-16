@@ -1,14 +1,17 @@
 builds:
-  -
-    main: ./protoc-gen-twirp_php/
-    binary: protoc-gen-twirp_php
-    env:
-      - CGO_ENABLED=0
-    goos:
-      - linux
-      - darwin
-    goarch:
-      - amd64
-    ldflags: "-s -w -X main.Version={{.Version}}"
+    -
+        main: ./protoc-gen-twirp_php/
+        binary: protoc-gen-twirp_php
+        env:
+            - CGO_ENABLED=0
+        goos:
+            - linux
+            - darwin
+        goarch:
+            - amd64
+        ldflags: "-s -w -X main.version={{.Version}}"
 
 archive:
+
+changelog:
+    skip: true
