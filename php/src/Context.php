@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Twirp;
 
 /**
@@ -17,12 +19,8 @@ final class Context
     /**
      * Extracts the name of the method being handled in the given
      * context. If it is not known, it returns null.
-     *
-     * @param array $ctx
-     *
-     * @return string
      */
-    public static function methodName(array $ctx)
+    public static function methodName(array $ctx): ?string
     {
         if (isset($ctx[self::METHOD_NAME])) {
             return $ctx[self::METHOD_NAME];
@@ -33,13 +31,8 @@ final class Context
 
     /**
      * Sets the method name in the context.
-     *
-     * @param array  $ctx
-     * @param string $name
-     *
-     * @return array
      */
-    public static function withMethodName(array $ctx, $name)
+    public static function withMethodName(array $ctx, string $name): array
     {
         $ctx[self::METHOD_NAME] = $name;
 
@@ -49,12 +42,8 @@ final class Context
     /**
      * Extracts the name of the service handling the given context. If
      * it is not known, it returns null.
-     *
-     * @param array $ctx
-     *
-     * @return string
      */
-    public static function serviceName(array $ctx)
+    public static function serviceName(array $ctx): ?string
     {
         if (isset($ctx[self::SERVICE_NAME])) {
             return $ctx[self::SERVICE_NAME];
@@ -65,13 +54,8 @@ final class Context
 
     /**
      * Sets the service name in the context.
-     *
-     * @param array  $ctx
-     * @param string $name
-     *
-     * @return array
      */
-    public static function withServiceName(array $ctx, $name)
+    public static function withServiceName(array $ctx, string $name): array
     {
         $ctx[self::SERVICE_NAME] = $name;
 
@@ -86,12 +70,8 @@ final class Context
      *
      * Note that the protobuf package name can be very different than the go package
      * name; the two are unrelated.
-     *
-     * @param array $ctx
-     *
-     * @return string
      */
-    public static function packageName(array $ctx)
+    public static function packageName(array $ctx): ?string
     {
         if (isset($ctx[self::PACKAGE_NAME])) {
             return $ctx[self::PACKAGE_NAME];
@@ -102,13 +82,8 @@ final class Context
 
     /**
      * Sets the package name in the context.
-     *
-     * @param array  $ctx
-     * @param string $name
-     *
-     * @return array
      */
-    public static function withPackageName(array $ctx, $name)
+    public static function withPackageName(array $ctx, string $name): array
     {
         $ctx[self::PACKAGE_NAME] = $name;
 
@@ -119,12 +94,8 @@ final class Context
      * Retrieves the status code of the response (as string like "200").
      * If it is known returns the status.
      * If it is not known, it returns null.
-     *
-     * @param array $ctx
-     *
-     * @return int
      */
-    public static function statusCode(array $ctx)
+    public static function statusCode(array $ctx): ?int
     {
         if (isset($ctx[self::STATUS_CODE])) {
             return $ctx[self::STATUS_CODE];
@@ -135,13 +106,8 @@ final class Context
 
     /**
      * Sets the status code in the context.
-     *
-     * @param array $ctx
-     * @param int   $code
-     *
-     * @return array
      */
-    public static function withStatusCode(array $ctx, $code)
+    public static function withStatusCode(array $ctx, int $code): array
     {
         $ctx[self::STATUS_CODE] = $code;
 
@@ -151,12 +117,8 @@ final class Context
     /**
      * Retrieves the HTTP headers sent as part of the request.
      * If there are no headers, it returns an empty array.
-     *
-     * @param array $ctx
-     *
-     * @return array
      */
-    public static function httpRequestHeaders(array $ctx)
+    public static function httpRequestHeaders(array $ctx): array
     {
         if (isset($ctx[self::REQUEST_HEADER])) {
             return $ctx[self::REQUEST_HEADER];
@@ -178,15 +140,9 @@ final class Context
      * Throws an exception if the provided headers
      * would overwrite a header that is needed by Twirp, like "Content-Type".
      *
-     *
-     * @param array $ctx
-     * @param array $headers
-     *
-     * @return array
-     *
      * @throws \InvalidArgumentException when any of the following headers are included: Accept, Content-Type, Twirp-Version
      */
-    public static function withHttpRequestHeaders(array $ctx, array $headers)
+    public static function withHttpRequestHeaders(array $ctx, array $headers): array
     {
         foreach ($headers as $key => $value) {
             $key = strtolower($key);
@@ -222,16 +178,9 @@ final class Context
      * Throws an exception if the provided headers
      * would overwrite a header that is needed by Twirp, like "Content-Type".
      *
-     *
-     * @param array  $ctx
-     * @param string $key
-     * @param string $value
-     *
-     * @return array
-     *
      * @throws \InvalidArgumentException when any of the following headers are included: Content-Type
      */
-    public static function withHttpResponseHeader(array $ctx, $key, $value)
+    public static function withHttpResponseHeader(array $ctx, string $key, string $value): array
     {
         if (strtolower($key) === 'content-type') {
             throw new \InvalidArgumentException('header key can not be Content-Type');

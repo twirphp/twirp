@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Twirp;
 
 use Twirp\BaseServerHooks;
@@ -10,7 +12,7 @@ final class BaseServerHooksTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_has_a_request_received_hook()
+    public function it_has_a_request_received_hook(): void
     {
         $actual = ['key' => 'value'];
 
@@ -22,7 +24,7 @@ final class BaseServerHooksTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_has_a_request_routed_hook()
+    public function it_has_a_request_routed_hook(): void
     {
         $actual = ['key' => 'value'];
 
@@ -34,7 +36,7 @@ final class BaseServerHooksTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_has_a_response_prepared_hook()
+    public function it_has_a_response_prepared_hook(): void
     {
         $actual = ['key' => 'value'];
 
@@ -46,7 +48,7 @@ final class BaseServerHooksTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_has_an_error_hook()
+    public function it_has_an_error_hook(): void
     {
         $actual = ['key' => 'value'];
 

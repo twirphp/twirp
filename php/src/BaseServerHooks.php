@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Twirp;
 
 /**
@@ -11,7 +13,7 @@ class BaseServerHooks implements ServerHooks
     /**
      * {@inheritdoc}
      */
-    public function requestReceived(array $ctx)
+    public function requestReceived(array $ctx): array
     {
         return $ctx;
     }
@@ -19,7 +21,7 @@ class BaseServerHooks implements ServerHooks
     /**
      * {@inheritdoc}
      */
-    public function requestRouted(array $ctx)
+    public function requestRouted(array $ctx): array
     {
         return $ctx;
     }
@@ -27,7 +29,7 @@ class BaseServerHooks implements ServerHooks
     /**
      * {@inheritdoc}
      */
-    public function responsePrepared(array $ctx)
+    public function responsePrepared(array $ctx): array
     {
         return $ctx;
     }
@@ -35,14 +37,14 @@ class BaseServerHooks implements ServerHooks
     /**
      * {@inheritdoc}
      */
-    public function responseSent(array $ctx)
+    public function responseSent(array $ctx): void
     {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function error(array $ctx, $error)
+    public function error(array $ctx, \Throwable $error): array
     {
         return $ctx;
     }

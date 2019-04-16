@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Twirp;
 
 use Http\Discovery\Psr17FactoryDiscovery;
@@ -28,10 +30,6 @@ final class Server implements RequestHandler
      */
     private $handlers = [];
 
-    /**
-     * @param ResponseFactoryInterface|null $responseFactory
-     * @param StreamFactoryInterface|null   $streamFactory
-     */
     public function __construct(
         ResponseFactoryInterface $responseFactory = null,
         StreamFactoryInterface $streamFactory = null
@@ -48,13 +46,7 @@ final class Server implements RequestHandler
         $this->streamFactory = $streamFactory;
     }
 
-    /**
-     * Registers a server instance for a prefix.
-     *
-     * @param string         $prefix
-     * @param RequestHandler $server
-     */
-    public function registerServer($prefix, RequestHandler $server)
+    public function registerServer(string $prefix, RequestHandler $server): void
     {
         $this->handlers[$prefix] = $server;
     }
@@ -62,7 +54,7 @@ final class Server implements RequestHandler
     /**
      * {@inheritdoc}
      */
-    public function handle(ServerRequestInterface $req)
+    public function handle(ServerRequestInterface $req): ResponseInterface
     {
         foreach ($this->handlers as $prefix => $handler) {
             if (strpos($req->getUri()->getPath(), $prefix) === 0) {
@@ -75,12 +67,8 @@ final class Server implements RequestHandler
 
     /**
      * Writes no route Twirp error in the response.
-     *
-     * @param ServerRequestInterface $req
-     *
-     * @return ResponseInterface
      */
-    private function writeNoRouteError(ServerRequestInterface $req)
+    private function writeNoRouteError(ServerRequestInterface $req): ResponseInterface
     {
         $statusCode = ErrorCode::serverHTTPStatusFromErrorCode(ErrorCode::BadRoute);
 

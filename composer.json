@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": "^5.6 || ^7.0",
+        "php": "^7.1",
         "php-http/discovery": "^1.6",
         "php-http/httplug": "^1.0",
         "psr/http-factory": "^1.0",
@@ -23,7 +23,7 @@
         "http-interop/http-factory-guzzle": "^1.0",
         "php-http/guzzle6-adapter": "^1.0",
         "php-http/message": "^1.6",
-        "phpunit/phpunit": "^5.7 || ^6.0 || ^7.0"
+        "phpunit/phpunit": "^7.0 || ^8.0"
     },
     "conflict": {
         "google/protobuf": "<3.5"

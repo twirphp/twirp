@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Twirp;
 
 use Prophecy\Prophecy\ObjectProphecy;
@@ -24,7 +26,7 @@ final class ChainServerHooksTest extends \PHPUnit\Framework\TestCase
      */
     private $hook2;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->hook1 = $this->prophesize(ServerHooks::class);
         $this->hook2 = $this->prophesize(ServerHooks::class);
@@ -35,7 +37,7 @@ final class ChainServerHooksTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_has_a_request_received_hook()
+    public function it_has_a_request_received_hook(): void
     {
         $actual = ['key' => 'value'];
 
@@ -50,7 +52,7 @@ final class ChainServerHooksTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_has_a_request_routed_hook()
+    public function it_has_a_request_routed_hook(): void
     {
         $actual = ['key' => 'value'];
 
@@ -65,7 +67,7 @@ final class ChainServerHooksTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_has_a_response_prepared_hook()
+    public function it_has_a_response_prepared_hook(): void
     {
         $actual = ['key' => 'value'];
 
@@ -80,7 +82,7 @@ final class ChainServerHooksTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_has_a_response_sent_hook()
+    public function it_has_a_response_sent_hook(): void
     {
         $ctx = ['key' => 'value'];
 
@@ -93,7 +95,7 @@ final class ChainServerHooksTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      */
-    public function it_has_an_error_hook()
+    public function it_has_an_error_hook(): void
     {
         $actual = ['key' => 'value'];
         $error = $this->prophesize(Error::class)->reveal();
