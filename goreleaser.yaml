@@ -12,6 +12,7 @@ builds:
         ldflags: "-s -w -X main.version={{.Version}}"
 
 archive:
+    name_template: "protoc-gen-twirp_php_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
 
 changelog:
     skip: true
