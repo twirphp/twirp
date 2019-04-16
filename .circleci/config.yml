@@ -127,8 +127,16 @@ workflows:
 
     build:
         jobs:
-            - gomodules
-            - composer
+            -
+                gomodules:
+                    filters:
+                        tags:
+                            only: /.*/
+            -
+                composer:
+                    filters:
+                        tags:
+                            only: /.*/
             -
                 build:
                     requires:
