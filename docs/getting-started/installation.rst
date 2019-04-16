@@ -27,6 +27,13 @@ TwirPHP protoc plugin
 Just like in case of ``protoc``, the easiest way to install the plugin
 is downloading it from the `Github Releases <https://github.com/twirphp/twirp/releases>`_ page.
 
+Alternatively you can use the following oneliner to install the plugin:
+
+.. code-block:: bash
+
+    curl -Ls https://git.io/twirphp | bash -b path/to/bin
+
+
 Make sure to save the binary with the same name as it is found in the downloaded archive.
 Also, make sure you place the binary in your ``$PATH``, otherwise you will have to
 tell ``protoc`` where you saved the plugin:

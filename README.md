@@ -8,7 +8,18 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/twirphp/twirp.svg?style=flat-square)](https://scrutinizer-ci.com/g/twirphp/twirp)
 [![Composer Package](http://img.shields.io/badge/composer-twirp%2Ftwirp-green.svg?style=flat-square)](https://packagist.org/packages/twirp/twirp)
 
-**Work in progress! First estimated preview: end of April**
+
+## Installation
+
+Download the plugin from the [Releases](https://github.com/twirphp/twirp/releases) page.
+
+Alternatively you can use the following oneliner to install the plugin:
+
+```bash
+curl -Ls https://git.io/twirphp | bash -b path/to/bin
+```
+
+See the [documentation](https://twirphp.readthedocs.io/en/latest/getting-started/installation.html) for details.
 
 
 ## Documentation
