@@ -1,11 +1,10 @@
 FROM quay.io/twirphp/build
 
-WORKDIR /go/src/github.com/twirphp/twirp
+WORKDIR /workspace
 
 COPY . .
 
-RUN set -xe \
-    && composer install \
-    && dep ensure -vendor-only
+RUN composer install
+RUN go mod download
 
 CMD ["echo", "Please see the readme for help"]
