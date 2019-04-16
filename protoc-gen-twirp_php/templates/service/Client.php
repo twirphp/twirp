@@ -15,7 +15,6 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use Psr\Http\Message\UriInterface;
 use Twirp\Context;
 use Twirp\Error;
 use Twirp\ErrorCode;
@@ -29,7 +28,7 @@ use Twirp\ErrorCode;
 final class {{ .Service | phpServiceName .File }}Client implements {{ .Service | phpServiceName .File }}
 {
     /**
-     * @var UriInterface
+     * @var server
      */
     private $addr;
 
