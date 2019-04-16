@@ -12,10 +12,10 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Twirp\BaseServerHooks;
 use Twirp\Context;
 use Twirp\ErrorCode;
-use Twirp\RequestHandler;
 use Twirp\ServerHooks;
 
 /**
@@ -23,7 +23,7 @@ use Twirp\ServerHooks;
  *
  * Generated from protobuf service <code>{{ .Service | protoFullName .File }}</code>
  */
-final class {{ .Service | phpServiceName .File }}Server implements RequestHandler
+final class {{ .Service | phpServiceName .File }}Server implements RequestHandlerInterface
 {
     const PATH_PREFIX = '/twirp/{{ .Service | protoFullName .File }}/';
 
