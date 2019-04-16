@@ -25,13 +25,13 @@ jobs:
                 command: go test -v ./protoc-gen-twirp_php/...
             - run:
                 name: Test shared library
-                command: vendorphp/bin/phpunit -v
+                command: vendor/bin/phpunit -v
             - run:
                 name: Generate code
                 command: ./gen.sh
             - run:
                 name: Test generated code
-                command: vendorphp/bin/phpunit -v --group example
+                command: vendor/bin/phpunit -v --group example
             - run:
                 name: Test client compatibility
                 command: clientcompat -client clientcompat/compat.sh

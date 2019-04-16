@@ -31,9 +31,9 @@ The following set of commands runs the complete test suite for the project:
 
 ```bash
 $ docker run --rm -it twirphp go test -v ./protoc-gen-twirp_php/...
-$ docker run --rm -it twirphp vendorphp/bin/phpunit -v
+$ docker run --rm -it twirphp vendor/bin/phpunit -v
 $ docker run --rm -it -v $PWD/clientcompat:/workspace/clientcompat twirphp ./gen.sh
-$ docker run --rm -it twirphp vendorphp/bin/phpunit -v --group example
+$ docker run --rm -it twirphp vendor/bin/phpunit -v --group example
 $ docker run --rm -it -v $PWD/clientcompat:/workspace/clientcompat twirphp clientcompat -client clientcompat/compat.sh
 ```
 

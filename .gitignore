@@ -1,5 +1,4 @@
 /build/
-/vendor/
 
 # IDE integration
 /.vscode/*
@@ -16,6 +15,6 @@
 /composer.lock
 /phpunit.xml
 /php/.idea/
-/vendorphp/
+/vendor/
 
 *-packr.go
