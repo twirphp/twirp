@@ -9,11 +9,12 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * Collects server implementations and routes requests based on their prefix.
  */
-final class Server implements RequestHandler
+final class Server implements RequestHandlerInterface
 {
     /**
      * @var ResponseFactoryInterface
@@ -26,7 +27,7 @@ final class Server implements RequestHandler
     private $streamFactory;
 
     /**
-     * @var RequestHandler[]
+     * @var RequestHandlerInterface[]
      */
     private $handlers = [];
 
@@ -46,7 +47,7 @@ final class Server implements RequestHandler
         $this->streamFactory = $streamFactory;
     }
 
-    public function registerServer(string $prefix, RequestHandler $server): void
+    public function registerServer(string $prefix, RequestHandlerInterface $server): void
     {
         $this->handlers[$prefix] = $server;
     }

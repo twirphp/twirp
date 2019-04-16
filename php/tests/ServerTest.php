@@ -9,9 +9,9 @@ use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Uri;
 use Prophecy\Argument;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Twirp\ErrorCode;
 use Twirp\Server;
-use Twirp\RequestHandler;
 
 final class ServerTest extends \PHPUnit\Framework\TestCase
 {
@@ -20,7 +20,7 @@ final class ServerTest extends \PHPUnit\Framework\TestCase
      */
     public function it_handles_a_request(): void
     {
-        $handler = $this->prophesize(RequestHandler::class);
+        $handler = $this->prophesize(RequestHandlerInterface::class);
 
         $server = new Server();
 
