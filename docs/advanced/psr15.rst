@@ -2,14 +2,10 @@ Using PSR-15
 ============
 
 `PSR-15`_ is a standard describing server request handlers and middlewares for PHP.
-In fact, the ``Twirp\RequestHandler`` interface is a PHP 5.6 backported version of the interface
-found in PSR-15.
 
 In some cases Twirp might not be the primary receiver of requests or simply you might want to add some
 extra logic to the HTTP flow (for example attaching some headers to the Twirp context).
 Either way, PSR-15 has a great ecosystem around it which helps you with both cases.
-
-.. note:: PSR-15 is PHP 7.x only.
 
 
 Routing requests

@@ -42,9 +42,9 @@ Read HTTP Headers from responses
 Twirp client responses are structs that depend only on the protobuf response.
 HTTP headers can not be used by the Twirp client in any way.
 
-However, remember that the TwirPHP client is instantiated with an `HTTPlug`_ client,
+However, remember that the TwirPHP client is instantiated with a `PSR-18`_ HTTP client,
 which can be anything that implements the minimal interface.
-For example you could configure a `PluginClient`_ and read the headers in a plugin.
+For example you could configure an `HTTPlug`_ `PluginClient`_ and read the headers in a plugin.
 
 
 Server side
@@ -59,7 +59,7 @@ In your server implementation you can set HTTP headers using ``Twirp\Context::wi
 
     <?php
 
-    public function makeHat(array $ctx, \Twitch\Twirp\Example\Size $size)
+    public function MakeHat(array $ctx, \Twitch\Twirp\Example\Size $size): Hat
     {
         \Twirp\Context::withHttpResponseHeader($ctx, 'Cache-Control', 'public, max-age=60');
 
@@ -96,5 +96,6 @@ You might write this middleware:
     }
 
 
+.. _PSR-18: http://www.php-fig.org/psr/psr-18/
 .. _HTTPlug: http://httplug.io/
 .. _PluginClient: http://docs.php-http.org/en/latest/plugins/index.html

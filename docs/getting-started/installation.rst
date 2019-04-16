@@ -90,35 +90,40 @@ via `Composer`_.
 HTTP Client and PSR-7 implementation
 ------------------------------------
 
-The generated code relies on `PSR-7`_ (HTTP Message standard) and the related `message factories`_.
-Furthermore, the generated client relies on  `HTTPlug`_ (HTTP Client standard).
-As such, you will have to install some additional dependencies of your choice.
-If you do HTTP Client stuff in your project, chances are that some of them are already installed.
+The generated code relies on the following standard HTTP interfaces:
+
+* `PSR-7`_ (HTTP Message)
+* `PSR-15`_ (HTTP Server Request Handler)
+* `PSR-17`_ (HTTP Factory)
+* `PSR-18`_ (HTTP Client)
+
+Choosing the right implementations for your project is up to you.
+If you do HTTP stuff in your project, chances are that some of them are already installed.
 
 An example set of dependencies for server usage:
 
 .. code-block:: bash
 
-    $ composer require guzzlehttp/psr7 php-http/message
+    $ composer require guzzlehttp/psr7 http-interop/http-factory-guzzle
 
 
-And an example for client usage:
+And for client usage:
 
 .. code-block:: bash
 
-    $ composer require guzzlehttp/psr7 php-http/message php-http/guzzle6-adapter
+    $ composer require guzzlehttp/psr7 http-interop/http-factory-guzzle php-http/guzzle6-adapter
 
 You can find packages that implement the above interfaces on `Packagist`_:
 
 * `PSR-7 implementation <https://packagist.org/providers/psr/http-message-implementation>`_
-* `Message Factory implementation <https://packagist.org/providers/php-http/message-factory-implementation>`_
-* `HTTP Client implementation <https://packagist.org/providers/php-http/client-implementation>`_
+* `PSR-17 implementation <https://packagist.org/providers/psr/http-factory-implementation>`_
+* `psr-18 implementation <https://packagist.org/providers/psr/http-client-implementation>`_
 
 
 Quickstart
 ----------
 
-From the above guide it is clear that installing TwirPHP is not a trivial thing. It has multiple components and
+From the above guide it is clear that installing TwirPHP is not trivial. It has multiple components and
 external dependencies. To make installing these dependencies easier, there is a quickstart metapackage which
 can be installed via `Composer`_:
 
@@ -136,6 +141,8 @@ It installs:
 .. _dep: https://golang.github.io/dep/
 .. _Composer: https://getcomposer.org
 .. _PSR-7: http://www.php-fig.org/psr/psr-7/
+.. _PSR-15: http://www.php-fig.org/psr/psr-15/
+.. _PSR-17: http://www.php-fig.org/psr/psr-17/
+.. _PSR-18: http://www.php-fig.org/psr/psr-18/
 .. _message factories: https://github.com/php-http/message-factory
-.. _HTTPlug: http://httplug.io/
 .. _Packagist: https://packagist.org

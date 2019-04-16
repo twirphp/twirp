@@ -75,7 +75,7 @@ Now that everything is in place, it's time to implement the server implementing 
 
     final class Haberdasher implements \Twitch\Twirp\Example\Haberdasher
     {
-        public function makeHat(array $ctx, Size $size)
+        public function MakeHat(array $ctx, Size $size): Hat
         {
             $hat = new Hat();
             $hat->setSize($size->getInches());
