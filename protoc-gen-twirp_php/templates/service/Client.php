@@ -8,9 +8,9 @@ namespace {{ .File | phpNamespace }};
 
 use Google\Protobuf\Internal\GPBDecodeException;
 use Google\Protobuf\Internal\Message;
-use Http\Client\HttpClient;
-use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
+use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -33,7 +33,7 @@ final class {{ .Service | phpServiceName .File }}Client implements {{ .Service |
     private $addr;
 
     /**
-     * @var HttpClient
+     * @var ClientInterface
      */
     private $httpClient;
 
@@ -49,12 +49,12 @@ final class {{ .Service | phpServiceName .File }}Client implements {{ .Service |
 
     public function __construct(
         $addr,
-        HttpClient $httpClient = null,
+        ClientInterface $httpClient = null,
         RequestFactoryInterface $requestFactory = null,
         StreamFactoryInterface $streamFactory = null
     ) {
         if ($httpClient === null) {
-            $httpClient = HttpClientDiscovery::find();
+            $httpClient = Psr18ClientDiscovery::find();
         }
 
         if ($requestFactory === null) {
