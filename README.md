@@ -30,11 +30,20 @@ $ docker build -t twirphp .
 The following set of commands runs the complete test suite for the project:
 
 ```bash
-$ docker run --rm -it twirphp go test -v ./protoc-gen-twirp_php/...
-$ docker run --rm -it twirphp vendor/bin/phpunit -v
-$ docker run --rm -it -v $PWD/clientcompat:/workspace/clientcompat twirphp ./gen.sh
-$ docker run --rm -it twirphp vendor/bin/phpunit -v --group example
-$ docker run --rm -it -v $PWD/clientcompat:/workspace/clientcompat twirphp clientcompat -client clientcompat/compat.sh
+docker run --rm -it -v $PWD:/app composer install # Optionall add "-v $COMPOSER_HOME:/tmp" to the docker command
+
+go test -v ./protoc-gen-twirp_php/...
+# OR
+docker run --rm -it -v $PWD:/workspace -v $GOPATH:/go twirphp go test -v ./protoc-gen-twirp_php/...
+
+docker run --rm -it -v $PWD:/workspace twirphp vendor/bin/phpunit -v
+docker run --rm -it -v $PWD:/workspace twirphp vendor/bin/phpunit -v --group example
+
+./gencompat.sh
+# OR
+docker run --rm -it -v $PWD:/workspace -v $GOPATH:/go twirphp ./gencompat.sh
+
+docker run --rm -it -v $PWD:/workspace twirphp clientcompat -client clientcompat/compat.sh
 ```
 
 
