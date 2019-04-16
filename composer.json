@@ -23,7 +23,6 @@
         "guzzlehttp/psr7": "^1.4",
         "http-interop/http-factory-guzzle": "^1.0",
         "php-http/guzzle6-adapter": "^2.0",
-        "php-http/message": "^1.6",
         "phpunit/phpunit": "^7.0 || ^8.0"
     },
     "conflict": {
