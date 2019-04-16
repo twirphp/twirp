@@ -84,8 +84,6 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
             $ctx = $this->hook->requestReceived($ctx);
         } catch (\Throwable $e) {
             return $this->writeError($ctx, $e);
-        } catch (\Exception $e) { // For PHP 5.6 compatibility
-            return $this->writeError($ctx, $e);
         }
 
         if ($req->getMethod() !== 'POST') {
@@ -161,8 +159,6 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
             return $this->writeError($ctx, TwirpError::newError(ErrorCode::Internal, 'failed to parse request json'));
         } catch (\Throwable $e) {
             return $this->writeError($ctx, $e);
-        } catch (\Exception $e) { // For PHP 5.6 compatibility
-            return $this->writeError($ctx, $e);
         }
 
         $data = $out->serializeToJsonString();
@@ -199,8 +195,6 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
         } catch (GPBDecodeException $e) {
             return $this->writeError($ctx, TwirpError::newError(ErrorCode::Internal, 'failed to parse request proto'));
         } catch (\Throwable $e) {
-            return $this->writeError($ctx, $e);
-        } catch (\Exception $e) { // For PHP 5.6 compatibility
             return $this->writeError($ctx, $e);
         }
 

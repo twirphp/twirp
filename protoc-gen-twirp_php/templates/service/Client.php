@@ -103,8 +103,6 @@ final class {{ .Service | phpServiceName .File }}Client implements {{ .Service |
             $resp = $this->httpClient->sendRequest($req);
         } catch (\Throwable $e) {
             throw $this->clientError('failed to send request', $e);
-        } catch (\Exception $e) { // For PHP 5.6 compatibility
-            throw $this->clientError('failed to send request', $e);
         }
 
         if ($resp->getStatusCode() !== 200) {

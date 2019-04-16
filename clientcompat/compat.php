@@ -23,7 +23,7 @@ switch ($message->getMethod()) {
     case ClientCompatMessage_CompatServiceMethod::NOOP:
         try {
             doNoop($client, $message->getRequest());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             file_put_contents('php://stderr', 'doNoop err:'.$e->getMessage());
         }
         break;
@@ -31,7 +31,7 @@ switch ($message->getMethod()) {
     case ClientCompatMessage_CompatServiceMethod::METHOD:
         try {
             doMethod($client, $message->getRequest());
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             file_put_contents('php://stderr', 'doMethod err:'.$e->getMessage());
         }
         break;
