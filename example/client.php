@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__.'/../vendorphp/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 $client = new \Twitch\Twirp\Example\HaberdasherClient($argv[1]);
 

@@ -2,6 +2,8 @@ FROM quay.io/twirphp/build
 
 WORKDIR /workspace
 
+ENV CGO_ENABLED 0
+
 COPY . .
 
 RUN composer install
