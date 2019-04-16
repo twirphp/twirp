@@ -1,7 +1,7 @@
 # [Twirp](https://twitchtv.github.io/twirp/) PHP port
 
 [![CircleCI](https://circleci.com/gh/twirphp/twirp.svg?style=svg)](https://circleci.com/gh/twirphp/twirp)
-[![Twirp Version](http://img.shields.io/badge/twirp%20version-v5.3.0-orange.svg?style=flat-square)](https://github.com/twitchtv/twirp/releases/tag/v5.3.0)
+[![Twirp Version](http://img.shields.io/badge/twirp%20version-v5-orange.svg?style=flat-square)](https://twitchtv.github.io/twirp/docs/spec_v5.html)
 [![Go Report Card](https://goreportcard.com/badge/github.com/twirphp/twirp?style=flat-square)](https://goreportcard.com/report/github.com/twirphp/twirp)
 [![GolangCI](https://golangci.com/badges/github.com/twirphp/twirp.svg)](https://golangci.com)
 [![GoDoc](http://img.shields.io/badge/godoc-reference-5272B4.svg?style=flat-square)](https://godoc.org/github.com/twirphp/twirp)
