@@ -3,7 +3,8 @@ version: 2
 defaults: &defaults
     docker:
         - image: quay.io/twirphp/build
-    working_directory: /go/src/github.com/twirphp/twirp
+          environment:
+            CGO_ENABLED: "0"
 
 jobs:
     build:
@@ -15,7 +16,7 @@ jobs:
                 command: composer install
             - run:
                 name: Install Go dependencies
-                command: dep ensure -v -vendor-only
+                command: go mod download
             - run:
                 name: Generate Packr boxes
                 command: go generate ./protoc-gen-twirp_php/
