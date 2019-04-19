@@ -4,8 +4,7 @@ Usage Example
 This page contains a full example about using TwirPHP on both server and client side.
 Much of it is based on the `original usage example <https://twitchtv.github.io/twirp/docs/example.html>`_,
 so you might want to check that out as well.
-The complete example is available under the `example <https://github.com/twirphp/twirp/tree/master/example>`_
-directory of the project's git repository.
+You can find the code for this example in the `demo-project <https://github.com/twirphp/demo-project>`_ repository.
 
 Before moving forward, make sure to check the :doc:`installation` guide as well.
 
@@ -62,25 +61,29 @@ Implement the server
 --------------------
 
 Now that everything is in place, it's time to implement the server implementing the service interface
-(``Twitch\Twirp\Example\Haberdasher`` in this case).
+(``Twirp\Example\Haberdasher\Haberdasher`` in this case).
 
 .. code-block:: php
 
     <?php
 
-    namespace Twirphp\Example;
+    namespace Twirp\Demo;
 
-    use Twitch\Twirp\Example\Hat;
-    use Twitch\Twirp\Example\Size;
+    use Twirp\Example\Haberdasher\Hat;
+    use Twirp\Example\Haberdasher\Size;
 
-    final class Haberdasher implements \Twitch\Twirp\Example\Haberdasher
+    final class Haberdasher implements \Twirp\Example\Haberdasher\Haberdasher
     {
+        private $colors = ['golden', 'black', 'brown', 'blue', 'white', 'red'];
+
+        private $hats = ['crown', 'baseball cap', 'fedora', 'flat cap', 'panama', 'helmet'];
+
         public function MakeHat(array $ctx, Size $size): Hat
         {
             $hat = new Hat();
-            $hat->setSize($size->getInches());
-            $hat->setColor('golden');
-            $hat->setName('crown');
+            $hat->setInches($size->getInches());
+            $hat->setColor($this->colors[array_rand($this->colors, 1)]);
+            $hat->setName($this->hats[array_rand($this->hats, 1)]);
 
             return $hat;
         }
@@ -103,23 +106,17 @@ works perfectly as well:
 
     require __DIR__.'/vendor/autoload.php';
 
-    $server = new \Twitch\Twirp\Example\HaberdasherServer(new \Twirphp\Example\Haberdasher());
-
     $request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
+
+    $server = new \Twirp\Server();
+    $handler = new \Twirp\Example\Haberdasher\HaberdasherServer(new \Twirp\Demo\Haberdasher());
+    $server->registerServer(\Twirp\Example\Haberdasher\HaberdasherServer::PATH_PREFIX, $handler);
 
     $response = $server->handle($request);
 
     if (!headers_sent()) {
         // status
-        header(sprintf(
-            'HTTP/%s %s %s',
-            $response->getProtocolVersion(),
-            $response->getStatusCode(),
-            $response->getReasonPhrase()),
-            true,
-            $response->getStatusCode()
-        );
-
+        header(sprintf('HTTP/%s %s %s', $response->getProtocolVersion(), $response->getStatusCode(), $response->getReasonPhrase()), true, $response->getStatusCode());
         // headers
         foreach ($response->getHeaders() as $header => $values) {
             foreach ($values as $value) {
@@ -127,7 +124,6 @@ works perfectly as well:
             }
         }
     }
-
     echo $response->getBody();
 
 
@@ -147,21 +143,27 @@ Using the client is quite trivial, you only need to pass an endpoint to the gene
 
     <?php
 
-    $client = new \Twitch\Twirp\Example\HaberdasherClient('http://localhost:8080');
+    require __DIR__.'/vendor/autoload.php';
 
-    $size = new \Twitch\Twirp\Example\Size();
-    $size->setInches(1234);
+    $client = new \Twirp\Example\Haberdasher\HaberdasherClient($argv[1]);
 
-    try {
-        $hat = $client->MakeHat([], $size);
+    while (true) {
+        $size = new \Twirp\Example\Haberdasher\Size();
+        $size->setInches(10);
 
-        var_dump($hat->serializeToJsonString());
-    } catch (\Twirp\Error $e) {
-        var_dump(json_encode([
-            'code' => $e->code(),
-            'msg' => $e->msg(),
-            'meta' => $e->metaMap(),
-        ]));
+        try {
+            $hat = $client->MakeHat([], $size);
+
+            printf("I received a %s %s\n", $hat->getColor(), $hat->getName());
+        } catch (\Twirp\Error $e) {
+            if ($cause = $e->getMeta('cause') !== null) {
+                printf("%s: %s (%s)\n", strtoupper($e->getErrorCode()), $e->getMessage(), $cause);
+            } else {
+                printf("%s: %s\n", strtoupper($e->getErrorCode()), $e->getMessage());
+            }
+        }
+
+        sleep(1);
     }
 
 .. warning:: When no scheme is present in the endpoint, the client falls back to `HTTP`.
