@@ -49,7 +49,7 @@ final class TwirpError extends \Exception implements Error
     /**
      * {@inheritdoc}
      */
-    public function getMeta($key): string
+    public function getMeta(string $key): string
     {
         if (isset($this->meta[$key])) {
             return $this->meta[$key];
