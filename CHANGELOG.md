@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Panic when no options were found in a proto file
+
 
 ## [0.5.2] - 2019-05-16
 
