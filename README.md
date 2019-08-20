@@ -5,7 +5,6 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/twirphp/twirp?style=flat-square)](https://goreportcard.com/report/github.com/twirphp/twirp)
 [![GolangCI](https://golangci.com/badges/github.com/twirphp/twirp.svg)](https://golangci.com)
 [![GoDoc](http://img.shields.io/badge/godoc-reference-5272B4.svg?style=flat-square)](https://godoc.org/github.com/twirphp/twirp)
-[![Quality Score](https://img.shields.io/scrutinizer/g/twirphp/twirp.svg?style=flat-square)](https://scrutinizer-ci.com/g/twirphp/twirp)
 [![Composer Package](http://img.shields.io/badge/composer-twirp%2Ftwirp-green.svg?style=flat-square)](https://packagist.org/packages/twirp/twirp)
 
 
