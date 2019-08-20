@@ -62,11 +62,11 @@ func ClassNamePrefix(className string, file *descriptor.FileDescriptorProto) str
 // 1. Explicitly set namespace using the "php_namespace" option
 // 2. Package name with dots replaced with backslashes and segments converted to title
 func Namespace(file *descriptor.FileDescriptorProto) string {
-	options := file.GetOptions()
-
-	// When there is a namespace option defined we use it
-	if options.PhpNamespace != nil {
-		return options.GetPhpNamespace()
+	if options := file.GetOptions(); options != nil {
+		// When there is a namespace option defined we use it
+		if options.PhpNamespace != nil {
+			return options.GetPhpNamespace()
+		}
 	}
 
 	return Name(file.GetPackage())
