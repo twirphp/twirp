@@ -20,20 +20,20 @@ class Hat extends \Google\Protobuf\Internal\Message
      *
      * Generated from protobuf field <code>int32 size = 1;</code>
      */
-    private $size = 0;
+    protected $size = 0;
     /**
      * The color of a hat will never be 'invisible', but other than
      * that, anything is fair game.
      *
      * Generated from protobuf field <code>string color = 2;</code>
      */
-    private $color = '';
+    protected $color = '';
     /**
      * The name of a hat is it's type. Like, 'bowler', or something.
      *
      * Generated from protobuf field <code>string name = 3;</code>
      */
-    private $name = '';
+    protected $name = '';
 
     /**
      * Constructor.

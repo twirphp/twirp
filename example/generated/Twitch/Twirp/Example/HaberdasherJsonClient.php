@@ -20,12 +20,12 @@ use Twirp\Error;
 use Twirp\ErrorCode;
 
 /**
- * A Protobuf client that implements the {@see Haberdasher} interface.
- * It communicates using Protobuf and can be configured with a custom HTTP Client.
+ * A JSON client that implements the {@see Haberdasher} interface.
+ * It communicates using JSON and can be configured with a custom HTTP Client.
  *
  * Generated from protobuf service <code>twitch.twirp.example.Haberdasher</code>
  */
-final class HaberdasherClient implements Haberdasher
+final class HaberdasherJsonClient implements Haberdasher
 {
     /**
      * @var server
@@ -84,7 +84,7 @@ final class HaberdasherClient implements Haberdasher
 
         $url = $this->addr.'/twirp/twitch.twirp.example.Haberdasher/MakeHat';
 
-        $this->doProtobufRequest($ctx, $url, $in, $out);
+        $this->doJsonRequest($ctx, $url, $in, $out);
 
         return $out;
     }
@@ -92,11 +92,11 @@ final class HaberdasherClient implements Haberdasher
     /**
      * Common code to make a request to the remote twirp service.
      */
-    private function doProtobufRequest(array $ctx, string $url, Message $in, Message $out): void
+    private function doJsonRequest(array $ctx, string $url, Message $in, Message $out): void
     {
-        $body = $in->serializeToString();
+        $body = $in->serializeToJsonString();
 
-        $req = $this->newRequest($ctx, $url, $body, 'application/protobuf');
+        $req = $this->newRequest($ctx, $url, $body, 'application/json');
 
         try {
             $resp = $this->httpClient->sendRequest($req);
@@ -109,9 +109,9 @@ final class HaberdasherClient implements Haberdasher
         }
 
         try {
-            $out->mergeFromString((string)$resp->getBody());
+            $out->mergeFromJsonString((string)$resp->getBody());
         } catch (GPBDecodeException $e) {
-            throw $this->clientError('failed to unmarshal proto response', $e);
+            throw $this->clientError('failed to unmarshal json response', $e);
         }
     }
 
