@@ -132,7 +132,7 @@ Use the client
 
 Client stubs are automatically generated, hooray!
 
-There are two clients generated for each proto service- a default(e.g. HaberdasherClient) which usage protobuf serialization, and another(e.g. HaberdasherJsonClient) which usage json serialization. It is recommended(see `twitchtv/twirp docs`_) to use the default. In either case besides using the different class names there is no difference interface wise.
+There are two client stubs generated for each proto service: the default one which uses protobuf serialization, and a JSON client stub. Twirp itself supports both `protobuf and json`_, but it recommends using only protobuf in production.
 
 Using the client is quite trivial, you only need to pass an endpoint to the generated client:
 
@@ -168,4 +168,4 @@ Using the client is quite trivial, you only need to pass an endpoint to the gene
 
 .. _PSR-7: http://www.php-fig.org/psr/psr-7/
 .. _Zend Diactoros: https://zendframework.github.io/zend-diactoros/usage/#server-side-applications
-.. _twitchtv/twirp docs: https://twitchtv.github.io/twirp/docs/proto_and_json.html
+.. _protobuf and json: https://twitchtv.github.io/twirp/docs/proto_and_json.html
