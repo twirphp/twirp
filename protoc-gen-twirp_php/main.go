@@ -54,6 +54,7 @@ func Main(in io.Reader, out io.Writer, box packr.Box) error {
 		},
 		ServiceFiles: []string{
 			"service/_Service_.php",
+			"service/AbstractClient.php",
 			"service/Client.php",
 			"service/JsonClient.php",
 			"service/Server.php",
