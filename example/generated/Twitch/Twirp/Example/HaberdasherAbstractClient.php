@@ -20,6 +20,9 @@ use Twirp\ErrorCode;
 
 /**
  * @internal HaberdasherAbstractClient provides abstraction for JsonClient and Client (default).
+ * Note that you MUST NOT use it directly! It is an internal implementation detail that is not
+ * covered by backward compatibility promise. The only thing that will and should remain backward
+ * compatible is the two clients.
  */
 abstract class HaberdasherAbstractClient
 {
