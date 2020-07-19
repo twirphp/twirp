@@ -132,10 +132,7 @@ Use the client
 
 Client stubs are automatically generated, hooray!
 
-The original library offers two clients to be generated differing in the underlying serialization: JSON and Protobuf.
-This library only offers Protobuf as per the official recommendation.
-
-.. note:: This may change in the future based on demand.
+There are two client stubs generated for each proto service: the default one which uses protobuf serialization, and a JSON client stub. Twirp itself supports both `protobuf and json`_, but it recommends using only protobuf in production.
 
 Using the client is quite trivial, you only need to pass an endpoint to the generated client:
 
@@ -171,3 +168,4 @@ Using the client is quite trivial, you only need to pass an endpoint to the gene
 
 .. _PSR-7: http://www.php-fig.org/psr/psr-7/
 .. _Zend Diactoros: https://zendframework.github.io/zend-diactoros/usage/#server-side-applications
+.. _protobuf and json: https://twitchtv.github.io/twirp/docs/proto_and_json.html

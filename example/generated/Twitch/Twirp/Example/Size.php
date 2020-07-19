@@ -19,7 +19,7 @@ class Size extends \Google\Protobuf\Internal\Message
     /**
      * Generated from protobuf field <code>int32 inches = 1;</code>
      */
-    private $inches = 0;
+    protected $inches = 0;
 
     /**
      * Constructor.

@@ -10,21 +10,21 @@ use Google\Protobuf\Internal\GPBDecodeException;
 use Google\Protobuf\Internal\Message;
 
 /**
- * A Protobuf client that implements the {@see {{ .Service | phpServiceName .File }}} interface.
- * It communicates using Protobuf and can be configured with a custom HTTP Client.
+ * A JSON client that implements the {@see {{ .Service | phpServiceName .File }}} interface.
+ * It communicates using JSON and can be configured with a custom HTTP Client.
  *
  * Generated from protobuf service <code>{{ .Service | protoFullName .File }}</code>
  */
-final class {{ .Service | phpServiceName .File }}Client extends {{ .Service | phpServiceName .File }}AbstractClient implements {{ .Service | phpServiceName .File }}
+final class {{ .Service | phpServiceName .File }}JsonClient extends {{ .Service | phpServiceName .File }}AbstractClient implements {{ .Service | phpServiceName .File }}
 {
     /**
      * @inheritDoc
      */
     protected function doRequest(array $ctx, string $url, Message $in, Message $out): void
     {
-        $body = $in->serializeToString();
+        $body = $in->serializeToJsonString();
 
-        $req = $this->newRequest($ctx, $url, $body, 'application/protobuf');
+        $req = $this->newRequest($ctx, $url, $body, 'application/json');
 
         try {
             $resp = $this->httpClient->sendRequest($req);
@@ -37,9 +37,9 @@ final class {{ .Service | phpServiceName .File }}Client extends {{ .Service | ph
         }
 
         try {
-            $out->mergeFromString((string)$resp->getBody());
+            $out->mergeFromJsonString((string)$resp->getBody());
         } catch (GPBDecodeException $e) {
-            throw $this->clientError('failed to unmarshal proto response', $e);
+            throw $this->clientError('failed to unmarshal json response', $e);
         }
     }
 }
