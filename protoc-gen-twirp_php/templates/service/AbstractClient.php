@@ -46,6 +46,11 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
      */
     protected $streamFactory;
 
+    /**
+     * @var string
+     */
+    protected $prefix;
+
     public function __construct(
         $addr,
         ClientInterface $httpClient = null,
@@ -68,6 +73,7 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
         $this->httpClient = $httpClient;
         $this->requestFactory = $requestFactory;
         $this->streamFactory = $streamFactory;
+        $this->prefix = '/twirp';
     }
 {{ range $method := .Service.Method }}
 {{- $inputType := $method.InputType | phpMessageName }}
@@ -82,7 +88,12 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
 
         $out = new {{ $method.OutputType | phpMessageName }}();
 
-        $url = $this->addr.'/twirp/{{ $method | protoFullName $.File $.Service }}';
+        $url = $this->addr;
+        if (empty($this->prefix)) {
+            $url = $url.'/{{ $method | protoFullName $.File $.Service }}';
+        } else {
+            $url = $url.'/'.$this->prefix.'/{{ $method | protoFullName $.File $.Service }}';
+        }
 
         $this->doRequest($ctx, $url, $in, $out);
 
@@ -244,5 +255,14 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
         }
 
         return $addr;
+    }
+
+    /**
+     * Set url path prefix. Default is twirp.
+     * @param string $prefix 
+     */
+    public function setPrefix(string $prefix)
+    {
+        $this->prefix = ltrim(rtrim($prefix, '/'), '/');
     }
 }
