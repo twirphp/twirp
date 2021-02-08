@@ -73,7 +73,7 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
         $this->httpClient = $httpClient;
         $this->requestFactory = $requestFactory;
         $this->streamFactory = $streamFactory;
-        $this->prefix = '/twirp';
+        $this->prefix = 'twirp';
     }
 {{ range $method := .Service.Method }}
 {{- $inputType := $method.InputType | phpMessageName }}
