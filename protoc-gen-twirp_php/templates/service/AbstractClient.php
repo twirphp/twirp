@@ -55,7 +55,8 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
         $addr,
         ClientInterface $httpClient = null,
         RequestFactoryInterface $requestFactory = null,
-        StreamFactoryInterface $streamFactory = null
+        StreamFactoryInterface $streamFactory = null,
+        string $prefix = '/twirp'
     ) {
         if ($httpClient === null) {
             $httpClient = Psr18ClientDiscovery::find();
@@ -73,7 +74,7 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
         $this->httpClient = $httpClient;
         $this->requestFactory = $requestFactory;
         $this->streamFactory = $streamFactory;
-        $this->prefix = 'twirp';
+        $this->prefix = ltrim(rtrim($prefix, '/'), '/');
     }
 {{ range $method := .Service.Methods }}
 {{- $inputType := $method.Input | phpMessageName $.File }}
@@ -255,14 +256,5 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
         }
 
         return $addr;
-    }
-
-    /**
-     * Set url path prefix. Default is twirp.
-     * @param string $prefix
-     */
-    public function setPrefix(string $prefix)
-    {
-        $this->prefix = ltrim(rtrim($prefix, '/'), '/');
     }
 }
