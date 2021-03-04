@@ -53,5 +53,12 @@
         }
     },
     "prefer-stable": true,
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "archive": {
+        "exclude": [
+            "/vendor/*",
+            "/.idea/*",
+            "/protoc-gen-twirp_php/*"
+        ]
+    }
 }
