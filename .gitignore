@@ -1,14 +1,5 @@
 /build/
 
-# IDE integration
-/.vscode/*
-!/.vscode/tasks.json
-/.idea/*
-!/.idea/runConfigurations/
-!/.idea/go.imports.xml
-!/.idea/modules.xml
-!/.idea/*.iml
-
 # PHP
 .php_cs
 .php_cs.cache
