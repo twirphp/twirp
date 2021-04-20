@@ -4,22 +4,22 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/golang/protobuf/protoc-gen-go/descriptor"
+	"google.golang.org/protobuf/types/descriptorpb"
 )
 
 // FullName is a template wrapper for protocol buffer descriptor names.
 func FullName(desc ...interface{}) (string, error) {
-	switch  len(desc) {
+	switch len(desc) {
 	case 2:
-		file := desc[0].(*descriptor.FileDescriptorProto)
-		svc := desc[1].(*descriptor.ServiceDescriptorProto)
+		file := desc[0].(*descriptorpb.FileDescriptorProto)
+		svc := desc[1].(*descriptorpb.ServiceDescriptorProto)
 
 		return ServiceFullName(file, svc), nil
 
 	case 3:
-		file := desc[0].(*descriptor.FileDescriptorProto)
-		svc := desc[1].(*descriptor.ServiceDescriptorProto)
-		method := desc[2].(*descriptor.MethodDescriptorProto)
+		file := desc[0].(*descriptorpb.FileDescriptorProto)
+		svc := desc[1].(*descriptorpb.ServiceDescriptorProto)
+		method := desc[2].(*descriptorpb.MethodDescriptorProto)
 
 		return MethodFullName(file, svc, method), nil
 
@@ -29,7 +29,7 @@ func FullName(desc ...interface{}) (string, error) {
 }
 
 // ServiceFullName creates a fully qualified name for the service.
-func ServiceFullName(file *descriptor.FileDescriptorProto, svc *descriptor.ServiceDescriptorProto) string {
+func ServiceFullName(file *descriptorpb.FileDescriptorProto, svc *descriptorpb.ServiceDescriptorProto) string {
 	prefix := ""
 
 	if pkg := file.GetPackage(); pkg != "" {
@@ -40,6 +40,6 @@ func ServiceFullName(file *descriptor.FileDescriptorProto, svc *descriptor.Servi
 }
 
 // MethodFullName creates a fully qualified name for the service.
-func MethodFullName(file *descriptor.FileDescriptorProto, svc *descriptor.ServiceDescriptorProto, method *descriptor.MethodDescriptorProto) string {
+func MethodFullName(file *descriptorpb.FileDescriptorProto, svc *descriptorpb.ServiceDescriptorProto, method *descriptorpb.MethodDescriptorProto) string {
 	return ServiceFullName(file, svc) + "/" + method.GetName()
 }

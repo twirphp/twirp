@@ -9,11 +9,11 @@ import (
 	"log"
 	"os"
 
-	"github.com/golang/protobuf/proto"
-	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 	"github.com/pkg/errors"
 	"github.com/twirphp/twirp/protoc-gen-twirp_php/internal/gen"
 	"github.com/twirphp/twirp/protoc-gen-twirp_php/templates"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/pluginpb"
 )
 
 // Provisioned by ldflags
@@ -74,13 +74,13 @@ func Main(in io.Reader, out io.Writer, fsys fs.FS) error {
 	return nil
 }
 
-func readCodeGeneratorRequest(in io.Reader) (*plugin.CodeGeneratorRequest, error) {
+func readCodeGeneratorRequest(in io.Reader) (*pluginpb.CodeGeneratorRequest, error) {
 	data, err := ioutil.ReadAll(in)
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot read input")
 	}
 
-	req := new(plugin.CodeGeneratorRequest)
+	req := new(pluginpb.CodeGeneratorRequest)
 	if err = proto.Unmarshal(data, req); err != nil {
 		return nil, errors.Wrap(err, "cannot parse input proto")
 	}
@@ -92,8 +92,7 @@ func readCodeGeneratorRequest(in io.Reader) (*plugin.CodeGeneratorRequest, error
 	return req, nil
 }
 
-func writeCodeGeneratorResponse(out io.Writer, resp *plugin.CodeGeneratorResponse) error {
-
+func writeCodeGeneratorResponse(out io.Writer, resp *pluginpb.CodeGeneratorResponse) error {
 	data, err := proto.Marshal(resp)
 	if err != nil {
 		return errors.Wrap(err, "cannot serialize output proto")

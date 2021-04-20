@@ -6,11 +6,12 @@ import (
 	"path"
 	"strings"
 
-	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/protoc-gen-go/descriptor"
-	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 	"github.com/twirphp/twirp/protoc-gen-twirp_php/internal/php"
-	"github.com/twitchtv/protogen/typemap"
+	"google.golang.org/protobuf/compiler/protogen"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
+	"google.golang.org/protobuf/types/descriptorpb"
+	"google.golang.org/protobuf/types/pluginpb"
 )
 
 const twirpVersion = "v5.3.0"
@@ -18,12 +19,12 @@ const twirpVersion = "v5.3.0"
 // Generator is code generator.
 type Generator interface {
 	// Generate generates the necessary files.
-	Generate(*Request) (*plugin.CodeGeneratorResponse, error)
+	Generate(*Request) (*pluginpb.CodeGeneratorResponse, error)
 }
 
 // Request contains all information necessary to start the code generation.
 type Request struct {
-	CodeGeneratorRequest *plugin.CodeGeneratorRequest
+	CodeGeneratorRequest *pluginpb.CodeGeneratorRequest
 
 	// GlobalFiles are generated once per namespace.
 	GlobalFiles []string
@@ -46,17 +47,34 @@ type generator struct {
 
 // generatorContext is passed around to every generation task.
 type generatorContext struct {
-	request  *Request
-	registry *typemap.Registry
+	request    *Request
+	fileReg    map[protoreflect.FullName]*protogen.File
+	messageReg map[protoreflect.FullName]*protogen.Message
 }
 
-func (g *generator) Generate(req *Request) (*plugin.CodeGeneratorResponse, error) {
-	ctx := &generatorContext{
-		request:  req,
-		registry: typemap.New(req.CodeGeneratorRequest.ProtoFile),
+func (g *generator) Generate(req *Request) (*pluginpb.CodeGeneratorResponse, error) {
+	plugin, err := protogen.Options{}.New(req.CodeGeneratorRequest)
+	if err != nil {
+		return nil, err
 	}
 
-	resp := &plugin.CodeGeneratorResponse{}
+	fileReg := make(map[protoreflect.FullName]*protogen.File)
+	messageReg := make(map[protoreflect.FullName]*protogen.Message)
+
+	for _, f := range plugin.Files {
+		for _, m := range f.Messages {
+			fileReg[m.Desc.FullName()] = f
+			messageReg[m.Desc.FullName()] = m
+		}
+	}
+
+	ctx := &generatorContext{
+		request:    req,
+		fileReg:    fileReg,
+		messageReg: messageReg,
+	}
+
+	resp := &pluginpb.CodeGeneratorResponse{}
 
 	namespaces := map[string]bool{}
 
@@ -90,18 +108,18 @@ func (g *generator) Generate(req *Request) (*plugin.CodeGeneratorResponse, error
 }
 
 type serviceFileData struct {
-	File         *descriptor.FileDescriptorProto
-	Service      *descriptor.ServiceDescriptorProto
+	File         *descriptorpb.FileDescriptorProto
+	Service      *descriptorpb.ServiceDescriptorProto
 	TwirpVersion string
 	Version      string
 }
 
 func (g *generator) generateServiceFile(
 	ctx *generatorContext,
-	file *descriptor.FileDescriptorProto,
-	svc *descriptor.ServiceDescriptorProto,
+	file *descriptorpb.FileDescriptorProto,
+	svc *descriptorpb.ServiceDescriptorProto,
 	serviceFile string,
-) (*plugin.CodeGeneratorResponse_File, error) {
+) (*pluginpb.CodeGeneratorResponse_File, error) {
 	data := &serviceFileData{
 		File:         file,
 		Service:      svc,
@@ -119,7 +137,7 @@ func (g *generator) generateServiceFile(
 		return nil, err
 	}
 
-	return &plugin.CodeGeneratorResponse_File{
+	return &pluginpb.CodeGeneratorResponse_File{
 		Name: proto.String(fmt.Sprintf(
 			"%s/%s%s",
 			php.Path(file),
@@ -135,7 +153,7 @@ type globalFileData struct {
 	Version   string
 }
 
-func (g *generator) generateGlobalFile(ctx *generatorContext, file string, namespace string) (*plugin.CodeGeneratorResponse_File, error) {
+func (g *generator) generateGlobalFile(ctx *generatorContext, file string, namespace string) (*pluginpb.CodeGeneratorResponse_File, error) {
 	data := &globalFileData{
 		Namespace: namespace,
 		Version:   ctx.request.Version,
@@ -151,7 +169,7 @@ func (g *generator) generateGlobalFile(ctx *generatorContext, file string, names
 		return nil, err
 	}
 
-	return &plugin.CodeGeneratorResponse_File{
+	return &pluginpb.CodeGeneratorResponse_File{
 		Name:    proto.String(fmt.Sprintf("%s/%s", php.PathFromNamespace(namespace), path.Base(file))),
 		Content: proto.String(tpl),
 	}, nil

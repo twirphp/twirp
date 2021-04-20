@@ -8,6 +8,7 @@ import (
 	"github.com/Masterminds/sprig/v3"
 	"github.com/twirphp/twirp/protoc-gen-twirp_php/internal/php"
 	"github.com/twirphp/twirp/protoc-gen-twirp_php/internal/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 // TxtFuncMap wraps sprig.TxtFuncMap and adds some proto generation specific ones.
@@ -20,12 +21,16 @@ func TxtFuncMap(ctx *generatorContext) template.FuncMap {
 	funcMap["phpNamespace"] = php.Namespace
 	funcMap["phpServiceName"] = php.ServiceName
 	funcMap["phpMessageName"] = func(t string) (string, error) {
-		msg := ctx.registry.MessageDefinition(t)
+		name := protoreflect.FullName(t)
+
+		msg := ctx.messageReg[name]
 		if msg == nil {
 			return "", errors.New("message definition not found for " + t)
 		}
 
-		return php.MessageName(msg), nil
+		file := ctx.fileReg[name]
+
+		return php.MessageName(file, msg), nil
 	}
 
 	return funcMap

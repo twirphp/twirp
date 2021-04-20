@@ -3,8 +3,8 @@ package php
 import (
 	"strings"
 
-	"github.com/golang/protobuf/protoc-gen-go/descriptor"
-	"github.com/twitchtv/protogen/typemap"
+	"google.golang.org/protobuf/compiler/protogen"
+	"google.golang.org/protobuf/types/descriptorpb"
 )
 
 // Reserved PHP keywords that must be prefixed with something.
@@ -29,7 +29,7 @@ var reservedNames = []string{
 // ClassNamePrefix calculates class name prefix.
 //
 // Created based on https://github.com/google/protobuf/blob/67952fab2c766ac5eacc15bb78e5af4039a3d398/src/google/protobuf/compiler/php/php_generator.cc#L137
-func ClassNamePrefix(className string, file *descriptor.FileDescriptorProto) string {
+func ClassNamePrefix(className string, file *descriptorpb.FileDescriptorProto) string {
 	prefix := file.GetOptions().GetPhpClassPrefix()
 	if prefix != "" {
 		return prefix
@@ -61,7 +61,7 @@ func ClassNamePrefix(className string, file *descriptor.FileDescriptorProto) str
 //
 // 1. Explicitly set namespace using the "php_namespace" option
 // 2. Package name with dots replaced with backslashes and segments converted to title
-func Namespace(file *descriptor.FileDescriptorProto) string {
+func Namespace(file *descriptorpb.FileDescriptorProto) string {
 	if options := file.GetOptions(); options != nil {
 		// When there is a namespace option defined we use it
 		if options.PhpNamespace != nil {
@@ -73,7 +73,7 @@ func Namespace(file *descriptor.FileDescriptorProto) string {
 }
 
 // Path guesses the path of the file based on the (internally calculated) namespace.
-func Path(file *descriptor.FileDescriptorProto) string {
+func Path(file *descriptorpb.FileDescriptorProto) string {
 	return strings.Replace(Namespace(file), "\\", "/", -1)
 }
 
@@ -96,7 +96,7 @@ func Name(s string) string {
 // NamespacedName calculates a fully qualified class name.
 //
 // Created based on https://github.com/google/protobuf/blob/67952fab2c766ac5eacc15bb78e5af4039a3d398/src/google/protobuf/compiler/php/php_generator.cc#L195
-func NamespacedName(className string, file *descriptor.FileDescriptorProto) string {
+func NamespacedName(className string, file *descriptorpb.FileDescriptorProto) string {
 	ns := Namespace(file)
 
 	if ns == "" {
@@ -107,23 +107,15 @@ func NamespacedName(className string, file *descriptor.FileDescriptorProto) stri
 }
 
 // ServiceName transforms the service name into a PHP compatible one.
-func ServiceName(file *descriptor.FileDescriptorProto, svc *descriptor.ServiceDescriptorProto) string {
+func ServiceName(file *descriptorpb.FileDescriptorProto, svc *descriptorpb.ServiceDescriptorProto) string {
 	serviceName := svc.GetName()
 
 	return ClassNamePrefix(serviceName, file) + serviceName
 }
 
 // MessageName transforms a message name into a PHP compatible one.
-func MessageName(msg *typemap.MessageDefinition) string {
-	className := ""
+func MessageName(file *protogen.File, message *protogen.Message) string {
+	className := string(message.Desc.Name())
 
-	if lineage := msg.Lineage(); len(lineage) > 0 {
-		for _, parent := range lineage {
-			className += parent.Descriptor.GetName() + "_"
-		}
-	}
-
-	className += msg.Descriptor.GetName()
-
-	return "\\" + NamespacedName(ClassNamePrefix(className, msg.File)+className, msg.File)
+	return "\\" + NamespacedName(ClassNamePrefix(className, file.Proto)+className, file.Proto)
 }
