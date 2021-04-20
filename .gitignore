@@ -6,6 +6,6 @@
 .phpunit.result.cache
 /composer.lock
 /phpunit.xml
-/.phpunit.result.cache
+/phpstan.neon
 /php/.idea/
 /vendor/
