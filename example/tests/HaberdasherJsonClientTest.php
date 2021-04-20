@@ -7,6 +7,7 @@ namespace Tests\Twitch\Twirp\Example;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Http\Client\ClientInterface;
 use Twitch\Twirp\Example\Size;
 use Twitch\Twirp\Example\HaberdasherJsonClient;
@@ -16,6 +17,8 @@ use Twitch\Twirp\Example\HaberdasherJsonClient;
  */
 final class HaberdasherJsonClientTest extends \PHPUnit\Framework\TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @test
      */

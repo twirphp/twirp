@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Twirp;
 
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Twirp\ChainServerHooks;
 use Twirp\Error;
@@ -11,6 +12,8 @@ use Twirp\ServerHooks;
 
 final class ChainServerHooksTest extends \PHPUnit\Framework\TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ChainServerHooks
      */
