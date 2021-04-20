@@ -47,7 +47,7 @@ jobs:
         run: go mod download
 
       - name: Download PHP dependencies
-        run: composer install
+        run: composer update --no-interaction --no-progress
 
       - name: Test code generator
         run: go test -v ./protoc-gen-twirp_php/...
