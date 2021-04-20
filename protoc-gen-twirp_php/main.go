@@ -4,18 +4,17 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/fs"
 	"io/ioutil"
 	"log"
 	"os"
 
-	"github.com/gobuffalo/packr"
 	"github.com/golang/protobuf/proto"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 	"github.com/pkg/errors"
 	"github.com/twirphp/twirp/protoc-gen-twirp_php/internal/gen"
+	"github.com/twirphp/twirp/protoc-gen-twirp_php/templates"
 )
-
-//go:generate sh -c "CGO_ENABLED=0 go run build/packr.go $PWD"
 
 // Provisioned by ldflags
 var (
@@ -32,20 +31,20 @@ func main() {
 		os.Exit(0)
 	}
 
-	err := Main(os.Stdin, os.Stdout, packr.NewBox("./templates"))
+	err := Main(os.Stdin, os.Stdout, templates.FS())
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
 // Main does the hard work. It is called by the main func.
-func Main(in io.Reader, out io.Writer, box packr.Box) error {
+func Main(in io.Reader, out io.Writer, fsys fs.FS) error {
 	req, err := readCodeGeneratorRequest(in)
 	if err != nil {
 		return err
 	}
 
-	g := gen.New(box)
+	g := gen.New(fsys)
 
 	greq := &gen.Request{
 		CodeGeneratorRequest: req,

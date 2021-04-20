@@ -8,5 +8,3 @@
 /.phpunit.result.cache
 /php/.idea/
 /vendor/
-
-*-packr.go

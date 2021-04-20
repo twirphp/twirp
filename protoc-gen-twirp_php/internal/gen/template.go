@@ -5,7 +5,7 @@ import (
 	"errors"
 	"text/template"
 
-	"github.com/Masterminds/sprig"
+	"github.com/Masterminds/sprig/v3"
 	"github.com/twirphp/twirp/protoc-gen-twirp_php/internal/php"
 	"github.com/twirphp/twirp/protoc-gen-twirp_php/internal/proto"
 )

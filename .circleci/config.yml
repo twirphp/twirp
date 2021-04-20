@@ -83,10 +83,6 @@ jobs:
             - restore_php_dependencies
             -
                 run:
-                    name: Generate Packr boxes
-                    command: go generate ./protoc-gen-twirp_php/
-            -
-                run:
                     name: Test code generator
                     command: go test -v ./protoc-gen-twirp_php/...
             -

@@ -48,9 +48,6 @@ jobs:
       - name: Download PHP dependencies
         run: composer install
 
-      - name: Generate Packr boxes
-        run: go generate ./protoc-gen-twirp_php/
-
       - name: Test code generator
         run: go test -v ./protoc-gen-twirp_php/...
 
