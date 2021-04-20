@@ -6,6 +6,7 @@ namespace Tests\Twitch\Twirp\Example;
 
 use GuzzleHttp\Psr7\ServerRequest;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Twirp\Context;
 use Twirp\ServerHooks;
 use Twitch\Twirp\Example\Haberdasher;
@@ -18,6 +19,8 @@ use Twitch\Twirp\Example\TwirpError;
  */
 final class HaberdasherServerTest extends \PHPUnit\Framework\TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @test
      */

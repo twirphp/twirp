@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Twirp;
 
+use Prophecy\PhpUnit\ProphecyTrait;
 use Twirp\BaseServerHooks;
 use Twirp\Error;
 
 final class BaseServerHooksTest extends \PHPUnit\Framework\TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @test
      */

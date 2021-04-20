@@ -8,6 +8,7 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Uri;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Twirp\ErrorCode;
@@ -15,6 +16,8 @@ use Twirp\Server;
 
 final class ServerTest extends \PHPUnit\Framework\TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @test
      */
