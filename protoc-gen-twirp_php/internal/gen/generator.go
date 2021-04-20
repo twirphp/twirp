@@ -2,175 +2,101 @@ package gen
 
 import (
 	"fmt"
-	"io/fs"
-	"path"
 	"strings"
+	"text/template"
 
 	"github.com/twirphp/twirp/protoc-gen-twirp_php/internal/php"
+	"github.com/twirphp/twirp/protoc-gen-twirp_php/templates/global"
+	"github.com/twirphp/twirp/protoc-gen-twirp_php/templates/service"
 	"google.golang.org/protobuf/compiler/protogen"
-	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/reflect/protoreflect"
-	"google.golang.org/protobuf/types/descriptorpb"
-	"google.golang.org/protobuf/types/pluginpb"
 )
 
 const twirpVersion = "v5.3.0"
 
-// Generator is code generator.
-type Generator interface {
-	// Generate generates the necessary files.
-	Generate(*Request) (*pluginpb.CodeGeneratorResponse, error)
+var globalFiles = []string{
+	"TwirpError.php",
 }
+var globalTemplates = template.Must(template.New("").Funcs(TxtFuncMap()).ParseFS(global.FS(), "*.php"))
 
-// Request contains all information necessary to start the code generation.
-type Request struct {
-	CodeGeneratorRequest *pluginpb.CodeGeneratorRequest
-
-	// GlobalFiles are generated once per namespace.
-	GlobalFiles []string
-
-	// ServiceFiles are generated once per service with the service name as a prefix.
-	ServiceFiles []string
-
-	// Version is the compiler's version.
-	Version string
+var serviceFiles = []string{
+	"_Service_.php",
+	"AbstractClient.php",
+	"Client.php",
+	"JsonClient.php",
+	"Server.php",
 }
+var serviceTemplates = template.Must(template.New("").Funcs(TxtFuncMap()).ParseFS(service.FS(), "*.php"))
 
-// New creates a new generator instance.
-func New(fsys fs.FS) Generator {
-	return &generator{fsys}
-}
-
-type generator struct {
-	fsys fs.FS
-}
-
-// generatorContext is passed around to every generation task.
-type generatorContext struct {
-	request    *Request
-	fileReg    map[protoreflect.FullName]*protogen.File
-	messageReg map[protoreflect.FullName]*protogen.Message
-}
-
-func (g *generator) Generate(req *Request) (*pluginpb.CodeGeneratorResponse, error) {
-	plugin, err := protogen.Options{}.New(req.CodeGeneratorRequest)
-	if err != nil {
-		return nil, err
-	}
-
-	fileReg := make(map[protoreflect.FullName]*protogen.File)
-	messageReg := make(map[protoreflect.FullName]*protogen.Message)
-
-	for _, f := range plugin.Files {
-		for _, m := range f.Messages {
-			fileReg[m.Desc.FullName()] = f
-			messageReg[m.Desc.FullName()] = m
-		}
-	}
-
-	ctx := &generatorContext{
-		request:    req,
-		fileReg:    fileReg,
-		messageReg: messageReg,
-	}
-
-	resp := &pluginpb.CodeGeneratorResponse{}
-
+// Generate is the main code generator.
+func Generate(plugin *protogen.Plugin, version string) error {
 	namespaces := map[string]bool{}
 
-	for _, file := range req.CodeGeneratorRequest.ProtoFile {
+	for _, file := range plugin.Files {
 		namespaces[php.Namespace(file)] = true
 
-		for _, svc := range file.Service {
-			for _, serviceFile := range req.ServiceFiles {
-				generatedFile, err := g.generateServiceFile(ctx, file, svc, serviceFile)
-				if err != nil {
-					return nil, err
+		for _, svc := range file.Services {
+			for _, serviceFile := range serviceFiles {
+				generatedFileName := fmt.Sprintf(
+					"%s/%s%s",
+					php.Path(file),
+					php.ServiceName(file, svc),
+					strings.Replace(serviceFile, "_Service_", "", -1),
+				)
+
+				generatedFile := plugin.NewGeneratedFile(generatedFileName, "dummy/path")
+
+				data := &serviceFileData{
+					File:         file,
+					Service:      svc,
+					TwirpVersion: twirpVersion,
+					Version:      version,
 				}
 
-				resp.File = append(resp.File, generatedFile)
+				err := serviceTemplates.ExecuteTemplate(generatedFile, serviceFile, data)
+				if err != nil {
+					return err
+				}
 			}
 		}
 	}
 
 	for namespace := range namespaces {
-		for _, file := range req.GlobalFiles {
-			generatedFile, err := g.generateGlobalFile(ctx, file, namespace)
-			if err != nil {
-				return nil, err
+		for _, file := range globalFiles {
+			generatedFileName := fmt.Sprintf("%s/%s", php.PathFromNamespace(namespace), file)
+
+			generatedFile := plugin.NewGeneratedFile(generatedFileName, "dummy/path")
+
+			data := &globalFileData{
+				Namespace: namespace,
+				Version:   version,
 			}
 
-			resp.File = append(resp.File, generatedFile)
+			err := globalTemplates.ExecuteTemplate(generatedFile, file, data)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
-	return resp, nil
+	return nil
+}
+
+func renderTemplate(plugin *protogen.Plugin, name string, fileName string, data interface{}) error {
+	genFile := plugin.NewGeneratedFile(fileName, "")
+
+	var tpl *template.Template
+
+	return tpl.ExecuteTemplate(genFile, name, data)
 }
 
 type serviceFileData struct {
-	File         *descriptorpb.FileDescriptorProto
-	Service      *descriptorpb.ServiceDescriptorProto
+	File         *protogen.File
+	Service      *protogen.Service
 	TwirpVersion string
 	Version      string
-}
-
-func (g *generator) generateServiceFile(
-	ctx *generatorContext,
-	file *descriptorpb.FileDescriptorProto,
-	svc *descriptorpb.ServiceDescriptorProto,
-	serviceFile string,
-) (*pluginpb.CodeGeneratorResponse_File, error) {
-	data := &serviceFileData{
-		File:         file,
-		Service:      svc,
-		TwirpVersion: twirpVersion,
-		Version:      ctx.request.Version,
-	}
-
-	tplContent, err := fs.ReadFile(g.fsys, serviceFile)
-	if err != nil {
-		return nil, err
-	}
-
-	tpl, err := executeTemplate(ctx, string(tplContent), data)
-	if err != nil {
-		return nil, err
-	}
-
-	return &pluginpb.CodeGeneratorResponse_File{
-		Name: proto.String(fmt.Sprintf(
-			"%s/%s%s",
-			php.Path(file),
-			php.ServiceName(file, svc),
-			strings.Replace(path.Base(serviceFile), "_Service_", "", -1),
-		)),
-		Content: proto.String(tpl),
-	}, nil
 }
 
 type globalFileData struct {
 	Namespace string
 	Version   string
-}
-
-func (g *generator) generateGlobalFile(ctx *generatorContext, file string, namespace string) (*pluginpb.CodeGeneratorResponse_File, error) {
-	data := &globalFileData{
-		Namespace: namespace,
-		Version:   ctx.request.Version,
-	}
-
-	tplContent, err := fs.ReadFile(g.fsys, file)
-	if err != nil {
-		return nil, err
-	}
-
-	tpl, err := executeTemplate(ctx, string(tplContent), data)
-	if err != nil {
-		return nil, err
-	}
-
-	return &pluginpb.CodeGeneratorResponse_File{
-		Name:    proto.String(fmt.Sprintf("%s/%s", php.PathFromNamespace(namespace), path.Base(file))),
-		Content: proto.String(tpl),
-	}, nil
 }

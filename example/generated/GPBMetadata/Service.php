@@ -14,16 +14,19 @@ class Service
         if (static::$is_initialized == true) {
           return;
         }
-        $pool->internalAddGeneratedFile(hex2bin(
-            "0ad3010a0d736572766963652e70726f746f12147477697463682e747769" .
-            "72702e6578616d706c6522300a03486174120c0a0473697a651801200128" .
-            "05120d0a05636f6c6f72180220012809120c0a046e616d65180320012809" .
-            "22160a0453697a65120e0a06696e63686573180120012805324f0a0b4861" .
-            "62657264617368657212400a074d616b65486174121a2e7477697463682e" .
-            "74776972702e6578616d706c652e53697a651a192e7477697463682e7477" .
-            "6972702e6578616d706c652e48617442095a076578616d706c6562067072" .
-            "6f746f33"
-        ), true);
+        $pool->internalAddGeneratedFile(
+            '
+Ó
+service.prototwitch.twirp.example"0
+Hat
+size (
+color (	
+name (	"
+Size
+inches (2O
+Haberdasher@
+MakeHat.twitch.twirp.example.Size.twitch.twirp.example.HatB	Zexamplebproto3'
+        , true);
 
         static::$is_initialized = true;
     }
