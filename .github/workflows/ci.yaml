@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    env:
+      GOFLAGS: -mod=readonly
+    strategy:
+      matrix:
+        php: ['7.1', '7.2', '7.3', '7.4', '8.0']
+
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v1,prestissimo
+
+      - name: Set up Problem Matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Install protoc
+        uses: arduino/setup-protoc@v1
+        with:
+          version: 3.7.1
+
+      - name: Install clientcompat
+        run: go get github.com/twitchtv/twirp/clientcompat@v5.12.1
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Download Go dependencies
+        run: go mod download
+
+      - name: Download PHP dependencies
+        run: composer install
+
+      - name: Generate Packr boxes
+        run: go generate ./protoc-gen-twirp_php/
+
+      - name: Test code generator
+        run: go test -v ./protoc-gen-twirp_php/...
+
+      - name: Test shared library
+        run: vendor/bin/phpunit -v
+
+      - name: Generate code
+        run: ./gen.sh
+
+      - name: Test generated code
+        run: vendor/bin/phpunit -v --group example
+
+      - name: Test client compatibility
+        run: clientcompat -client clientcompat/compat.sh
