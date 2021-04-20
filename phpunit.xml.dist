@@ -1,10 +1,13 @@
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/5.7/phpunit.xsd"
-         backupGlobals="false"
-         colors="true"
-         bootstrap="vendor/autoload.php"
->
-
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" backupGlobals="false" colors="true" bootstrap="vendor/autoload.php">
+    <coverage>
+        <include>
+            <directory suffix=".php">./php/src/</directory>
+        </include>
+        <exclude>
+            <directory>./vendor/</directory>
+        </exclude>
+    </coverage>
     <testsuites>
         <testsuite name="Twirp Test Suite">
             <directory>./php/tests/</directory>
@@ -13,16 +16,6 @@
             <directory>./example/tests/</directory>
         </testsuite>
     </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory suffix=".php">./php/src/</directory>
-            <exclude>
-                <directory>./vendor/</directory>
-            </exclude>
-        </whitelist>
-    </filter>
-
     <groups>
         <exclude>
             <group>example</group>
