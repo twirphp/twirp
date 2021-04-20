@@ -77,7 +77,7 @@ final class Server implements RequestHandlerInterface
             'code' => ErrorCode::BadRoute,
             'msg' => sprintf('no handler for path "%s"', $req->getUri()->getPath()),
             'meta' => [
-                'twirp_invalid_route' => $req->getMethod().' '.$req->getUri()->getPath(),
+                'twirp_invalid_route' => $req->getMethod() . ' ' . $req->getUri()->getPath(),
             ],
         ]));
 

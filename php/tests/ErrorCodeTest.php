@@ -15,7 +15,7 @@ final class ErrorCodeTest extends \PHPUnit\Framework\TestCase
     {
         $statusCode = ErrorCode::serverHTTPStatusFromErrorCode(ErrorCode::NoError);
 
-        $this->assertEquals(200, $statusCode);
+        self::assertEquals(200, $statusCode);
     }
 
     /**
@@ -23,7 +23,7 @@ final class ErrorCodeTest extends \PHPUnit\Framework\TestCase
      */
     public function it_checks_if_error_code_is_valid(): void
     {
-        $this->assertTrue(ErrorCode::isValid(ErrorCode::NoError));
-        $this->assertFalse(ErrorCode::isValid('invalid_code_for_sure'));
+        self::assertTrue(ErrorCode::isValid(ErrorCode::NoError));
+        self::assertFalse(ErrorCode::isValid('invalid_code_for_sure'));
     }
 }

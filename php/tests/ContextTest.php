@@ -21,7 +21,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
 
         $actual = Context::methodName($ctx);
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -29,7 +29,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
      */
     public function it_returns_null_when_there_is_not_method_name(): void
     {
-        $this->assertNull(Context::methodName([]));
+        self::assertNull(Context::methodName([]));
     }
 
     /**
@@ -43,7 +43,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
 
         $actual = $ctx[Context::METHOD_NAME];
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -59,7 +59,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
 
         $actual = Context::serviceName($ctx);
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -67,7 +67,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
      */
     public function it_returns_null_when_there_is_not_service_name(): void
     {
-        $this->assertNull(Context::serviceName([]));
+        self::assertNull(Context::serviceName([]));
     }
 
     /**
@@ -81,7 +81,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
 
         $actual = $ctx[Context::SERVICE_NAME];
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -97,7 +97,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
 
         $actual = Context::packageName($ctx);
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -105,7 +105,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
      */
     public function it_returns_null_when_there_is_not_package_name(): void
     {
-        $this->assertNull(Context::packageName([]));
+        self::assertNull(Context::packageName([]));
     }
 
     /**
@@ -119,7 +119,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
 
         $actual = $ctx[Context::PACKAGE_NAME];
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -135,7 +135,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
 
         $actual = Context::statusCode($ctx);
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -143,7 +143,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
      */
     public function it_returns_null_when_there_is_not_status_code(): void
     {
-        $this->assertNull(Context::statusCode([]));
+        self::assertNull(Context::statusCode([]));
     }
 
     /**
@@ -157,7 +157,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
 
         $actual = $ctx[Context::STATUS_CODE];
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -175,7 +175,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
 
         $actual = Context::httpRequestHeaders($ctx);
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -183,7 +183,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
      */
     public function it_returns_null_when_there_is_not_http_request_headers(): void
     {
-        $this->assertEquals([], Context::httpRequestHeaders([]));
+        self::assertEquals([], Context::httpRequestHeaders([]));
     }
 
     /**
@@ -199,7 +199,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
 
         $actual = $ctx[Context::REQUEST_HEADER];
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -229,7 +229,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
 
         $actual = $ctx[Context::RESPONSE_HEADER];
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**

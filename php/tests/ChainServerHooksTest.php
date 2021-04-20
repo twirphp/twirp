@@ -49,7 +49,7 @@ final class ChainServerHooksTest extends \PHPUnit\Framework\TestCase
 
         $expected = $this->hook->requestReceived([]);
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -64,7 +64,7 @@ final class ChainServerHooksTest extends \PHPUnit\Framework\TestCase
 
         $expected = $this->hook->requestRouted([]);
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -79,7 +79,7 @@ final class ChainServerHooksTest extends \PHPUnit\Framework\TestCase
 
         $expected = $this->hook->responsePrepared([]);
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -108,6 +108,6 @@ final class ChainServerHooksTest extends \PHPUnit\Framework\TestCase
 
         $expected = $this->hook->error([], $error);
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 }

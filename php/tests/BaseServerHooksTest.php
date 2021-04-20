@@ -21,7 +21,7 @@ final class BaseServerHooksTest extends \PHPUnit\Framework\TestCase
 
         $expected = (new BaseServerHooks())->requestReceived($actual);
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -33,7 +33,7 @@ final class BaseServerHooksTest extends \PHPUnit\Framework\TestCase
 
         $expected = (new BaseServerHooks())->requestRouted($actual);
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -45,7 +45,7 @@ final class BaseServerHooksTest extends \PHPUnit\Framework\TestCase
 
         $expected = (new BaseServerHooks())->responsePrepared($actual);
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -57,6 +57,6 @@ final class BaseServerHooksTest extends \PHPUnit\Framework\TestCase
 
         $expected = (new BaseServerHooks())->error($actual, $this->prophesize(Error::class)->reveal());
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 }

@@ -37,7 +37,7 @@ final class ServerTest extends \PHPUnit\Framework\TestCase
 
         $actualResponse = $server->handle($request);
 
-        $this->assertSame($response, $actualResponse);
+        self::assertSame($response, $actualResponse);
     }
 
     /**
@@ -54,7 +54,7 @@ final class ServerTest extends \PHPUnit\Framework\TestCase
         $body = (string) $response->getBody();
         $body = json_decode($body, true);
 
-        $this->assertEquals(404, $response->getStatusCode());
-        $this->assertEquals(ErrorCode::BadRoute, $body['code']);
+        self::assertEquals(404, $response->getStatusCode());
+        self::assertEquals(ErrorCode::BadRoute, $body['code']);
     }
 }
