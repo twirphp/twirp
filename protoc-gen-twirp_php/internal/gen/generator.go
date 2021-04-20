@@ -2,10 +2,10 @@ package gen
 
 import (
 	"fmt"
+	"io/fs"
 	"path"
 	"strings"
 
-	"github.com/gobuffalo/packr"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/protoc-gen-go/descriptor"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
@@ -36,12 +36,12 @@ type Request struct {
 }
 
 // New creates a new generator instance.
-func New(box packr.Box) Generator {
-	return &generator{box}
+func New(fsys fs.FS) Generator {
+	return &generator{fsys}
 }
 
 type generator struct {
-	box packr.Box
+	fsys fs.FS
 }
 
 // generatorContext is passed around to every generation task.
@@ -109,12 +109,12 @@ func (g *generator) generateServiceFile(
 		Version:      ctx.request.Version,
 	}
 
-	tpl, err := g.box.MustString(serviceFile)
+	tplContent, err := fs.ReadFile(g.fsys, serviceFile)
 	if err != nil {
 		return nil, err
 	}
 
-	tpl, err = executeTemplate(ctx, tpl, data)
+	tpl, err := executeTemplate(ctx, string(tplContent), data)
 	if err != nil {
 		return nil, err
 	}
@@ -141,12 +141,12 @@ func (g *generator) generateGlobalFile(ctx *generatorContext, file string, names
 		Version:   ctx.request.Version,
 	}
 
-	tpl, err := g.box.MustString(file)
+	tplContent, err := fs.ReadFile(g.fsys, file)
 	if err != nil {
 		return nil, err
 	}
 
-	tpl, err = executeTemplate(ctx, tpl, data)
+	tpl, err := executeTemplate(ctx, string(tplContent), data)
 	if err != nil {
 		return nil, err
 	}

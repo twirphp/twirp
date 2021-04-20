@@ -23,9 +23,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Generate Packr boxes
-        run: go generate ./protoc-gen-twirp_php/
-
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
         with:
