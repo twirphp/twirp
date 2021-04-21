@@ -47,11 +47,7 @@ docker run --rm -it -v $PWD:/workspace -v $GOPATH:/go twirphp go test -v ./proto
 docker run --rm -it -v $PWD:/workspace twirphp vendor/bin/phpunit -v
 docker run --rm -it -v $PWD:/workspace twirphp vendor/bin/phpunit -v --group example
 
-./gencompat.sh
-# OR
-docker run --rm -it -v $PWD:/workspace -v $GOPATH:/go twirphp ./gencompat.sh
-
-docker run --rm -it -v $PWD:/workspace twirphp clientcompat -client clientcompat/compat.sh
+docker run --rm -it -v $PWD:/workspace twirphp make clientcompat
 ```
 
 

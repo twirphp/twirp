@@ -32,14 +32,6 @@ jobs:
       - name: Set up Problem Matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-      - name: Install protoc
-        uses: arduino/setup-protoc@v1
-        with:
-          version: 3.7.1
-
-      - name: Install clientcompat
-        run: go get github.com/twitchtv/twirp/clientcompat@v5.12.1
-
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -56,10 +48,10 @@ jobs:
         run: vendor/bin/phpunit -v
 
       - name: Generate code
-        run: ./gen.sh
+        run: make generate
 
       - name: Test generated code
         run: vendor/bin/phpunit -v --group example
 
       - name: Test client compatibility
-        run: clientcompat -client clientcompat/compat.sh
+        run: make clientcompat

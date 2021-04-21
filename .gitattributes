@@ -7,10 +7,9 @@
 /docs/            export-ignore
 /example/         export-ignore
 /goreleaser.yml   export-ignore
-/gen.sh           export-ignore
-/gencompat.sh     export-ignore
 /go.mod           export-ignore
 /go.sum           export-ignore
+/Makefile         export-ignore
 /phpunit.xml.dist export-ignore
 /php/tests/       export-ignore
 /vendor-bin/      export-ignore
