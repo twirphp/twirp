@@ -58,6 +58,7 @@
     "archive": {
         "exclude": [
             "/vendor/*",
+            "/vendor-bin/*",
             "/protoc-gen-twirp_php/*"
         ]
     }

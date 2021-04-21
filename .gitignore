@@ -9,3 +9,4 @@
 /phpstan.neon
 /php/.idea/
 /vendor/
+/vendor-bin/**/vendor/
