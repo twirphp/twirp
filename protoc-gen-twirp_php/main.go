@@ -4,16 +4,15 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"io/fs"
 	"io/ioutil"
 	"log"
 	"os"
 
-	"github.com/golang/protobuf/proto"
-	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
 	"github.com/pkg/errors"
 	"github.com/twirphp/twirp/protoc-gen-twirp_php/internal/gen"
-	"github.com/twirphp/twirp/protoc-gen-twirp_php/templates"
+	"google.golang.org/protobuf/compiler/protogen"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/pluginpb"
 )
 
 // Provisioned by ldflags
@@ -31,42 +30,38 @@ func main() {
 		os.Exit(0)
 	}
 
-	err := Main(os.Stdin, os.Stdout, templates.FS())
+	err := Main(os.Stdin, os.Stdout)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
 // Main does the hard work. It is called by the main func.
-func Main(in io.Reader, out io.Writer, fsys fs.FS) error {
+func Main(in io.Reader, out io.Writer) error {
 	req, err := readCodeGeneratorRequest(in)
 	if err != nil {
 		return err
 	}
 
-	g := gen.New(fsys)
-
-	greq := &gen.Request{
-		CodeGeneratorRequest: req,
-		GlobalFiles: []string{
-			"global/TwirpError.php",
-		},
-		ServiceFiles: []string{
-			"service/_Service_.php",
-			"service/AbstractClient.php",
-			"service/Client.php",
-			"service/JsonClient.php",
-			"service/Server.php",
-		},
-		Version: version,
+	// This is an ugly hack to make sure we bypass Go requirements
+	for _, fd := range req.GetProtoFile() {
+		pkg := "dummy/path"
+		fd.GetOptions().GoPackage = &pkg
 	}
 
-	resp, err := g.Generate(greq)
+	options := protogen.Options{}
+
+	plugin, err := options.New(req)
 	if err != nil {
 		return err
 	}
 
-	err = writeCodeGeneratorResponse(out, resp)
+	err = gen.Generate(plugin, version)
+	if err != nil {
+		plugin.Error(err)
+	}
+
+	err = writeCodeGeneratorResponse(out, plugin.Response())
 	if err != nil {
 		return err
 	}
@@ -74,13 +69,13 @@ func Main(in io.Reader, out io.Writer, fsys fs.FS) error {
 	return nil
 }
 
-func readCodeGeneratorRequest(in io.Reader) (*plugin.CodeGeneratorRequest, error) {
+func readCodeGeneratorRequest(in io.Reader) (*pluginpb.CodeGeneratorRequest, error) {
 	data, err := ioutil.ReadAll(in)
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot read input")
 	}
 
-	req := new(plugin.CodeGeneratorRequest)
+	req := new(pluginpb.CodeGeneratorRequest)
 	if err = proto.Unmarshal(data, req); err != nil {
 		return nil, errors.Wrap(err, "cannot parse input proto")
 	}
@@ -92,8 +87,7 @@ func readCodeGeneratorRequest(in io.Reader) (*plugin.CodeGeneratorRequest, error
 	return req, nil
 }
 
-func writeCodeGeneratorResponse(out io.Writer, resp *plugin.CodeGeneratorResponse) error {
-
+func writeCodeGeneratorResponse(out io.Writer, resp *pluginpb.CodeGeneratorResponse) error {
 	data, err := proto.Marshal(resp)
 	if err != nil {
 		return errors.Wrap(err, "cannot serialize output proto")

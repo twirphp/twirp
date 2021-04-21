@@ -1,11 +1,11 @@
-package templates
+package global
 
 import (
 	"embed"
 	"io/fs"
 )
 
-//go:embed global/*.php service/*.php
+//go:embed *.php
 var files embed.FS
 
 // FS returns a filesystem with the templates.
