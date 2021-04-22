@@ -12,6 +12,7 @@ import (
 	"github.com/twirphp/twirp/protoc-gen-twirp_php/internal/gen"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/descriptorpb"
 	"google.golang.org/protobuf/types/pluginpb"
 )
 
@@ -46,7 +47,10 @@ func Main(in io.Reader, out io.Writer) error {
 	// This is an ugly hack to make sure we bypass Go requirements
 	for _, fd := range req.GetProtoFile() {
 		pkg := "dummy/path"
-		fd.GetOptions().GoPackage = &pkg
+		if fd.Options == nil {
+			fd.Options = &descriptorpb.FileOptions{}
+		}
+		fd.Options.GoPackage = &pkg
 	}
 
 	options := protogen.Options{}
