@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixes
 
 - Fix segfault when input proto file does not specify options
+- Fix namespacing bug when importing other proto files
 
 
 ## [0.7.1] - 2021-04-21
