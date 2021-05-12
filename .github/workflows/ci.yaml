@@ -24,7 +24,7 @@ jobs:
           go-version: 1.16
 
       - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@2.11.0
         with:
           php-version: ${{ matrix.php }}
           tools: composer:v2

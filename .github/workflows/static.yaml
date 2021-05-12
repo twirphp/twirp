@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@2.11.0
         with:
           php-version: '7.3'
           coverage: none
@@ -39,7 +39,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@2.11.0
         with:
           php-version: '7.3'
           coverage: none
@@ -62,7 +62,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@2.11.0
         with:
           php-version: '7.3'
           coverage: none
