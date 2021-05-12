@@ -46,11 +46,17 @@ abstract class HaberdasherAbstractClient
      */
     protected $streamFactory;
 
+    /**
+     * @var string
+     */
+    protected $prefix;
+
     public function __construct(
         $addr,
         ClientInterface $httpClient = null,
         RequestFactoryInterface $requestFactory = null,
-        StreamFactoryInterface $streamFactory = null
+        StreamFactoryInterface $streamFactory = null,
+        string $prefix = '/twirp'
     ) {
         if ($httpClient === null) {
             $httpClient = Psr18ClientDiscovery::find();
@@ -68,6 +74,7 @@ abstract class HaberdasherAbstractClient
         $this->httpClient = $httpClient;
         $this->requestFactory = $requestFactory;
         $this->streamFactory = $streamFactory;
+        $this->prefix = ltrim(rtrim($prefix, '/'), '/');
     }
 
     /**
@@ -81,7 +88,12 @@ abstract class HaberdasherAbstractClient
 
         $out = new \Twitch\Twirp\Example\Hat();
 
-        $url = $this->addr.'/twirp/twitch.twirp.example.Haberdasher/MakeHat';
+        $url = $this->addr;
+        if (empty($this->prefix)) {
+            $url = $url.'/twitch.twirp.example.Haberdasher/MakeHat';
+        } else {
+            $url = $url.'/'.$this->prefix.'/twitch.twirp.example.Haberdasher/MakeHat';
+        }
 
         $this->doRequest($ctx, $url, $in, $out);
 
