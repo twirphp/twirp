@@ -13,8 +13,8 @@ import (
 
 const twirpVersion = "v5.3.0"
 
-var globalTemplates = template.Must(template.New("").Funcs(TxtFuncMap()).ParseFS(global.FS(), "*.php"))
-var serviceTemplates = template.Must(template.New("").Funcs(TxtFuncMap()).ParseFS(service.FS(), "*.php"))
+var globalTemplates = template.Must(template.New("").Funcs(TxtFuncMap()).ParseFS(global.FS(), "*.php.tmpl"))
+var serviceTemplates = template.Must(template.New("").Funcs(TxtFuncMap()).ParseFS(service.FS(), "*.php.tmpl"))
 
 type serviceFileData struct {
 	File         *protogen.File
@@ -43,6 +43,7 @@ func Generate(plugin *protogen.Plugin, version string) error {
 					php.ServiceName(file, svc),
 					strings.Replace(tpl.Name(), "_Service_", "", -1),
 				)
+				fileName = strings.TrimSuffix(fileName, ".tmpl")
 
 				generatedFile := plugin.NewGeneratedFile(fileName, "")
 
@@ -64,6 +65,7 @@ func Generate(plugin *protogen.Plugin, version string) error {
 	for namespace := range namespaces {
 		for _, tpl := range globalTemplates.Templates() {
 			fileName := fmt.Sprintf("%s/%s", php.PathFromNamespace(namespace), tpl.Name())
+			fileName = strings.TrimSuffix(fileName, ".tmpl")
 
 			generatedFile := plugin.NewGeneratedFile(fileName, "")
 
