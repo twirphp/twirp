@@ -5,7 +5,7 @@ import (
 	"io/fs"
 )
 
-//go:embed *.php
+//go:embed *.php.tmpl
 var files embed.FS
 
 // FS returns a filesystem with the templates.
