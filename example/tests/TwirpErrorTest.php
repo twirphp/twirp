@@ -102,4 +102,30 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('custom msg', $error->getMessage());
         $this->assertEquals('msg', $error->getMeta('cause'));
     }
+
+    /**
+     * Exception->getCode is not guaranteed to return an int, even though the method has a type hint.
+     * See: https://www.php.net/manual/en/exception.getcode.php
+     * > Returns the exception code as int in Exception but possibly as other
+     * > type in Exception descendants (for example as string in PDOException).
+     *
+     * @test
+     */
+    public function it_works_with_string_codes(): void
+    {
+        $exception = new class('msg', 'code') extends \PDOException
+        {
+            public function __construct(string $msg, string $code)
+            {
+                parent::__construct($msg);
+                $this->code = $code;
+            }
+        };
+        $error = TwirpError::errorFrom($exception);
+
+        $this->assertEquals(ErrorCode::Internal, $error->getErrorCode());
+        $this->assertEquals('msg', $error->getMessage());
+        $this->assertEquals('msg', $error->getMeta('cause'));
+        $this->assertEquals(0, $error->getCode());
+    }
 }
