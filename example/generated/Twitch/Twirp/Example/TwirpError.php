@@ -91,8 +91,9 @@ final class TwirpError extends \Exception implements Error
     public static function errorFrom(\Throwable $e, string $msg = ''): self
     {
         $msg = empty($msg) ? $e->getMessage() : $msg;
+        $code = is_int($e->getCode()) ? $e->getCode() : 0;
 
-        $err = new self(ErrorCode::Internal, $msg, $e->getCode(), $e);
+        $err = new self(ErrorCode::Internal, $msg, $code, $e);
         $err->setMeta('cause', $e->getMessage());
 
         return $err;
