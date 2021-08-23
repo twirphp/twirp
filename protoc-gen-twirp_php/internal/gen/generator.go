@@ -9,6 +9,7 @@ import (
 	"github.com/twirphp/twirp/protoc-gen-twirp_php/templates/global"
 	"github.com/twirphp/twirp/protoc-gen-twirp_php/templates/service"
 	"google.golang.org/protobuf/compiler/protogen"
+	"google.golang.org/protobuf/types/pluginpb"
 )
 
 const twirpVersion = "v5.3.0"
@@ -30,6 +31,8 @@ type globalFileData struct {
 
 // Generate is the main code generator.
 func Generate(plugin *protogen.Plugin, version string) error {
+	plugin.SupportedFeatures = uint64(pluginpb.CodeGeneratorResponse_FEATURE_PROTO3_OPTIONAL)
+
 	namespaces := map[string]bool{}
 
 	for _, file := range plugin.Files {
