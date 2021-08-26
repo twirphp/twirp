@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Support for proto3 field presence (optional fields)
+
 
 ## [0.7.4] - 2021-07-31
 
