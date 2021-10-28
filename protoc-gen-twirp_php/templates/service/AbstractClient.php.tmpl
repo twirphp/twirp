@@ -133,7 +133,7 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
      */
     protected function clientError(string $desc, \Throwable $e): TwirpError
     {
-        return TwirpError::newError(ErrorCode::Internal, sprintf('%s: %s', $desc, $e->getMessage()));
+        return TwirpError::newError(ErrorCode::Internal, sprintf('%s: %s', $desc, $e->getMessage()), $e);
     }
 
     /**
