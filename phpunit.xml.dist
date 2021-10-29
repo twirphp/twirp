@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" backupGlobals="false" colors="true" bootstrap="vendor/autoload.php">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" backupGlobals="false" colors="true" bootstrap="php/vendor/autoload.php">
     <coverage>
         <include>
             <directory suffix=".php">./php/src/</directory>
         </include>
         <exclude>
             <directory>./vendor/</directory>
+            <directory>./php/vendor/</directory>
         </exclude>
     </coverage>
     <testsuites>

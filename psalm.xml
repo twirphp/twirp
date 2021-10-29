@@ -9,7 +9,7 @@
     <projectFiles>
         <directory name="php/src" />
         <ignoreFiles>
-            <directory name="vendor" />
+            <directory name="php/vendor" />
         </ignoreFiles>
     </projectFiles>
 </psalm>

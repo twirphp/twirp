@@ -42,7 +42,8 @@
         }
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "vendor-dir": "php/vendor"
     },
     "extra": {
         "branch-alias": {
