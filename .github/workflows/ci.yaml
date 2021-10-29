@@ -38,6 +38,9 @@ jobs:
       - name: Download Go dependencies
         run: go mod download
 
+      - name: Download tool dependencies
+        run: make deps
+
       - name: Download PHP dependencies
         run: composer update --no-interaction --no-progress
 

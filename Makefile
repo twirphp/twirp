@@ -3,7 +3,7 @@
 # A Self-Documenting Makefile: http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 
 OS = $(shell uname | tr A-Z a-z)
-export PATH := $(abspath bin/):${PATH}
+export PATH := $(abspath bin/protoc/bin/):$(abspath bin/):${PATH}
 
 # Build variables
 BUILD_DIR ?= build
@@ -18,63 +18,63 @@ endif
 LDFLAGS += -X main.version=${VERSION} -X main.commitHash=${COMMIT_HASH} -X main.buildDate=${BUILD_DATE}
 export CGO_ENABLED ?= 0
 
-# Dependency versions
-PROTOC_VERSION = 3.15.8
-TWIRP_VERSION = v5.12.1
-GOLANGCI_VERSION = 1.38.0
-
 .PHONY: build
 build: ## Build binaries
 	@mkdir -p ${BUILD_DIR}
 	go build -mod=mod -trimpath -ldflags "${LDFLAGS}" -o ${BUILD_DIR}/ ./protoc-gen-twirp_php/
 
-bin/golangci-lint: bin/golangci-lint-${GOLANGCI_VERSION}
-	@ln -sf golangci-lint-${GOLANGCI_VERSION} bin/golangci-lint
-bin/golangci-lint-${GOLANGCI_VERSION}:
-	@mkdir -p bin
-	curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | BINARY=golangci-lint bash -s -- v${GOLANGCI_VERSION}
-	@mv bin/golangci-lint $@
-
 .PHONY: lint
-lint: bin/golangci-lint ## Run linter
-	bin/golangci-lint run
+lint: ## Run linter
+	golangci-lint run
 
 .PHONY: fix
-fix: bin/golangci-lint ## Fix lint violations
-	bin/golangci-lint run --fix
-
-bin/protoc: bin/protoc-${PROTOC_VERSION}
-	@ln -sf protoc-${PROTOC_VERSION}/bin/protoc bin/protoc
-bin/protoc-${PROTOC_VERSION}:
-	@mkdir -p bin/protoc-${PROTOC_VERSION}
-ifeq (${OS}, darwin)
-	curl -L https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-osx-x86_64.zip > bin/protoc.zip
-endif
-ifeq (${OS}, linux)
-	curl -L https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip > bin/protoc.zip
-endif
-	unzip bin/protoc.zip -d bin/protoc-${PROTOC_VERSION}
-	rm bin/protoc.zip
+fix: ## Fix lint violations
+	golangci-lint run --fix
 
 .PHONY: generate
-generate: build bin/protoc ## Generate example and clientcompat files
+generate: build ## Generate example and clientcompat files
 	@mkdir -p example/generated
 	@mkdir -p clientcompat/generated
-	bin/protoc -I ./example/ --plugin=protoc-gen-twirp_php=build/protoc-gen-twirp_php --twirp_php_out=example/generated/ --php_out=example/generated/ service.proto
-	bin/protoc -I ./clientcompat/ --plugin=protoc-gen-twirp_php=build/protoc-gen-twirp_php --twirp_php_out=clientcompat/generated/ --php_out=clientcompat/generated/ clientcompat.proto
+	protoc -I ./example/ --plugin=protoc-gen-twirp_php=build/protoc-gen-twirp_php --twirp_php_out=example/generated/ --php_out=example/generated/ service.proto
+	protoc -I ./clientcompat/ --plugin=protoc-gen-twirp_php=build/protoc-gen-twirp_php --twirp_php_out=clientcompat/generated/ --php_out=clientcompat/generated/ clientcompat.proto
 
-bin/clientcompat: bin/clientcompat-${TWIRP_VERSION}
-	@ln -sf clientcompat-${TWIRP_VERSION} bin/clientcompat
-bin/clientcompat-${TWIRP_VERSION}:
+clientcompat: build ## Run the client compatibility test suite
+	@mkdir -p clientcompat/generated
+	protoc -I ./example/ --plugin=protoc-gen-twirp_php=build/protoc-gen-twirp_php --twirp_php_out=example/generated/ --php_out=example/generated/ service.proto
+	clientcompat -client clientcompat/compat.sh
+
+# Dependency versions
+TWIRP_VERSION = v5.12.1
+PROTOC_VERSION = 3.15.8
+GOTESTSUM_VERSION = 1.7.0
+GOLANGCI_VERSION = 1.38.0
+
+deps: bin/clientcompat bin/gotestsum bin/golangci-lint bin/protoc
+
+bin/clientcompat:
 	@mkdir -p bin
 	@unlink bin/clientcompat || true
 	GOBIN=${PWD}/bin/ go install github.com/twitchtv/twirp/clientcompat@${TWIRP_VERSION}
-	mv bin/clientcompat bin/clientcompat-${TWIRP_VERSION}
 
-clientcompat: build bin/protoc bin/clientcompat ## Run the client compatibility test suite
-	@mkdir -p clientcompat/generated
-	bin/protoc -I ./example/ --plugin=protoc-gen-twirp_php=build/protoc-gen-twirp_php --twirp_php_out=example/generated/ --php_out=example/generated/ service.proto
-	bin/clientcompat -client clientcompat/compat.sh
+bin/gotestsum:
+	@mkdir -p bin
+	curl -L https://github.com/gotestyourself/gotestsum/releases/download/v${GOTESTSUM_VERSION}/gotestsum_${GOTESTSUM_VERSION}_$(shell uname | tr A-Z a-z)_amd64.tar.gz | tar -zOxf - gotestsum > ./bin/gotestsum
+	@chmod +x ./bin/gotestsum
+
+bin/golangci-lint:
+	@mkdir -p bin
+	curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | BINARY=golangci-lint bash -s -- v${GOLANGCI_VERSION}
+
+bin/protoc:
+	@mkdir -p bin/protoc
+ifeq ($(shell uname | tr A-Z a-z), darwin)
+	curl -L https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-osx-x86_64.zip > bin/protoc.zip
+endif
+ifeq ($(shell uname | tr A-Z a-z), linux)
+	curl -L https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip > bin/protoc.zip
+endif
+	unzip bin/protoc.zip -d bin/protoc
+	rm bin/protoc.zip
 
 .PHONY: help
 .DEFAULT_GOAL := help
