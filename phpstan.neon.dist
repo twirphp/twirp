@@ -7,3 +7,5 @@ parameters:
     checkMissingIterableValueType: false
     paths:
         - php/src
+    autoload_files:
+        - php/vendor/autoload.php
