@@ -78,7 +78,7 @@ $config = PhpCsFixer\Config::create()
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()
-            ->in(__DIR__.'/php')
+            ->in(__DIR__.'/lib')
             ->name('*.php')
     )
 ;

@@ -1,17 +1,16 @@
 <?xml version="1.0"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" backupGlobals="false" colors="true" bootstrap="php/vendor/autoload.php">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" backupGlobals="false" colors="true" bootstrap="lib/vendor/autoload.php">
     <coverage>
         <include>
-            <directory suffix=".php">./php/src/</directory>
+            <directory suffix=".php">./lib/src/</directory>
         </include>
         <exclude>
-            <directory>./vendor/</directory>
-            <directory>./php/vendor/</directory>
+            <directory>./lib/vendor/</directory>
         </exclude>
     </coverage>
     <testsuites>
         <testsuite name="Twirp Test Suite">
-            <directory>./php/tests/</directory>
+            <directory>./lib/tests/</directory>
         </testsuite>
         <testsuite name="Twirp Example Test Suite">
             <directory>./example/tests/</directory>

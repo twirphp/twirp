@@ -31,19 +31,19 @@
     },
     "autoload": {
         "psr-4": {
-            "Twirp\\": "php/src/"
+            "Twirp\\": "lib/src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\Twirp\\": "php/tests/",
+            "Tests\\Twirp\\": "lib/tests/",
             "": ["clientcompat/generated/", "example/generated/", "example/src/"],
             "Tests\\Twitch\\Twirp\\Example\\": "example/tests/"
         }
     },
     "config": {
         "sort-packages": true,
-        "vendor-dir": "php/vendor"
+        "vendor-dir": "lib/vendor"
     },
     "extra": {
         "branch-alias": {

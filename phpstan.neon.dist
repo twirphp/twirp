@@ -6,6 +6,6 @@ parameters:
     level: max
     checkMissingIterableValueType: false
     paths:
-        - php/src
+        - lib/src
     autoload_files:
-        - php/vendor/autoload.php
+        - lib/vendor/autoload.php
