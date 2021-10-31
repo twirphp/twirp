@@ -11,5 +11,5 @@
 /go.sum           export-ignore
 /Makefile         export-ignore
 /phpunit.xml.dist export-ignore
-/php/tests/       export-ignore
+/lib/tests/       export-ignore
 /vendor-bin/      export-ignore
