@@ -12,7 +12,7 @@ import (
 	"google.golang.org/protobuf/types/pluginpb"
 )
 
-const twirpVersion = "v5.3.0"
+const twirpVersion = "v8.1.0"
 
 var globalTemplates = template.Must(template.New("").Funcs(TxtFuncMap()).ParseFS(global.FS(), "*.php.tmpl"))
 var serviceTemplates = template.Must(template.New("").Funcs(TxtFuncMap()).ParseFS(service.FS(), "*.php.tmpl"))

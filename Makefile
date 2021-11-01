@@ -52,7 +52,7 @@ clientcompat: build ## Run the client compatibility test suite
 	clientcompat -client clientcompat/compat.sh
 
 # Dependency versions
-TWIRP_VERSION = v5.12.1
+TWIRP_VERSION = v8.1.0
 PROTOC_VERSION = 3.15.8
 GOTESTSUM_VERSION = 1.7.0
 GOLANGCI_VERSION = 1.38.0
