@@ -23,13 +23,21 @@ build: ## Build binaries
 	@mkdir -p ${BUILD_DIR}
 	go build -mod=mod -trimpath -ldflags "${LDFLAGS}" -o ${BUILD_DIR}/ ./protoc-gen-twirp_php/
 
+.PHONY: check
+check: test lint ## Run checks (tests and linters)
+
+.PHONY: test
+test: TEST_FORMAT ?= short
+test: export CGO_ENABLED=1
+test: ## Run tests
+	gotestsum --no-summary=skipped --junitfile ${BUILD_DIR}/coverage-go.xml --jsonfile ${BUILD_DIR}/test.json --format ${TEST_FORMAT} -- -race -coverprofile=${BUILD_DIR}/coverage-go.txt -covermode=atomic ./protoc-gen-twirp_php/...
+	XDEBUG_MODE=coverage lib/vendor/bin/phpunit -v --coverage-clover ${BUILD_DIR}/coverage-php.xml
+	lib/vendor/bin/phpunit -v --group example
+	$(MAKE) clientcompat
+
 .PHONY: lint
 lint: ## Run linter
-	golangci-lint run
-
-.PHONY: fix
-fix: ## Fix lint violations
-	golangci-lint run --fix
+	golangci-lint run ${LINT_ARGS}
 
 .PHONY: generate
 generate: build ## Generate example and clientcompat files

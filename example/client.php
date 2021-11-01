@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__.'/../vendor/autoload.php';
+require __DIR__.'/../lib/vendor/autoload.php';
 
 $client = new \Twitch\Twirp\Example\HaberdasherClient($argv[1]);
 
@@ -13,8 +13,8 @@ try {
     var_dump($hat->serializeToJsonString());
 } catch (\Twirp\Error $e) {
     var_dump(json_encode([
-        'code' => $e->code(),
-        'msg' => $e->msg(),
-        'meta' => $e->metaMap(),
+        'code' => $e->getErrorCode(),
+        'msg' => $e->getMessage(),
+        'meta' => $e->getMetaMap(),
     ]));
 }

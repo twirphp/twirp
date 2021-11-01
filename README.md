@@ -8,9 +8,9 @@
 
 ## Installation
 
-Download the plugin from the [Releases](https://github.com/twirphp/twirp/releases) page.
+Download prebuilt binaries for the protoc plugin from the [releases](https://github.com/twirphp/twirp/releases) page.
 
-Alternatively you can use the following oneliner to install the plugin:
+Alternatively, you can use the following oneliner to install the plugin:
 
 ```bash
 curl -Ls https://git.io/twirphp | bash -b path/to/bin
@@ -24,31 +24,36 @@ See the [documentation](https://twirphp.readthedocs.io/en/latest/getting-started
 See the [official documentation](http://twirphp.readthedocs.io).
 
 
-## Example
+## Development
 
-To use the example and run certain test suites you need to build a Docker image from this directory:
+Install dependencies:
 
-```bash
-$ docker build -t twirphp .
+```shell
+go mod download
+composer install
 ```
 
+If you change something in the protoc plugin, regenerate the examples:
 
-## Tests
-
-The following set of commands runs the complete test suite for the project:
-
-```bash
-docker run --rm -it -v $PWD:/app composer install # Optionall add "-v $COMPOSER_HOME:/tmp" to the docker command
-
-go test -v ./protoc-gen-twirp_php/...
-# OR
-docker run --rm -it -v $PWD:/workspace -v $GOPATH:/go twirphp go test -v ./protoc-gen-twirp_php/...
-
-docker run --rm -it -v $PWD:/workspace twirphp vendor/bin/phpunit -v
-docker run --rm -it -v $PWD:/workspace twirphp vendor/bin/phpunit -v --group example
-
-docker run --rm -it -v $PWD:/workspace twirphp make clientcompat
+```shell
+make generate
 ```
+
+When all coding and testing is done, please run the test suite:
+
+```shell
+make check
+```
+
+For the best developer experience, install [Nix](https://builtwithnix.org/) and [direnv](https://direnv.net/).
+
+Alternatively, install the following dependencies manually:
+
+- Go >=1.17
+- PHP 8.x
+- Composer 2.x
+
+Then run `make deps` to install the remaining dependencies.
 
 
 ## Security
@@ -58,6 +63,6 @@ If you discover any security related issues, please contact us at [mark.sagikaza
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE) for more information.
+The project is licensed under the [MIT License](LICENSE).
 
 The original Twirp library is licensed under the Apache 2.0 License.

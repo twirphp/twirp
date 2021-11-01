@@ -1,34 +1,34 @@
-| Q               | A
-| --------------- | ---
-| Bug fix?        | no|yes
-| New feature?    | no|yes
-| BC breaks?      | no|yes
-| Deprecations?   | no|yes
-| Related tickets | fixes #X, partially #Y, mentioned in #Z
-| License         | MIT
+<!--
+Thank you for sending a pull request! Here are some tips for contributors:
 
+1. Fill the description template below.
+2. Include appropriate tests (if necessary). Make sure that all CI checks passed.
+3. If the Pull Request is a work in progress, make use of GitHub's "Draft PR" feature and mark it as such.
+-->
 
-**What's in this PR?**
-Explain the contents of the PR.
+**Overview**
 
-**Why?**
-Which problem does the PR fix? (remove this section if you linked an issue above)
+<!-- Describe your changes briefly here. -->
 
-**Example Usage**
-```php
-<?php
+**What this PR does / why we need it**
 
-// If you added new features, show examples of how to use them here
-// (remove this section if not a new feature)
+<!--
+- Please state in detail why we need this PR and what it solves.
+- If your PR closes some of the existing issues, please add links to them here.
+  Mentioned issues will be automatically closed.
+  Usage: "Closes #<issue number>", or "Closes (paste link of issue)"
+-->
 
-$foo = new Foo();
+**Special notes for your reviewer**
 
-// Now we can do
-$foo->doSomething();
+**Does this PR introduce a user-facing change?**
+
+<!--
+If no, just write "NONE" in the release-note block below.
+If yes, a release note is required:
+Enter your extended release note in the block below. If the PR requires additional action from users switching to the new release, include the string "action required".
+-->
+
+```release-note
+
 ```
-
-**Checklist**
-- [ ] Updated CHANGELOG.md to describe BC breaks / deprecations | new feature | bugfix
-
-**To Do**
-- [ ] If the PR is not complete but you want to discuss the approach, list what remains to be done here

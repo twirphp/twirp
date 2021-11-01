@@ -36,7 +36,7 @@
               git
               gnumake
               go
-              php
+              (php.withExtensions ({ enabled, all }: enabled ++ [ all.xdebug ]))
               protobuf
               php.packages.composer
               golangci-lint
