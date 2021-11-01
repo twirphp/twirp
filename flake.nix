@@ -1,5 +1,5 @@
 {
-  description = "Twirp PHP port";
+  description = "TwirPHP: PHP port of Twitch's Twirp RPC framework";
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";

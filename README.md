@@ -1,4 +1,4 @@
-# [Twirp](https://twitchtv.github.io/twirp/) PHP port
+# TwirPHP: PHP port of Twitch's [Twirp](https://twitchtv.github.io/twirp/) RPC framework
 
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/twirphp/twirp/CI?style=flat-square)
 [![Twirp Version](http://img.shields.io/badge/twirp%20version-v7-orange.svg?style=flat-square)](https://twitchtv.github.io/twirp/docs/spec_v7.html)
