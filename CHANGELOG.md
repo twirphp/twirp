@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Add previous exception to the Twirp error for client errors (thanks @bakins)
+- [Nix](https://nixos.org/) based developer environment
+- V7 spec support
+
+### Changed
+
+- **Breaking change:** Resource exhausted error is now returned as HTTP 429. Read more in the [v7 specification](https://twitchtv.github.io/twirp/docs/spec_v7.html#differences-with-v5).
+- Updated Go dependencies
+- Updated PHP dependencies
+- Updated tools (PHP CS Fixer, PHPStan, Psalm)
+- Moved the runtime library to `lib/` subdirectory from `php/`
+- Improved GitHub integrations (issue templates, support template, security policy, etc)
+
+### Removed
+
+- Docker based developer environment (use Nix or install Go, PHP and Composer using your preferred method)
+
 
 ## [0.7.5] - 2021-08-26
 
