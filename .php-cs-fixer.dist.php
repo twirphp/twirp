@@ -1,24 +1,22 @@
 <?php
 
-$config = PhpCsFixer\Config::create()
+$config = (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
         '@PSR2' => true,
         'array_syntax' => ['syntax' => 'short'],
         'binary_operator_spaces' => ['operators' => ['=>' => null]],
         'blank_line_after_opening_tag' => true,
-        'class_attributes_separation' => ['elements' => ['method']],
+        'class_attributes_separation' => ['elements' => ['method' => 'one']],
         'compact_nullable_typehint' => true,
         'concat_space' => ['spacing' => 'one'],
         'declare_equal_normalize' => ['space' => 'none'],
         'declare_strict_types' => false,
         'dir_constant' => true,
-        'final_static_access' => true,
         'fully_qualified_strict_types' => true,
         'function_to_constant' => true,
         'function_typehint_space' => true,
         'header_comment' => false,
-        'is_null' => ['use_yoda_style' => false],
         'list_syntax' => ['syntax' => 'short'],
         'lowercase_cast' => true,
         'magic_method_casing' => true,
@@ -48,10 +46,11 @@ $config = PhpCsFixer\Config::create()
         'php_unit_dedicate_assert' => ['target' => 'newest'],
         'php_unit_dedicate_assert_internal_type' => ['target' => 'newest'],
         'php_unit_expectation' => ['target' => 'newest'],
+        'php_unit_method_casing' => ['case' => 'snake_case'],
         'php_unit_mock' => ['target' => 'newest'],
         'php_unit_mock_short_will_return' => true,
         'php_unit_no_expectation_annotation' => ['target' => 'newest'],
-        'php_unit_test_annotation' => ['style' => 'annotation', 'case' => 'snake'],
+        'php_unit_test_annotation' => ['style' => 'annotation'],
         'php_unit_test_case_static_method_calls' => ['call_type' => 'self'],
         'phpdoc_align' => ['align' => 'vertical'],
         'phpdoc_line_span' => ['method' => 'multi', 'property' => 'multi'],
@@ -66,6 +65,7 @@ $config = PhpCsFixer\Config::create()
         'phpdoc_types_order' => ['null_adjustment' => 'always_last', 'sort_algorithm' => 'none'],
         'phpdoc_var_without_name' => true,
         'return_assignment' => true,
+        'self_static_accessor' => true,
         'short_scalar_cast' => true,
         'single_trait_insert_per_statement' => true,
         'standardize_not_equals' => true,
