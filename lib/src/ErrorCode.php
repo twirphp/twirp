@@ -126,7 +126,7 @@ final class ErrorCode
             case self::Unauthenticated:
                 return 401; // Unauthorized
             case self::ResourceExhausted:
-                return 403; // Forbidden
+                return 429; // Too Many Requests
             case self::FailedPrecondition:
                 return 412; // Precondition Failed
             case self::Aborted:
