@@ -42,17 +42,13 @@ jobs:
       - name: Download PHP dependencies
         run: composer update --no-interaction --no-progress
 
-      - name: Test code generator
-        run: go test -v ./protoc-gen-twirp_php/...
-
-      - name: Test shared library
-        run: lib/vendor/bin/phpunit -v
-
       - name: Generate code
         run: make generate
 
-      - name: Test generated code
-        run: lib/vendor/bin/phpunit -v --group example
+      - name: Lint
+        run: make lint
+        env:
+          LINT_ARGS: --out-format=github-actions
 
-      - name: Test client compatibility
-        run: make clientcompat
+      - name: Test
+        run: make test
