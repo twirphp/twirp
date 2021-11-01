@@ -9,12 +9,12 @@ namespace Twirp;
  */
 final class Context
 {
-    const METHOD_NAME = 'method_name';
-    const SERVICE_NAME = 'service_name';
-    const PACKAGE_NAME = 'package_name';
-    const STATUS_CODE = 'status_code';
-    const REQUEST_HEADER = 'request_header';
-    const RESPONSE_HEADER = 'response_header';
+    public const METHOD_NAME = 'method_name';
+    public const SERVICE_NAME = 'service_name';
+    public const PACKAGE_NAME = 'package_name';
+    public const STATUS_CODE = 'status_code';
+    public const REQUEST_HEADER = 'request_header';
+    public const RESPONSE_HEADER = 'response_header';
 
     /**
      * Extracts the name of the method being handled in the given

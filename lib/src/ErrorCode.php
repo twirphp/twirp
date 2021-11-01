@@ -11,58 +11,58 @@ namespace Twirp;
 final class ErrorCode
 {
     // Canceled indicates the operation was cancelled (typically by the caller).
-    const Canceled = 'canceled';
+    public const Canceled = 'canceled';
 
     // Unknown error. For example when handling errors raised by APIs that do not
     // return enough error information.
-    const Unknown = 'unknown';
+    public const Unknown = 'unknown';
 
     // InvalidArgument indicates client specified an invalid argument. It
     // indicates arguments that are problematic regardless of the state of the
     // system (i.e. a malformed file name, required argument, number out of range,
     // etc.).
-    const InvalidArgument = 'invalid_argument';
+    public const InvalidArgument = 'invalid_argument';
 
     // DeadlineExceeded means operation expired before completion. For operations
     // that change the state of the system, this error may be returned even if the
     // operation has completed successfully (timeout).
-    const DeadlineExceeded = 'deadline_exceeded';
+    public const DeadlineExceeded = 'deadline_exceeded';
 
     // NotFound means some requested entity was not found.
-    const NotFound = 'not_found';
+    public const NotFound = 'not_found';
 
     // BadRoute means that the requested URL path wasn't routable to a Twirp
     // service and method. This is returned by the generated server, and usually
     // shouldn't be returned by applications. Instead, applications should use
     // NotFound or Unimplemented.
-    const BadRoute = 'bad_route';
+    public const BadRoute = 'bad_route';
 
     // AlreadyExists means an attempt to create an entity failed because one
     // already exists.
-    const AlreadyExists = 'already_exists';
+    public const AlreadyExists = 'already_exists';
 
     // PermissionDenied indicates the caller does not have permission to execute
     // the specified operation. It must not be used if the caller cannot be
     // identified (Unauthenticated).
-    const PermissionDenied = 'permission_denied';
+    public const PermissionDenied = 'permission_denied';
 
     // Unauthenticated indicates the request does not have valid authentication
     // credentials for the operation.
-    const Unauthenticated = 'unauthenticated';
+    public const Unauthenticated = 'unauthenticated';
 
     // ResourceExhausted indicates some resource has been exhausted, perhaps a
     // per-user quota, or perhaps the entire file system is out of space.
-    const ResourceExhausted = 'resource_exhausted';
+    public const ResourceExhausted = 'resource_exhausted';
 
     // FailedPrecondition indicates operation was rejected because the system is
     // not in a state required for the operation's execution. For example, doing
     // an rmdir operation on a directory that is non-empty, or on a non-directory
     // object, or when having conflicting read-modify-write on the same resource.
-    const FailedPrecondition = 'failed_precondition';
+    public const FailedPrecondition = 'failed_precondition';
 
     // Aborted indicates the operation was aborted, typically due to a concurrency
     // issue like sequencer check failures, transaction aborts, etc.
-    const Aborted = 'aborted';
+    public const Aborted = 'aborted';
 
     // OutOfRange means operation was attempted past the valid range. For example,
     // seeking or reading past end of a paginated collection.
@@ -74,30 +74,30 @@ final class ErrorCode
     // We recommend using OutOfRange (the more specific error) when it applies so
     // that callers who are iterating through a space can easily look for an
     // OutOfRange error to detect when they are done.
-    const OutOfRange = 'out_of_range';
+    public const OutOfRange = 'out_of_range';
 
     // Unimplemented indicates operation is not implemented or not
     // supported/enabled in this service.
-    const Unimplemented = 'unimplemented';
+    public const Unimplemented = 'unimplemented';
 
     // Internal errors. When some invariants expected by the underlying system
     // have been broken. In other words, something bad happened in the library or
     // backend service. Do not confuse with HTTP Internal Server Error; an
     // Internal error could also happen on the client code, i.e. when parsing a
     // server response.
-    const Internal = 'internal';
+    public const Internal = 'internal';
 
     // Unavailable indicates the service is currently unavailable. This is a most
     // likely a transient condition and may be corrected by retrying with a
     // backoff.
-    const Unavailable = 'unavailable';
+    public const Unavailable = 'unavailable';
 
     // DataLoss indicates unrecoverable data loss or corruption.
-    const DataLoss = 'data_loss';
+    public const DataLoss = 'data_loss';
 
     // NoError is the zero-value, is considered an empty error and should not be
     // used.
-    const NoError = '';
+    public const NoError = '';
 
     /**
      * Maps a Twirp error type into a similar HTTP
