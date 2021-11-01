@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+
+## [0.8.0] - 2021-11-01
+
 ### Added
 
 - Add previous exception to the Twirp error for client errors (thanks @bakins)
@@ -191,7 +194,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Initial release
 
 
-[Unreleased]: https://github.com/twirphp/twirp/compare/v0.7.5...HEAD
+[Unreleased]: https://github.com/twirphp/twirp/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/twirphp/twirp/compare/v0.7.5...v0.8.0
 [0.7.5]: https://github.com/twirphp/twirp/compare/v0.7.4...v0.7.5
 [0.7.4]: https://github.com/twirphp/twirp/compare/v0.7.3...v0.7.4
 [0.7.2]: https://github.com/twirphp/twirp/compare/v0.7.2...v0.7.3
