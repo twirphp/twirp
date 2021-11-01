@@ -16,7 +16,7 @@
         pkgs = import nixpkgs { inherit system; };
         clientcompat = pkgs.buildGoPackage rec {
           pname = "clientcompat";
-          version = "5.12.1";
+          version = "8.1.0";
 
           goPackagePath = "github.com/twitchtv/twirp";
 
@@ -24,7 +24,7 @@
             owner = "twitchtv";
             repo = "twirp";
             rev = "v${version}";
-            sha256 = "OXBeaoANUjh+s5baO0mw4zyVAFtn+VHMZgfxVNuUvAI=";
+            sha256 = "ezSNrDfOE1nj4FlX7E7Z7/eGfQw1B7NP34aj8ml5pDk=";
           };
 
           subPackages = [ "clientcompat" ];
