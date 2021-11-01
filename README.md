@@ -58,7 +58,7 @@ Then run `make deps` to install the remaining dependencies.
 
 ## Security
 
-If you discover any security related issues, please contact us at [mark.sagikazar+twirphp@gmail.com](mailto:mark.sagikazar+twirphp@gmail.com).
+If you discover any security related issues, please contact us at [twirphp@sagikazarmark.dev](mailto:twirphp@sagikazarmark.dev).
 
 
 ## License

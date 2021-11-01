@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-To report a vulnerability, send an email to [mark.sagikazar+twirphp@gmail.com](mailto:mark.sagikazar+twirphp@gmail.com)
+To report a vulnerability, send an email to [twirphp@sagikazarmark.dev](mailto:twirphp@sagikazarmark.dev)
 detailing the issue and steps to reproduce. The reporter(s) can expect a
 response within 48 hours acknowledging the issue was received. If a response is
 not received within 48 hours, please reach out to any maintainer directly
