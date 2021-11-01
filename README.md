@@ -8,9 +8,9 @@
 
 ## Installation
 
-Download the plugin from the [Releases](https://github.com/twirphp/twirp/releases) page.
+Download prebuilt binaries for the protoc plugin from the [releases](https://github.com/twirphp/twirp/releases) page.
 
-Alternatively you can use the following oneliner to install the plugin:
+Alternatively, you can use the following oneliner to install the plugin:
 
 ```bash
 curl -Ls https://git.io/twirphp | bash -b path/to/bin
