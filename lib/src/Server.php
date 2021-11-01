@@ -55,29 +55,29 @@ final class Server implements RequestHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(ServerRequestInterface $req): ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         foreach ($this->handlers as $prefix => $handler) {
-            if (strpos($req->getUri()->getPath(), $prefix) === 0) {
-                return $handler->handle($req);
+            if (strpos($request->getUri()->getPath(), $prefix) === 0) {
+                return $handler->handle($request);
             }
         }
 
-        return $this->writeNoRouteError($req);
+        return $this->writeNoRouteError($request);
     }
 
     /**
      * Writes no route Twirp error in the response.
      */
-    private function writeNoRouteError(ServerRequestInterface $req): ResponseInterface
+    private function writeNoRouteError(ServerRequestInterface $request): ResponseInterface
     {
         $statusCode = ErrorCode::serverHTTPStatusFromErrorCode(ErrorCode::BadRoute);
 
         $body = $this->streamFactory->createStream(json_encode([
             'code' => ErrorCode::BadRoute,
-            'msg' => sprintf('no handler for path "%s"', $req->getUri()->getPath()),
+            'msg' => sprintf('no handler for path "%s"', $request->getUri()->getPath()),
             'meta' => [
-                'twirp_invalid_route' => $req->getMethod() . ' ' . $req->getUri()->getPath(),
+                'twirp_invalid_route' => $request->getMethod() . ' ' . $request->getUri()->getPath(),
             ],
         ]));
 
