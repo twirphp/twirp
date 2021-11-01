@@ -34,6 +34,6 @@ so keep an eye on the `Change Log`_.
 
 .. _introductory post: https://blog.twitch.tv/twirp-a-sweet-new-rpc-framework-for-go-5f2febbf35f#d1bb
 .. _Composer: https://getcomposer.org
-.. _Twirp specification: https://twitchtv.github.io/twirp/docs/spec_v5.html
+.. _Twirp specification: https://twitchtv.github.io/twirp/docs/spec_v7.html
 .. _TWIRP_VERSION: https://github.com/twirphp/twirp/blob/master/TWIRP_VERSION
 .. _Change Log: https://github.com/twirphp/twirp/blob/master/CHANGELOG.md
