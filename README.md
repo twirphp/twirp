@@ -63,6 +63,6 @@ If you discover any security related issues, please contact us at [mark.sagikaza
 
 ## License
 
-The project is licensed under the [MIT License (MIT)](LICENSE).
+The project is licensed under the [MIT License](LICENSE).
 
 The original Twirp library is licensed under the Apache 2.0 License.
