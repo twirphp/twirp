@@ -1,10 +1,10 @@
 <?php
 
-require __DIR__.'/../vendor/autoload.php';
+require __DIR__.'/../lib/vendor/autoload.php';
 
 $request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
 
-$server = new \Twitch\Twirp\Example\Server();
+$server = new \Twirp\Server();
 $handler = new \Twitch\Twirp\Example\HaberdasherServer(new \Twirphp\Example\Haberdasher());
 $server->registerServer(\Twitch\Twirp\Example\HaberdasherServer::PATH_PREFIX, $handler);
 
