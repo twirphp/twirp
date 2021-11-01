@@ -72,13 +72,13 @@ final class TwirpError extends \Exception implements Error
      * error {type: Internal, msg: "invalid error type {code}"}. If you need to
      * add metadata, use setMeta(key, value) method after building the error.
      */
-    public static function newError(string $code, string $msg): self
+    public static function newError(string $code, string $msg, \Throwable $previous = null): self
     {
         if (ErrorCode::isValid($code)) {
-            return new self($code, $msg);
+            return new self($code, $msg, 0, $previous);
         }
 
-        return new self(ErrorCode::Internal, 'invalid error type '.$code);
+        return new self(ErrorCode::Internal, 'invalid error type '.$code, 0, $previous);
     }
 
     /**
@@ -91,6 +91,7 @@ final class TwirpError extends \Exception implements Error
     public static function errorFrom(\Throwable $e, string $msg = ''): self
     {
         $msg = empty($msg) ? $e->getMessage() : $msg;
+        // Exception->getCode is not guaranteed to return an int, see https://www.php.net/manual/en/exception.getcode.php
         $code = is_int($e->getCode()) ? $e->getCode() : 0;
 
         $err = new self(ErrorCode::Internal, $msg, $code, $e);

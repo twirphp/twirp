@@ -124,7 +124,7 @@ abstract class HaberdasherAbstractClient
             ->withBody($body)
             ->withHeader('Accept', $contentType)
             ->withHeader('Content-Type', $contentType)
-            ->withHeader('Twirp-Version', 'v5.3.0');
+            ->withHeader('Twirp-Version', 'v8.1.0');
     }
 
     /**
@@ -132,7 +132,7 @@ abstract class HaberdasherAbstractClient
      */
     protected function clientError(string $desc, \Throwable $e): TwirpError
     {
-        return TwirpError::newError(ErrorCode::Internal, sprintf('%s: %s', $desc, $e->getMessage()));
+        return TwirpError::newError(ErrorCode::Internal, sprintf('%s: %s', $desc, $e->getMessage()), $e);
     }
 
     /**
