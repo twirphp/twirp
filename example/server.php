@@ -6,7 +6,7 @@ $request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
 
 $server = new \Twirp\Server();
 $handler = new \Twitch\Twirp\Example\HaberdasherServer(new \Twirphp\Example\Haberdasher());
-$server->registerServer(\Twitch\Twirp\Example\HaberdasherServer::PATH_PREFIX, $handler);
+$server->registerServer($handler->getPathPrefix(), $handler);
 
 $response = $server->handle($request);
 

@@ -25,7 +25,15 @@ use Twirp\ServerHooks;
  */
 final class {{ .Service | phpServiceName .File }}Server implements RequestHandlerInterface
 {
-    const PATH_PREFIX = '/twirp/{{ .Service.Desc.FullName }}/';
+    /**
+     * A convenience constant that may identify URL paths.
+     *
+     * Should be used with caution, it only matches routes with the default "/twirp" prefix
+     * and default CamelCase service and method names.
+     *
+     * Use {{ .Service | phpServiceName .File }}Server::getPathPrefix instead.
+     */
+    public const PATH_PREFIX = '/twirp/{{ .Service.Desc.FullName }}/';
 
     /**
      * @var ResponseFactoryInterface
@@ -47,11 +55,17 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
      */
     private $hook;
 
+    /**
+     * @var string
+     */
+    private $prefix;
+
     public function __construct(
         {{ .Service | phpServiceName .File }} $svc,
         ServerHooks $hook = null,
         ResponseFactoryInterface $responseFactory = null,
-        StreamFactoryInterface $streamFactory = null
+        StreamFactoryInterface $streamFactory = null,
+        string $prefix = '/twirp'
     ) {
         if ($hook === null) {
             $hook = new BaseServerHooks();
@@ -69,6 +83,17 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
         $this->hook = $hook;
         $this->responseFactory = $responseFactory;
         $this->streamFactory = $streamFactory;
+        $this->prefix = rtrim($prefix, '/');
+    }
+
+    /**
+     * Returns the base service path, in the form: "/<prefix>/<package>.<Service>/"
+     * that is everything in a Twirp route except for the <Method>. This can be used for routing,
+     * for example to identify the requests that are targeted to this service in a mux.
+     */
+    public function getPathPrefix(): string
+    {
+        return $this->prefix.'/{{ .Service.Desc.FullName }}/';
     }
 
     /**
@@ -94,7 +119,7 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
 
         switch ($req->getUri()->getPath()) {
             {{- range $method := .Service.Methods }}
-            case '/twirp/{{ $method | protoMethodFullName }}':
+            case $this->prefix.'/{{ $method | protoMethodFullName }}':
                 return $this->handle{{ $method.Desc.Name }}($ctx, $req);
             {{- end }}
 

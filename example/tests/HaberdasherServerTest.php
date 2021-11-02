@@ -8,11 +8,10 @@ use GuzzleHttp\Psr7\ServerRequest;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Twirp\Context;
-use Twirp\ServerHooks;
 use Twitch\Twirp\Example\Haberdasher;
 use Twitch\Twirp\Example\HaberdasherServer;
+use Twitch\Twirp\Example\Hat;
 use Twitch\Twirp\Example\Size;
-use Twitch\Twirp\Example\TwirpError;
 
 /**
  * @group example
@@ -36,15 +35,69 @@ final class HaberdasherServerTest extends \PHPUnit\Framework\TestCase
         $haberdasher->MakeHat(Argument::any(), Argument::type(Size::class))->willThrow($e);
 
         $req = new ServerRequest(
-        	'POST',
-			'/twirp/twitch.twirp.example.Haberdasher/MakeHat',
-			['Content-Type' => 'application/json'],
-			'{}'
-		);
+            'POST',
+            '/twirp/twitch.twirp.example.Haberdasher/MakeHat',
+            ['Content-Type' => 'application/json'],
+            '{}'
+        );
 
-        $resp = $haberdasherServer->handle($req);
+        $haberdasherServer->handle($req);
 
         $this->assertSame($e, $hooks->error);
         $this->assertEquals(500, Context::statusCode($hooks->ctx));
+    }
+
+    /**
+     * @test
+     */
+    public function it_accepts_an_empty_path_prefix(): void
+    {
+        $haberdasher = $this->prophesize(Haberdasher::class);
+
+        $haberdasherServer = new HaberdasherServer($haberdasher->reveal(), null, null, null, '');
+
+        $hat = new Hat();
+        $hat->setSize(1);
+
+        $haberdasher->MakeHat(Argument::any(), Argument::type(Size::class))->willReturn($hat);
+
+        $req = new ServerRequest(
+            'POST',
+            '/twitch.twirp.example.Haberdasher/MakeHat',
+            ['Content-Type' => 'application/json'],
+            '{}'
+        );
+
+        $resp = $haberdasherServer->handle($req);
+
+        $this->assertEquals(200, $resp->getStatusCode());
+        $this->assertEquals('{"size":1}', $resp->getBody()->getContents());
+    }
+
+    /**
+     * @test
+     */
+    public function it_accepts_a_custom_path_prefix(): void
+    {
+        $haberdasher = $this->prophesize(Haberdasher::class);
+
+        $haberdasherServer = new HaberdasherServer($haberdasher->reveal(), null, null, null, '/custom/path');
+
+        $hat = new Hat();
+        $hat->setSize(1);
+
+        $haberdasher->MakeHat(Argument::any(), Argument::type(Size::class))->willReturn($hat);
+
+        $req = new ServerRequest(
+            'POST',
+            '/custom/path/twitch.twirp.example.Haberdasher/MakeHat',
+            ['Content-Type' => 'application/json'],
+            '{}'
+        );
+
+        $resp = $haberdasherServer->handle($req);
+
+        $this->assertEquals(200, $resp->getStatusCode());
+        $this->assertEquals('{"size":1}', $resp->getBody()->getContents());
     }
 }
