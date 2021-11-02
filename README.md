@@ -16,12 +16,12 @@ Alternatively, you can use the following oneliner to install the plugin:
 curl -Ls https://git.io/twirphp | bash -b path/to/bin
 ```
 
-See the [documentation](https://twirphp.readthedocs.io/en/latest/getting-started/installation.html) for details.
+See the [documentation](https://twirphp.github.io/docs/installation) for details.
 
 
 ## Documentation
 
-See the [official documentation](http://twirphp.readthedocs.io).
+See the [official documentation](https://twirphp.github.io/).
 
 
 ## Development
