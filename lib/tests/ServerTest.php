@@ -18,10 +18,7 @@ final class ServerTest extends \PHPUnit\Framework\TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @test
-     */
-    public function it_handles_a_request(): void
+    public function testItHandlesARequest(): void
     {
         $handler = $this->prophesize(RequestHandlerInterface::class);
 
@@ -40,10 +37,7 @@ final class ServerTest extends \PHPUnit\Framework\TestCase
         self::assertSame($response, $actualResponse);
     }
 
-    /**
-     * @test
-     */
-    public function it_returns_no_route_error_when_a_request_cannot_be_routed_to_a_service(): void
+    public function testItReturnsNoRouteErrorWhenARequestCannotBeRoutedToAService(): void
     {
         $server = new Server();
 

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Twitch\Twirp\Example;
 
 use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\ServerRequestFactoryInterface;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 final class Psr15HttpClient implements ClientInterface

@@ -8,10 +8,7 @@ use Twirp\Context;
 
 final class ContextTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function it_retrieves_method_name(): void
+    public function testItRetrievesMethodName(): void
     {
         $expected = 'method_name';
 
@@ -24,18 +21,12 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @test
-     */
-    public function it_returns_null_when_there_is_not_method_name(): void
+    public function testItReturnsNullWhenThereIsNotMethodName(): void
     {
         self::assertNull(Context::methodName([]));
     }
 
-    /**
-     * @test
-     */
-    public function it_adds_method_name(): void
+    public function testItAddsMethodName(): void
     {
         $expected = 'method_name';
 
@@ -46,10 +37,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @test
-     */
-    public function it_retrieves_service_name(): void
+    public function testItRetrievesServiceName(): void
     {
         $expected = 'service_name';
 
@@ -62,18 +50,12 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @test
-     */
-    public function it_returns_null_when_there_is_not_service_name(): void
+    public function testItReturnsNullWhenThereIsNotServiceName(): void
     {
         self::assertNull(Context::serviceName([]));
     }
 
-    /**
-     * @test
-     */
-    public function it_adds_service_name(): void
+    public function testItAddsServiceName(): void
     {
         $expected = 'service_name';
 
@@ -84,10 +66,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @test
-     */
-    public function it_retrieves_package_name(): void
+    public function testItRetrievesPackageName(): void
     {
         $expected = 'package_name';
 
@@ -100,18 +79,12 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @test
-     */
-    public function it_returns_null_when_there_is_not_package_name(): void
+    public function testItReturnsNullWhenThereIsNotPackageName(): void
     {
         self::assertNull(Context::packageName([]));
     }
 
-    /**
-     * @test
-     */
-    public function it_adds_package_name(): void
+    public function testItAddsPackageName(): void
     {
         $expected = 'package_name';
 
@@ -122,10 +95,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @test
-     */
-    public function it_retrieves_status_code(): void
+    public function testItRetrievesStatusCode(): void
     {
         $expected = 200;
 
@@ -138,18 +108,12 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @test
-     */
-    public function it_returns_null_when_there_is_not_status_code(): void
+    public function testItReturnsNullWhenThereIsNotStatusCode(): void
     {
         self::assertNull(Context::statusCode([]));
     }
 
-    /**
-     * @test
-     */
-    public function it_adds_status_code(): void
+    public function testItAddsStatusCode(): void
     {
         $expected = 200;
 
@@ -160,10 +124,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @test
-     */
-    public function it_retrieves_http_request_headers(): void
+    public function testItRetrievesHttpRequestHeaders(): void
     {
         $expected = [
             'Authorization' => 'Bearer 0123456789qwertzuiopasdfghjklyxcvbnm',
@@ -178,18 +139,12 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @test
-     */
-    public function it_returns_null_when_there_is_not_http_request_headers(): void
+    public function testItReturnsNullWhenThereIsNotHttpRequestHeaders(): void
     {
         self::assertEquals([], Context::httpRequestHeaders([]));
     }
 
-    /**
-     * @test
-     */
-    public function it_adds_http_request_headers(): void
+    public function testItAddsHttpRequestHeaders(): void
     {
         $expected = [
             'Authorization' => 'Bearer 0123456789qwertzuiopasdfghjklyxcvbnm',
@@ -203,10 +158,9 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @test
      * @dataProvider twirpRequestHeaderProvider
      */
-    public function it_throws_an_exception_when_http_request_headers_contain_a_header_used_by_twirp(array $headers, string $expectedMessage): void
+    public function testItThrowsAnExceptionWhenHttpRequestHeadersContainAHeaderUsedByTwirp(array $headers, string $expectedMessage): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedMessage);
@@ -214,10 +168,7 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
         Context::withHttpRequestHeaders([], $headers);
     }
 
-    /**
-     * @test
-     */
-    public function it_adds_http_response_header(): void
+    public function testItAddsHttpResponseHeader(): void
     {
         $key = 'Authorization';
         $value = 'Bearer 0123456789qwertzuiopasdfghjklyxcvbnm';
@@ -233,10 +184,9 @@ final class ContextTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @test
      * @dataProvider twirpResponseHeaderProvider
      */
-    public function it_throws_an_exception_when_http_response_header_is_used_by_twirp(string $key, string $value, string $expectedMessage): void
+    public function testItThrowsAnExceptionWhenHttpResponseHeaderIsUsedByTwirp(string $key, string $value, string $expectedMessage): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedMessage);
