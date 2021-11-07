@@ -12,11 +12,9 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
- * Collects server implementations and routes requests based on their prefix.
- *
- * @deprecated since 0.9.0, will be removed before 1.0.0. Use Router instead.
+ * A Twirp-compatible multiplexer for serving multiple Twirp services at the same time.
  */
-final class Server implements RequestHandlerInterface
+final class Router implements RequestHandlerInterface
 {
     /**
      * @var ResponseFactoryInterface
@@ -49,9 +47,9 @@ final class Server implements RequestHandlerInterface
         $this->streamFactory = $streamFactory;
     }
 
-    public function registerServer(string $prefix, RequestHandlerInterface $server): void
+    public function registerHandler(string $path, RequestHandlerInterface $handler): void
     {
-        $this->handlers[$prefix] = $server;
+        $this->handlers[$path] = $handler;
     }
 
     /**
@@ -59,8 +57,8 @@ final class Server implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        foreach ($this->handlers as $prefix => $handler) {
-            if (strpos($request->getUri()->getPath(), $prefix) === 0) {
+        foreach ($this->handlers as $path => $handler) {
+            if (strpos($request->getUri()->getPath(), $path) === 0) {
                 return $handler->handle($request);
             }
         }
