@@ -9,8 +9,8 @@ use GuzzleHttp\Psr7\Response;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Http\Client\ClientInterface;
-use Twitch\Twirp\Example\Size;
 use Twitch\Twirp\Example\HaberdasherJsonClient;
+use Twitch\Twirp\Example\Size;
 
 /**
  * @group example
@@ -19,10 +19,7 @@ final class HaberdasherJsonClientTest extends \PHPUnit\Framework\TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @test
-     */
-    public function it_makes_request_with_json_serialization(): void
+    public function testItMakesRequestWithJsonSerialization(): void
     {
         // Constructs a json client with mocked http.
         $http = $this->prophesize(ClientInterface::class);
@@ -37,7 +34,7 @@ final class HaberdasherJsonClientTest extends \PHPUnit\Framework\TestCase
         $http->sendRequest(Argument::that($isExpectedReq))->willReturn($res);
 
         // Makes a request and asserts response.
-        $hat = $client->MakeHat([], (new Size)->setInches(123));
+        $hat = $client->MakeHat([], (new Size())->setInches(123));
         $this->assertSame(123, $hat->getSize());
         $this->assertSame('golden', $hat->getColor());
         $this->assertSame('crown', $hat->getName());

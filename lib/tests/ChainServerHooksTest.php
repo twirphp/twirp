@@ -29,7 +29,7 @@ final class ChainServerHooksTest extends \PHPUnit\Framework\TestCase
      */
     private $hook2;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->hook1 = $this->prophesize(ServerHooks::class);
         $this->hook2 = $this->prophesize(ServerHooks::class);
@@ -37,10 +37,7 @@ final class ChainServerHooksTest extends \PHPUnit\Framework\TestCase
         $this->hook = new ChainServerHooks($this->hook1->reveal(), $this->hook2->reveal());
     }
 
-    /**
-     * @test
-     */
-    public function it_has_a_request_received_hook(): void
+    public function testItHasARequestReceivedHook(): void
     {
         $actual = ['key' => 'value'];
 
@@ -52,10 +49,7 @@ final class ChainServerHooksTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @test
-     */
-    public function it_has_a_request_routed_hook(): void
+    public function testItHasARequestRoutedHook(): void
     {
         $actual = ['key' => 'value'];
 
@@ -67,10 +61,7 @@ final class ChainServerHooksTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @test
-     */
-    public function it_has_a_response_prepared_hook(): void
+    public function testItHasAResponsePreparedHook(): void
     {
         $actual = ['key' => 'value'];
 
@@ -82,10 +73,7 @@ final class ChainServerHooksTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @test
-     */
-    public function it_has_a_response_sent_hook(): void
+    public function testItHasAResponseSentHook(): void
     {
         $ctx = ['key' => 'value'];
 
@@ -95,10 +83,7 @@ final class ChainServerHooksTest extends \PHPUnit\Framework\TestCase
         $this->hook->responseSent($ctx);
     }
 
-    /**
-     * @test
-     */
-    public function it_has_an_error_hook(): void
+    public function testItHasAnErrorHook(): void
     {
         $actual = ['key' => 'value'];
         $error = $this->prophesize(Error::class)->reveal();

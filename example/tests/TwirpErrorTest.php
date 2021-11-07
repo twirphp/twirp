@@ -12,30 +12,21 @@ use Twitch\Twirp\Example\TwirpError;
  */
 final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @test
-     */
-    public function it_has_a_code(): void
+    public function testItHasACode(): void
     {
         $error = new TwirpError('code', 'msg');
 
         $this->assertEquals('code', $error->getErrorCode());
     }
 
-    /**
-     * @test
-     */
-    public function it_has_a_message(): void
+    public function testItHasAMessage(): void
     {
         $error = new TwirpError('code', 'msg');
 
         $this->assertEquals('msg', $error->getMessage());
     }
 
-    /**
-     * @test
-     */
-    public function it_has_metadata(): void
+    public function testItHasMetadata(): void
     {
         $error = new TwirpError('code', 'msg');
         $error->setMeta('key', 'value');
@@ -44,10 +35,7 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('', $error->getMeta('invalid_key'));
     }
 
-    /**
-     * @test
-     */
-    public function it_has_a_map_of_metadata(): void
+    public function testItHasAMapOfMetadata(): void
     {
         $error = new TwirpError('code', 'msg');
         $error->setMeta('key', 'value');
@@ -55,10 +43,7 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['key' => 'value'], $error->getMetaMap());
     }
 
-    /**
-     * @test
-     */
-    public function it_creates_a_new_error(): void
+    public function testItCreatesANewError(): void
     {
         $error = TwirpError::newError(ErrorCode::Unauthenticated, 'msg');
 
@@ -66,10 +51,7 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('msg', $error->getMessage());
     }
 
-    /**
-     * @test
-     */
-    public function it_creates_an_internal_error_when_code_is_invalid(): void
+    public function testItCreatesAnInternalErrorWhenCodeIsInvalid(): void
     {
         $error = TwirpError::newError('code', 'msg');
 
@@ -77,10 +59,7 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('invalid error type code', $error->getMessage());
     }
 
-    /**
-     * @test
-     */
-    public function it_creates_an_error_from_an_exception(): void
+    public function testItCreatesAnErrorFromAnException(): void
     {
         $exception = new \Exception('msg');
         $error = TwirpError::errorFrom($exception);
@@ -90,10 +69,7 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('msg', $error->getMeta('cause'));
     }
 
-    /**
-     * @test
-     */
-    public function it_creates_an_error_from_an_exception_with_a_custom_message(): void
+    public function testItCreatesAnErrorFromAnExceptionWithACustomMessage(): void
     {
         $exception = new \Exception('msg');
         $error = TwirpError::errorFrom($exception, 'custom msg');
@@ -108,13 +84,10 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
      * See: https://www.php.net/manual/en/exception.getcode.php
      * > Returns the exception code as int in Exception but possibly as other
      * > type in Exception descendants (for example as string in PDOException).
-     *
-     * @test
      */
-    public function it_works_with_string_codes(): void
+    public function testItWorksWithStringCodes(): void
     {
-        $exception = new class('msg', 'code') extends \PDOException
-        {
+        $exception = new class('msg', 'code') extends \PDOException {
             public function __construct(string $msg, string $code)
             {
                 parent::__construct($msg);

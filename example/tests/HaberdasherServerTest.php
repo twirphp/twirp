@@ -20,10 +20,7 @@ final class HaberdasherServerTest extends \PHPUnit\Framework\TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @test
-     */
-    public function it_returns_an_internal_error_when_the_service_throws_an_exception(): void
+    public function testItReturnsAnInternalErrorWhenTheServiceThrowsAnException(): void
     {
         $haberdasher = $this->prophesize(Haberdasher::class);
         $hooks = new ServerHooksErrorStub();
@@ -47,10 +44,7 @@ final class HaberdasherServerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(500, Context::statusCode($hooks->ctx));
     }
 
-    /**
-     * @test
-     */
-    public function it_accepts_an_empty_path_prefix(): void
+    public function testItAcceptsAnEmptyPathPrefix(): void
     {
         $haberdasher = $this->prophesize(Haberdasher::class);
 
@@ -74,10 +68,7 @@ final class HaberdasherServerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('{"size":1}', $resp->getBody()->getContents());
     }
 
-    /**
-     * @test
-     */
-    public function it_accepts_a_custom_path_prefix(): void
+    public function testItAcceptsACustomPathPrefix(): void
     {
         $haberdasher = $this->prophesize(Haberdasher::class);
 
