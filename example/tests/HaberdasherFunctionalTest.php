@@ -7,7 +7,7 @@ namespace Tests\Twitch\Twirp\Example;
 use GuzzleHttp\Psr7\HttpFactory;
 use Twirphp\Example\Haberdasher;
 use Twirp\Error;
-use Twirp\Server;
+use Twirp\Router;
 use Twitch\Twirp\Example\HaberdasherClient;
 use Twitch\Twirp\Example\HaberdasherServer;
 use Twitch\Twirp\Example\Size;
@@ -41,7 +41,7 @@ final class HaberdasherFunctionalTest extends \PHPUnit\Framework\TestCase
      */
     public function it_returns_a_not_found_response_when_no_handlers_are_registered(): void
     {
-        $httpClient = new Psr15HttpClient(new Server(), new HttpFactory());
+        $httpClient = new Psr15HttpClient(new Router(), new HttpFactory());
 
         $haberdasherClient = new HaberdasherClient('www.example.com', $httpClient);
 
@@ -49,7 +49,7 @@ final class HaberdasherFunctionalTest extends \PHPUnit\Framework\TestCase
         $this->expectException(TwirpError::class);
         $this->expectExceptionMessage('no handler for path "/twirp/twitch.twirp.example.Haberdasher/MakeHat"');
 
-        $hat = $haberdasherClient->MakeHat([], (new Size)->setInches(123));
+        $haberdasherClient->MakeHat([], (new Size)->setInches(123));
     }
 
     /**
