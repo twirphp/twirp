@@ -117,9 +117,21 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
             return $this->writeError($ctx, $this->badRouteError($msg, $req->getMethod(), $req->getUri()->getPath()));
         }
 
-        switch ($req->getUri()->getPath()) {
+        list($prefix, $service, $method) = $this->parsePath($req->getUri()->getPath());
+
+        if ($service != '{{ .Service.Desc.FullName }}') {
+            return $this->writeError($ctx, $this->noRouteError($req));
+        }
+
+        if ($prefix != $this->prefix) {
+            $msg = sprintf('invalid path prefix "%s", expected "%s", on path "%s"', $prefix, $this->prefix, $req->getUri()->getPath());
+
+            return $this->writeError($ctx, $this->badRouteError($msg, $req->getMethod(), $req->getUri()->getPath()));
+        }
+
+        switch ($method) {
             {{- range $method := .Service.Methods }}
-            case $this->prefix.'/{{ $method | protoMethodFullName }}':
+            case '{{ $method.Desc.Name }}':
                 return $this->handle{{ $method.Desc.Name }}($ctx, $req);
             {{- end }}
 
@@ -237,6 +249,26 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
         return $resp;
     }
 {{- end }}
+
+    /**
+     * Extracts components from a path.
+     *
+     * Expected format: "[<prefix>]/<package>.<Service>/<Method>"
+     */
+    private function parsePath(string $path): array
+    {
+        $parts = explode('/', $path);
+
+        if (count($parts) < 2) {
+            return ["", "", ""];
+        }
+
+        $method = $parts[count($parts) - 1];
+        $service = $parts[count($parts) - 2];
+        $prefix = implode('/', array_slice($parts, 0, count($parts) - 2));
+
+        return [$prefix, $service, $method];
+    }
 
     /**
      * Used when there is no route for a request.
