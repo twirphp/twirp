@@ -214,6 +214,8 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
                     $code = ErrorCode::BadRoute;
                     break;
                 case 429: // Too Many Requests
+                    $code = ErrorCode::ResourceExhausted;
+                    break;
                 case 502: // Bad Gateway
                 case 503: // Service Unavailable
                 case 504: // Gateway Timeout
