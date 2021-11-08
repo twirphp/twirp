@@ -75,4 +75,19 @@ final class HaberdasherFunctionalTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('golden', $hat->getColor());
         $this->assertSame('crown', $hat->getName());
     }
+
+    public function testItReturnsABadPathErrorWhenThePrefixDoesNotMatch(): void
+    {
+        $haberdasherServer = new HaberdasherServer(new Haberdasher());
+
+        $httpClient = new Psr15HttpClient($haberdasherServer, new HttpFactory());
+
+        $haberdasherClient = new HaberdasherClient('www.example.com', $httpClient, null, null, '/not-twirp');
+
+        $this->expectException(Error::class);
+        $this->expectException(TwirpError::class);
+        $this->expectExceptionMessage('invalid path prefix "/not-twirp", expected "/twirp", on path "/not-twirp/twitch.twirp.example.Haberdasher/MakeHat"');
+
+        $haberdasherClient->MakeHat([], (new Size())->setInches(123));
+    }
 }
