@@ -18,4 +18,5 @@ if (!headers_sent()) {
         }
     }
 }
+
 echo $response->getBody();
