@@ -125,7 +125,9 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
             ->withBody($body)
             ->withHeader('Accept', $contentType)
             ->withHeader('Content-Type', $contentType)
-            ->withHeader('Twirp-Version', '{{ .TwirpVersion }}');
+            ->withHeader('Twirp-Version', '{{ .TwirpVersion }}')
+            ->withHeader('TwirPHP-Version', '{{ .TwirphpVersion }}')
+        ;
     }
 
     /**

@@ -18,10 +18,11 @@ var globalTemplates = template.Must(template.New("").Funcs(TxtFuncMap()).ParseFS
 var serviceTemplates = template.Must(template.New("").Funcs(TxtFuncMap()).ParseFS(service.FS(), "*.php.tmpl"))
 
 type serviceFileData struct {
-	File         *protogen.File
-	Service      *protogen.Service
-	TwirpVersion string
-	Version      string
+	File           *protogen.File
+	Service        *protogen.Service
+	TwirpVersion   string
+	TwirphpVersion string
+	Version        string
 }
 
 type globalFileData struct {
@@ -51,10 +52,11 @@ func Generate(plugin *protogen.Plugin, version string) error {
 				generatedFile := plugin.NewGeneratedFile(fileName, "")
 
 				data := &serviceFileData{
-					File:         file,
-					Service:      svc,
-					TwirpVersion: twirpVersion,
-					Version:      version,
+					File:           file,
+					Service:        svc,
+					TwirpVersion:   twirpVersion,
+					TwirphpVersion: version,
+					Version:        version,
 				}
 
 				err := tpl.Execute(generatedFile, data)
