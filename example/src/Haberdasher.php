@@ -1,6 +1,6 @@
 <?php
 
-namespace Twirphp\Example;
+namespace Twirp\Example;
 
 use Twitch\Twirp\Example\Hat;
 use Twitch\Twirp\Example\Size;

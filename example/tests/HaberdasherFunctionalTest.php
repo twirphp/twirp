@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tests\Twitch\Twirp\Example;
+namespace Tests\Twirp\Example;
 
 use GuzzleHttp\Psr7\HttpFactory;
 use Twirp\Error;
+use Twirp\Example\Haberdasher;
 use Twirp\Router;
-use Twirphp\Example\Haberdasher;
 use Twitch\Twirp\Example\HaberdasherClient;
 use Twitch\Twirp\Example\HaberdasherServer;
 use Twitch\Twirp\Example\Size;
