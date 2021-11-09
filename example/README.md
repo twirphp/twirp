@@ -2,6 +2,18 @@
 
 ## Usage
 
+In the repository root run the following:
+
+```shell
+make generate
+```
+
+Then enter the example directory:
+
+```shell
+cd example
+```
+
 Launch the server:
 
 ```shell

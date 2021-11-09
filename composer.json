@@ -37,8 +37,9 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\Twirp\\": "lib/tests/",
-            "": ["clientcompat/generated/", "example/generated/", "example/src/"],
-            "Tests\\Twitch\\Twirp\\Example\\": "example/tests/"
+            "": ["clientcompat/generated/", "example/generated/"],
+            "Twirp\\Example\\": "example/src/",
+            "Tests\\Twirp\\Example\\": "example/tests/"
         }
     },
     "config": {

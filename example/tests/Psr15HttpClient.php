@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Twitch\Twirp\Example;
+namespace Tests\Twirp\Example;
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
@@ -36,8 +36,7 @@ final class Psr15HttpClient implements ClientInterface
         )
             ->withRequestTarget($request->getRequestTarget())
             ->withProtocolVersion($request->getProtocolVersion())
-            ->withBody($request->getBody())
-        ;
+            ->withBody($request->getBody());
 
         foreach ($request->getHeaders() as $name => $value) {
             $serverRequest = $serverRequest->withHeader($name, $value);

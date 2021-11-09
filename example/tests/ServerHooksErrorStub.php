@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Twitch\Twirp\Example;
+namespace Tests\Twirp\Example;
 
 use Twirp\BaseServerHooks;
 
