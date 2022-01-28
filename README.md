@@ -13,7 +13,7 @@ Download prebuilt binaries for the protoc plugin from the [releases](https://git
 Alternatively, you can use the following oneliner to install the plugin:
 
 ```bash
-curl -Ls https://git.io/twirphp | bash -b path/to/bin
+curl -Ls https://git.io/twirphp | bash -s -- -b path/to/bin
 ```
 
 See the [documentation](https://twirphp.github.io/docs/installation) for details.
