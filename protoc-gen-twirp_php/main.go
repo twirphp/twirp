@@ -22,11 +22,11 @@ var (
 )
 
 func main() {
-	version := flag.Bool("version", false, "print version and exit")
+	versionFlag := flag.Bool("version", false, "print version and exit")
 
 	flag.Parse()
 
-	if *version {
+	if *versionFlag {
 		fmt.Println(version)
 		os.Exit(0)
 	}
