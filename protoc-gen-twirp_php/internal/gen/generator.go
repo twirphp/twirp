@@ -37,9 +37,10 @@ func Generate(plugin *protogen.Plugin, version string) error {
 	namespaces := map[string]bool{}
 
 	for _, file := range plugin.Files {
-		namespaces[php.Namespace(file)] = true
-
 		for _, svc := range file.Services {
+			// Namespaces are only relevant when there are services defined in them
+			namespaces[php.Namespace(file)] = true
+
 			for _, tpl := range serviceTemplates.Templates() {
 				fileName := fmt.Sprintf(
 					"%s/%s%s",
