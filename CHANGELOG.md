@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 
+## [0.8.1] - 2022-01-28
+
+### Fixed
+
+- Incorrect version information
+
+
 ## [0.8.0] - 2021-11-01
 
 ### Added
@@ -194,7 +201,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Initial release
 
 
-[Unreleased]: https://github.com/twirphp/twirp/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/twirphp/twirp/compare/v0.8.1...HEAD
+[0.8.1]: https://github.com/twirphp/twirp/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/twirphp/twirp/compare/v0.7.5...v0.8.0
 [0.7.5]: https://github.com/twirphp/twirp/compare/v0.7.4...v0.7.5
 [0.7.4]: https://github.com/twirphp/twirp/compare/v0.7.3...v0.7.4
