@@ -1,6 +1,7 @@
 /.direnv/
 /bin/
 /build/
+/result
 
 # PHP
 .php-cs-fixer.php

@@ -29,7 +29,28 @@
 
           subPackages = [ "clientcompat" ];
         };
-      in {
+      in
+      rec
+      {
+        defaultPackage = packages.protoc-gen-twirp_php;
+
+        packages.protoc-gen-twirp_php = pkgs.buildGoModule rec {
+          pname = "protoc-gen-twirp_php";
+          version = "0.8.1";
+
+          src = ./.;
+
+          vendorSha256 = "sha256-z3Yp+Yy03g2DAvWUZXaOxQWONjnYUl69eTpYIDPhsqc=";
+
+          subPackages = [ "protoc-gen-twirp_php" ];
+
+          ldflags = [
+            "-w"
+            "-s"
+            "-X main.version=v${version}"
+          ];
+        };
+
         devShell = pkgs.mkShell {
           buildInputs = with pkgs;
             [
