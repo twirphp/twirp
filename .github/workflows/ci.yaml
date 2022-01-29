@@ -42,9 +42,6 @@ jobs:
       - name: Download PHP dependencies
         run: composer update --no-interaction --no-progress
 
-      - name: Generate code
-        run: make generate
-
       - name: Lint
         run: make lint
         env:

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Tests\Twirp\Example;
+namespace Tests\Twirp\Complete;
 
 use GuzzleHttp\Psr7\HttpFactory;
 use Twirp\Error;
-use Twirp\Example\Haberdasher;
 use Twirp\Router;
-use Twitch\Twirp\Example\HaberdasherClient;
-use Twitch\Twirp\Example\HaberdasherServer;
-use Twitch\Twirp\Example\Size;
-use Twitch\Twirp\Example\TwirpError;
+use Twirp\Tests\Complete\Haberdasher;
+use Twirp\Tests\Complete\Proto\HaberdasherClient;
+use Twirp\Tests\Complete\Proto\HaberdasherServer;
+use Twirp\Tests\Complete\Proto\Size;
+use Twirp\Tests\Complete\Proto\TwirpError;
 
 /**
  * @group example
@@ -41,7 +41,7 @@ final class HaberdasherFunctionalTest extends \PHPUnit\Framework\TestCase
 
         $this->expectException(Error::class);
         $this->expectException(TwirpError::class);
-        $this->expectExceptionMessage('no handler for path "/twirp/twitch.twirp.example.Haberdasher/MakeHat"');
+        $this->expectExceptionMessage('no handler for path "/twirp/twirp.tests.complete.proto.Haberdasher/MakeHat"');
 
         $haberdasherClient->MakeHat([], (new Size())->setInches(123));
     }
@@ -86,7 +86,7 @@ final class HaberdasherFunctionalTest extends \PHPUnit\Framework\TestCase
 
         $this->expectException(Error::class);
         $this->expectException(TwirpError::class);
-        $this->expectExceptionMessage('invalid path prefix "/not-twirp", expected "/twirp", on path "/not-twirp/twitch.twirp.example.Haberdasher/MakeHat"');
+        $this->expectExceptionMessage('invalid path prefix "/not-twirp", expected "/twirp", on path "/not-twirp/twirp.tests.complete.proto.Haberdasher/MakeHat"');
 
         $haberdasherClient->MakeHat([], (new Size())->setInches(123));
     }

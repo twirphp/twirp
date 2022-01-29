@@ -2,20 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Tests\Twirp\Example;
+namespace Tests\Twirp\Complete;
 
 use GuzzleHttp\Psr7\ServerRequest;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Twirp\Context;
-use Twitch\Twirp\Example\Haberdasher;
-use Twitch\Twirp\Example\HaberdasherServer;
-use Twitch\Twirp\Example\Hat;
-use Twitch\Twirp\Example\Size;
+use Twirp\Tests\Complete\Proto\Haberdasher;
+use Twirp\Tests\Complete\Proto\HaberdasherServer;
+use Twirp\Tests\Complete\Proto\Hat;
+use Twirp\Tests\Complete\Proto\Size;
 
-/**
- * @group example
- */
 final class HaberdasherServerTest extends \PHPUnit\Framework\TestCase
 {
     use ProphecyTrait;
@@ -33,7 +30,7 @@ final class HaberdasherServerTest extends \PHPUnit\Framework\TestCase
 
         $req = new ServerRequest(
             'POST',
-            '/twirp/twitch.twirp.example.Haberdasher/MakeHat',
+            '/twirp/twirp.tests.complete.proto.Haberdasher/MakeHat',
             ['Content-Type' => 'application/json'],
             '{}'
         );
@@ -57,7 +54,7 @@ final class HaberdasherServerTest extends \PHPUnit\Framework\TestCase
 
         $req = new ServerRequest(
             'POST',
-            '/twitch.twirp.example.Haberdasher/MakeHat',
+            '/twirp.tests.complete.proto.Haberdasher/MakeHat',
             ['Content-Type' => 'application/json'],
             '{}'
         );
@@ -81,7 +78,7 @@ final class HaberdasherServerTest extends \PHPUnit\Framework\TestCase
 
         $req = new ServerRequest(
             'POST',
-            '/custom/path/twitch.twirp.example.Haberdasher/MakeHat',
+            '/custom/path/twirp.tests.complete.proto.Haberdasher/MakeHat',
             ['Content-Type' => 'application/json'],
             '{}'
         );

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Twirp\Example;
+namespace Tests\Twirp\Complete;
 
 use Twirp\BaseServerHooks;
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-require_once __DIR__.'/../lib/vendor/autoload.php';
+require_once __DIR__ . '/../../lib/vendor/autoload.php';
 
 use Google\Protobuf\Internal\GPBDecodeException;
 use Twirp\Clientcompat\ClientCompatMessage;
@@ -13,7 +13,7 @@ $message = new ClientCompatMessage();
 try {
     $message->mergeFromString(file_get_contents('php://stdin'));
 } catch (GPBDecodeException $e) {
-    file_put_contents('php://stderr', 'unmarshal err: '.$e->getMessage());
+    file_put_contents('php://stderr', 'unmarshal err: ' . $e->getMessage());
     exit(1);
 }
 
@@ -24,7 +24,7 @@ switch ($message->getMethod()) {
         try {
             doNoop($client, $message->getRequest());
         } catch (\Throwable $e) {
-            file_put_contents('php://stderr', 'doNoop err:'.$e->getMessage());
+            file_put_contents('php://stderr', 'doNoop err:' . $e->getMessage());
         }
         break;
 
@@ -32,12 +32,12 @@ switch ($message->getMethod()) {
         try {
             doMethod($client, $message->getRequest());
         } catch (\Throwable $e) {
-            file_put_contents('php://stderr', 'doMethod err:'.$e->getMessage());
+            file_put_contents('php://stderr', 'doMethod err:' . $e->getMessage());
         }
         break;
 
     default:
-        file_put_contents('php://stderr', 'unexpected method: '.$message->getMethod());
+        file_put_contents('php://stderr', 'unexpected method: ' . $message->getMethod());
         exit(1);
         break;
 }

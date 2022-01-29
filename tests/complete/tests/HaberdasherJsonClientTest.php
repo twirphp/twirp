@@ -2,19 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Tests\Twirp\Example;
+namespace Tests\Twirp\Complete;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Http\Client\ClientInterface;
-use Twitch\Twirp\Example\HaberdasherJsonClient;
-use Twitch\Twirp\Example\Size;
+use Twirp\Tests\Complete\Proto\HaberdasherJsonClient;
+use Twirp\Tests\Complete\Proto\Size;
 
-/**
- * @group example
- */
 final class HaberdasherJsonClientTest extends \PHPUnit\Framework\TestCase
 {
     use ProphecyTrait;

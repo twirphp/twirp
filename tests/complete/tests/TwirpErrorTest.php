@@ -2,14 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\Twirp\Example;
+namespace Tests\Twirp\Complete;
 
 use Twirp\ErrorCode;
-use Twitch\Twirp\Example\TwirpError;
+use Twirp\Tests\Complete\Proto\TwirpError;
 
-/**
- * @group example
- */
 final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
 {
     public function testItHasACode(): void
