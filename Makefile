@@ -27,13 +27,13 @@ build: ## Build binaries
 check: test lint ## Run checks (tests and linters)
 
 .PHONY: test
-test: TEST_FORMAT ?= short
 test: export CGO_ENABLED=1
-test: ## Run tests
-	gotestsum --no-summary=skipped --junitfile ${BUILD_DIR}/coverage-go.xml --jsonfile ${BUILD_DIR}/test.json --format ${TEST_FORMAT} -- -race -coverprofile=${BUILD_DIR}/coverage-go.txt -covermode=atomic ./protoc-gen-twirp_php/...
+test: build ## Run tests
+	gotestsum --no-summary=skipped --junitfile ${BUILD_DIR}/coverage-go.xml --jsonfile ${BUILD_DIR}/test.json --format short -- -race -coverprofile=${BUILD_DIR}/coverage-go.txt -covermode=atomic ./protoc-gen-twirp_php/...
 	XDEBUG_MODE=coverage lib/vendor/bin/phpunit -v --coverage-clover ${BUILD_DIR}/coverage-php.xml
-	lib/vendor/bin/phpunit -v --group example
-	$(MAKE) clientcompat
+	@for d in tests/*/ ; do echo "Running tests in $$d"; $$d/run.sh; done
+	# lib/vendor/bin/phpunit -v --group example
+	# $(MAKE) clientcompat
 
 .PHONY: lint
 lint: ## Run linter

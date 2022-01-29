@@ -2,7 +2,13 @@
     "name": "twirp/twirp",
     "description": "PHP port of Twitch's Twirp RPC framework",
     "license": "MIT",
-    "keywords": ["twirp", "rpc", "framework", "idl", "protobuf"],
+    "keywords": [
+        "twirp",
+        "rpc",
+        "framework",
+        "idl",
+        "protobuf"
+    ],
     "homepage": "https://twirphp.readthedocs.io",
     "authors": [
         {
@@ -37,9 +43,13 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\Twirp\\": "lib/tests/",
-            "": ["clientcompat/generated/", "example/generated/"],
             "Twirp\\Example\\": "example/src/",
-            "Tests\\Twirp\\Example\\": "example/tests/"
+            "": [
+                "tests/clientcompat/generated/",
+                "tests/complete/generated/"
+            ],
+            "Twirp\\Tests\\Complete\\": "tests/complete/src/",
+            "Tests\\Twirp\\Complete\\": "tests/complete/tests/"
         }
     },
     "config": {
