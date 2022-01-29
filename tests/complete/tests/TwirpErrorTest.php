@@ -84,8 +84,7 @@ final class TwirpErrorTest extends \PHPUnit\Framework\TestCase
      */
     public function testItWorksWithStringCodes(): void
     {
-        $exception = new class('msg', 'code') extends \PDOException
-        {
+        $exception = new class('msg', 'code') extends \PDOException {
             public function __construct(string $msg, string $code)
             {
                 parent::__construct($msg);

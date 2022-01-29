@@ -6,8 +6,8 @@ namespace Tests\Twirp\Complete;
 
 use GuzzleHttp\Psr7\HttpFactory;
 use Twirp\Error;
-use Twirp\Tests\Complete\Haberdasher;
 use Twirp\Router;
+use Twirp\Tests\Complete\Haberdasher;
 use Twirp\Tests\Complete\Proto\HaberdasherClient;
 use Twirp\Tests\Complete\Proto\HaberdasherServer;
 use Twirp\Tests\Complete\Proto\Size;
