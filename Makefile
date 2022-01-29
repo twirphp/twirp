@@ -32,8 +32,6 @@ test: build ## Run tests
 	gotestsum --no-summary=skipped --junitfile ${BUILD_DIR}/coverage-go.xml --jsonfile ${BUILD_DIR}/test.json --format short -- -race -coverprofile=${BUILD_DIR}/coverage-go.txt -covermode=atomic ./protoc-gen-twirp_php/...
 	XDEBUG_MODE=coverage lib/vendor/bin/phpunit -v --coverage-clover ${BUILD_DIR}/coverage-php.xml
 	@for d in tests/*/ ; do echo "Running tests in $$d"; $$d/run.sh; done
-	# lib/vendor/bin/phpunit -v --group example
-	# $(MAKE) clientcompat
 
 .PHONY: lint
 lint: ## Run linter
@@ -44,12 +42,6 @@ generate: build ## Generate example and clientcompat files
 	@mkdir -p example/generated
 	@mkdir -p clientcompat/generated
 	protoc -I ./example/ --plugin=protoc-gen-twirp_php=build/protoc-gen-twirp_php --twirp_php_out=example/generated/ --php_out=example/generated/ service.proto
-	protoc -I ./clientcompat/ --plugin=protoc-gen-twirp_php=build/protoc-gen-twirp_php --twirp_php_out=clientcompat/generated/ --php_out=clientcompat/generated/ clientcompat.proto
-
-clientcompat: build ## Run the client compatibility test suite
-	@mkdir -p clientcompat/generated
-	protoc -I ./example/ --plugin=protoc-gen-twirp_php=build/protoc-gen-twirp_php --twirp_php_out=example/generated/ --php_out=example/generated/ service.proto
-	clientcompat -client clientcompat/compat.sh
 
 # Dependency versions
 TWIRP_VERSION = v8.1.0

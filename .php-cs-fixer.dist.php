@@ -13,7 +13,7 @@ $config = (new PhpCsFixer\Config())
     ->setFinder(
         PhpCsFixer\Finder::create()
             ->in(__DIR__ . '/lib')
-            ->in(__DIR__ . '/example/tests')
+            ->in(__DIR__ . '/tests/complete/tests')
             ->name('*.php')
     );
 

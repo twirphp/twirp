@@ -12,13 +12,5 @@
         <testsuite name="Twirp Test Suite">
             <directory>./lib/tests/</directory>
         </testsuite>
-        <testsuite name="Twirp Example Test Suite">
-            <directory>./example/tests/</directory>
-        </testsuite>
     </testsuites>
-    <groups>
-        <exclude>
-            <group>example</group>
-        </exclude>
-    </groups>
 </phpunit>
