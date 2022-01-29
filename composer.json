@@ -46,7 +46,8 @@
             "Twirp\\Example\\": "example/src/",
             "": [
                 "tests/clientcompat/generated/",
-                "tests/complete/generated/"
+                "tests/complete/generated/",
+                "tests/namespace/generated/"
             ],
             "Twirp\\Tests\\Complete\\": "tests/complete/src/",
             "Tests\\Twirp\\Complete\\": "tests/complete/tests/"
