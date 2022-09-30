@@ -17,6 +17,8 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Twirp\Context;
 use Twirp\Error;
 use Twirp\ErrorCode;
+use Twirp\Interceptor;
+use Twirp\Method;
 
 /**
  * @internal {{ .Service | phpServiceName .File }}AbstractClient provides abstraction for JsonClient and Client (default).
@@ -51,12 +53,18 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
      */
     protected $prefix;
 
+    /**
+     * @var Interceptor
+     */
+    protected $interceptor;
+
     public function __construct(
         $addr,
         ClientInterface $httpClient = null,
         RequestFactoryInterface $requestFactory = null,
         StreamFactoryInterface $streamFactory = null,
-        string $prefix = '/twirp'
+        string $prefix = '/twirp',
+        Interceptor $interceptor = null
     ) {
         if ($httpClient === null) {
             $httpClient = Psr18ClientDiscovery::find();
@@ -75,6 +83,8 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
         $this->requestFactory = $requestFactory;
         $this->streamFactory = $streamFactory;
         $this->prefix = ltrim(rtrim($prefix, '/'), '/');
+        $this->interceptor = $interceptor;
+
     }
 {{ range $method := .Service.Methods }}
 {{- $inputType := $method.Input | phpMessageName $.File }}
@@ -114,6 +124,12 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
         $body = $this->streamFactory->createStream($reqBody);
 
         $req = $this->requestFactory->createRequest('POST', $url);
+
+        if (null !== $this->interceptor) {
+            $method = $this->interceptor->intercept(new Method($ctx, $req));
+            $ctx = $method->getCtx();
+            $req = $method->getRequest();
+        }
 
         $headers = Context::httpRequestHeaders($ctx);
 
