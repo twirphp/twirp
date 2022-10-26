@@ -6,12 +6,14 @@ declare(strict_types=1);
 
 namespace {{ .File | phpNamespace }};
 
+use Modix\TwirpBundle\Twirp\ServiceInterface;
+
 /**
  *{{ .Service.Comments.Leading | protoSplitComments | join "\n *" }}
  *
  * Generated from protobuf service <code>{{ .Service.Desc.FullName }}</code>
  */
-interface {{ .Service | phpServiceName .File }}
+interface {{ .Service | phpServiceName .File }}Interface extends ServiceInterface
 {
 {{- range $method := .Service.Methods }}
 {{- $inputType := $method.Input | phpMessageName $.File }}

@@ -13,6 +13,7 @@ func TxtFuncMap() template.FuncMap {
 	funcMap := sprig.TxtFuncMap()
 
 	funcMap["protoMethodFullName"] = proto.MethodFullName
+	funcMap["protoMethodShortName"] = proto.MethodShortName
 	funcMap["protoSplitComments"] = proto.SplitComments
 
 	funcMap["phpNamespace"] = php.Namespace

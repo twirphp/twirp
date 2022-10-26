@@ -43,12 +43,12 @@ lint: ## Run linter
 generate: build ## Generate example and clientcompat files
 	@mkdir -p example/generated
 	@mkdir -p clientcompat/generated
-	protoc -I ./example/ --plugin=protoc-gen-twirp_php=build/protoc-gen-twirp_php --twirp_php_out=example/generated/ --php_out=example/generated/ service.proto
+	protoc -I ./example/ --plugin=protoc-gen-twirp_php=build/protoc-gen-twirp_php --twirp_php_out=example/generated/ --php_out=example/generated/ proto/ExampleService.proto
 	protoc -I ./clientcompat/ --plugin=protoc-gen-twirp_php=build/protoc-gen-twirp_php --twirp_php_out=clientcompat/generated/ --php_out=clientcompat/generated/ clientcompat.proto
 
 clientcompat: build ## Run the client compatibility test suite
 	@mkdir -p clientcompat/generated
-	protoc -I ./example/ --plugin=protoc-gen-twirp_php=build/protoc-gen-twirp_php --twirp_php_out=example/generated/ --php_out=example/generated/ service.proto
+	protoc -I ./example/ --plugin=protoc-gen-twirp_php=build/protoc-gen-twirp_php --twirp_php_out=example/generated/ --php_out=example/generated/ proto/ExampleService
 	clientcompat -client clientcompat/compat.sh
 
 # Dependency versions
