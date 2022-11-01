@@ -1,0 +1,4 @@
+run:
+    skip-files:
+        - protoc-gen-twirp_php/internal/php/func.go
+        - protoc-gen-twirp_php/main.go
