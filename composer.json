@@ -55,7 +55,10 @@
     },
     "config": {
         "sort-packages": true,
-        "vendor-dir": "lib/vendor"
+        "vendor-dir": "lib/vendor",
+        "allow-plugins": {
+            "bamarni/composer-bin-plugin": true
+        }
     },
     "extra": {
         "branch-alias": {

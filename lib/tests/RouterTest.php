@@ -30,7 +30,7 @@ final class RouterTest extends \PHPUnit\Framework\TestCase
 
         $handler->handle(Argument::type(ServerRequestInterface::class))->willReturn($response);
 
-        $request = (ServerRequest::fromGlobals())->withUri(new Uri('http://localhost/twirp/prefix'));
+        $request = ServerRequest::fromGlobals()->withUri(new Uri('http://localhost/twirp/prefix'));
 
         $actualResponse = $server->handle($request);
 
