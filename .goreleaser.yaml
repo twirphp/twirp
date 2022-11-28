@@ -1,0 +1,27 @@
+builds:
+  - main: ./protoc-gen-twirp_php/
+    binary: protoc-gen-twirp_php
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    flags:
+      - -trimpath
+    ldflags: "-s -w -X main.version={{.Version}}"
+
+archives:
+  - name_template: "protoc-gen-twirp_php_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        format: zip
+
+checksum:
+  name_template: "protoc-gen-twirp_php_checksums.txt"
+
+changelog:
+  skip: true

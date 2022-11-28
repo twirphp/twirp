@@ -8,11 +8,14 @@ indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.go]
-indent_style = tab
-
 [{Makefile,*.mk}]
 indent_style = tab
 
+[{Taskfile.yaml,.goreleaser.yaml}]
+indent_size = 2
+
 [*.nix]
 indent_size = 2
+
+[*.go]
+indent_style = tab
