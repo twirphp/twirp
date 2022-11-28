@@ -40,11 +40,11 @@
 
           protoc-gen-twirp_php = pkgs.buildGoModule rec {
             pname = "protoc-gen-twirp_php";
-            version = "0.8.1";
+            version = "0.9.1";
 
             src = ./.;
 
-            vendorSha256 = "sha256-z3Yp+Yy03g2DAvWUZXaOxQWONjnYUl69eTpYIDPhsqc=";
+            vendorSha256 = "sha256-Kz9tMM4XSMOUmlHb/BE5/C/ZohdE505DTeDj9lGki/I=";
 
             subPackages = [ "protoc-gen-twirp_php" ];
 
@@ -56,24 +56,35 @@
           };
         };
 
+        devShells = {
+          default = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              git
+              gnumake
 
-        devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            git
-            gnumake
-            go
-            (php.withExtensions ({ enabled, all }: enabled ++ [ all.xdebug ]))
-            protobuf
-            php.packages.composer
-            golangci-lint
-            gotestsum
-            goreleaser
-            clientcompat
-          ];
+              (php.withExtensions ({ enabled, all }: enabled ++ [ all.xdebug ]))
+              php.packages.composer
 
-          shellHook = ''
-            ${pkgs.go}/bin/go version
-          '';
+              go
+              protobuf
+              gotestsum
+              clientcompat
+
+              golangci-lint
+              php.packages.phpstan
+              php.packages.php-cs-fixer
+              php.packages.psalm
+
+              goreleaser
+            ];
+
+            shellHook = ''
+              ${pkgs.go}/bin/go version
+              ${pkgs.php}/bin/php -v
+            '';
+          };
+
+          ci = devShells.default;
         };
       });
 }
