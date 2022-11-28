@@ -6,6 +6,10 @@ on:
       - master
   pull_request:
 
+defaults:
+  run:
+    shell: nix develop -c bash {0}
+
 jobs:
   phpstan:
     name: PHPStan
@@ -15,20 +19,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+      - name: Set up Nix
+        uses: cachix/install-nix-action@v18
         with:
-          php-version: '8.1'
-          coverage: none
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
       - name: Download dependencies
         run: composer update --no-interaction --no-progress
 
-      - name: Download PHPStan
-        run: composer bin phpstan update --no-interaction --no-progress
-
       - name: Run PHPStan
-        run: lib/vendor/bin/phpstan analyze --no-progress
+        run: phpstan analyze --no-progress
 
   php-cs-fixer:
     name: PHP-CS-Fixer
@@ -38,20 +39,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+      - name: Set up Nix
+        uses: cachix/install-nix-action@v18
         with:
-          php-version: '8.1'
-          coverage: none
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
       - name: Download dependencies
         run: composer update --no-interaction --no-progress
 
-      - name: Download PHP CS Fixer
-        run: composer bin php-cs-fixer update --no-interaction --no-progress
-
       - name: Run PHP CS Fixer
-        run: lib/vendor/bin/php-cs-fixer fix --diff --dry-run
+        run: php-cs-fixer fix --diff --dry-run
 
   psalm:
     name: Psalm
@@ -61,17 +59,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+      - name: Set up Nix
+        uses: cachix/install-nix-action@v18
         with:
-          php-version: '8.1'
-          coverage: none
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
       - name: Download dependencies
         run: composer update --no-interaction --no-progress
 
-      - name: Download Psalm
-        run: composer bin psalm update --no-interaction --no-progress
-
       - name: Run Psalm
-        run: lib/vendor/bin/psalm.phar --no-progress --output-format=github
+        run: psalm --no-progress --output-format=github
