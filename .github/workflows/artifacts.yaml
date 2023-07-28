@@ -1,0 +1,55 @@
+name: Artifacts
+
+on:
+  workflow_call:
+    inputs:
+      release:
+        description: Whether this is a release build
+        default: false
+        required: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  binary:
+    name: Binary
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+      - name: Set up Nix
+        uses: cachix/install-nix-action@6ed004b9ccb68dbc28e7c85bee15fa93dbd214ac # v22
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Prepare Nix shell
+        run: nix develop --impure .#ci
+
+      - name: Determine build command
+        uses: haya14busa/action-cond@1d6e8a12b20cdb4f1954feef9aa475b9c390cab5 # v1.1.1
+        id: build-command
+        with:
+          cond: ${{ inputs.release }}
+          if_true: goreleaser release
+          if_false: goreleaser release --skip-publish --snapshot
+
+      - name: Build
+        run: nix develop --impure .#ci -c ${{ steps.build-command.outputs.value }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        with:
+          name: "[${{ github.job }}] Goreleaser output"
+          path: |
+            build/dist/*.tar.gz
+            build/dist/protoc-gen-twirp_php_checksums.txt

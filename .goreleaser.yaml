@@ -1,3 +1,5 @@
+dist: build/dist
+
 builds:
   - main: ./protoc-gen-twirp_php/
     binary: protoc-gen-twirp_php
@@ -25,3 +27,6 @@ checksum:
 
 changelog:
   skip: true
+
+release:
+  prerelease: auto

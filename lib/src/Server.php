@@ -54,9 +54,6 @@ final class Server implements RequestHandlerInterface
         $this->handlers[$prefix] = $server;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         foreach ($this->handlers as $prefix => $handler) {

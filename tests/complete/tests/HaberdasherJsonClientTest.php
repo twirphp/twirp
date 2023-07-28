@@ -24,8 +24,8 @@ final class HaberdasherJsonClientTest extends \PHPUnit\Framework\TestCase
 
         // Sets http req expectations asserting that correct request body and header is present.
         $isExpectedReq = function (Request $req): bool {
-            return 'application/json' === $req->getHeaderLine('content-type') &&
-                '{"inches":123}' === (string) $req->getBody();
+            return 'application/json' === $req->getHeaderLine('content-type')
+                && '{"inches":123}' === (string) $req->getBody();
         };
         $res = new Response(200, [], '{"size":123,"color":"golden","name":"crown"}');
         $http->sendRequest(Argument::that($isExpectedReq))->willReturn($res);

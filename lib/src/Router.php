@@ -52,9 +52,6 @@ final class Router implements RequestHandlerInterface
         $this->handlers[$path] = $handler;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         foreach ($this->handlers as $path => $handler) {

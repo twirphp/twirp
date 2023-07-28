@@ -2,9 +2,11 @@ name: CI
 
 on:
   push:
-    branches:
-      - master
+    branches: [master]
   pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   test:
@@ -13,39 +15,91 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.3', '7.4', '8.0', '8.1']
+        php: ['7.3', '7.4', '8.0', '8.1', '8.2']
 
     steps:
-      - name: Set up Go
-        uses: actions/setup-go@v3
+      - name: Checkout repository
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+      - name: Set up Nix
+        uses: cachix/install-nix-action@6ed004b9ccb68dbc28e7c85bee15fa93dbd214ac # v22
         with:
-          go-version: 1.19
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          tools: composer:v2
+      - name: Set up magic Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@8a218f9e264e9c3803c9a1ee1c30d8e4ab55be63 # v2
 
-      - name: Set up Problem Matchers for PHPUnit
-        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+      # - name: Set up PHP
+      #   uses: shivammathur/setup-php@v2
+      #   with:
+      #     php-version: ${{ matrix.php }}
+      #     tools: composer:v2
 
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Shell name
+        id: shell
+        run: echo "value=ci_$(echo "${{ matrix.php }}" | sed 's/\./_/')" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare Nix shell
+        run: nix develop --impure .#${{ steps.shell.outputs.value }}
+
+      # - name: Set up Problem Matchers for PHPUnit
+      #   run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Download Go dependencies
-        run: go mod download
-
-      - name: Download tool dependencies
-        run: make deps
+        run: nix develop --impure .#${{ steps.shell.outputs.value }} -c go mod download
 
       - name: Download PHP dependencies
-        run: composer update --no-interaction --no-progress
+        run: nix develop --impure .#${{ steps.shell.outputs.value }} -c composer update --no-interaction --no-progress
 
       - name: Lint
-        run: make lint
+        run: nix develop --impure .#${{ steps.shell.outputs.value }} -c make lint
         env:
           LINT_ARGS: --out-format=github-actions
 
       - name: Test
-        run: make test
+        run: nix develop --impure .#${{ steps.shell.outputs.value }} -c make test
+
+  dev:
+    name: Developer environment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+      - name: Set up Nix
+        uses: cachix/install-nix-action@6ed004b9ccb68dbc28e7c85bee15fa93dbd214ac # v22
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up magic Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@8a218f9e264e9c3803c9a1ee1c30d8e4ab55be63 # v2
+
+      - name: Check
+        run: nix flake check --impure
+
+      - name: Dev shell
+        run: nix develop --impure
+
+  artifacts:
+    name: Artifacts
+    uses: ./.github/workflows/artifacts.yaml
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+      security-events: write
+
+  dependency-review:
+    name: Dependency review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@1360a344ccb0ab6e9475edef90ad2f46bf8003b1 # v3.0.6
