@@ -2,13 +2,11 @@ name: Static analysis
 
 on:
   push:
-    branches:
-      - master
+    branches: [master]
   pull_request:
 
-defaults:
-  run:
-    shell: nix develop -c bash {0}
+permissions:
+  contents: read
 
 jobs:
   phpstan:
@@ -16,57 +14,75 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
       - name: Set up Nix
-        uses: cachix/install-nix-action@v19
+        uses: cachix/install-nix-action@6ed004b9ccb68dbc28e7c85bee15fa93dbd214ac # v22
         with:
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set up magic Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@8a218f9e264e9c3803c9a1ee1c30d8e4ab55be63 # v2
+
+      - name: Prepare Nix shell
+        run: nix develop --impure .#ci
+
       - name: Download dependencies
-        run: composer update --no-interaction --no-progress
+        run: nix develop --impure .#ci -c composer update --no-interaction --no-progress
 
       - name: Run PHPStan
-        run: phpstan analyze --no-progress
+        run: nix develop --impure .#ci -c phpstan analyze --no-progress
 
   php-cs-fixer:
     name: PHP-CS-Fixer
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
       - name: Set up Nix
-        uses: cachix/install-nix-action@v19
+        uses: cachix/install-nix-action@6ed004b9ccb68dbc28e7c85bee15fa93dbd214ac # v22
         with:
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set up magic Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@8a218f9e264e9c3803c9a1ee1c30d8e4ab55be63 # v2
+
+      - name: Prepare Nix shell
+        run: nix develop --impure .#ci
+
       - name: Download dependencies
-        run: composer update --no-interaction --no-progress
+        run: nix develop --impure .#ci -c composer update --no-interaction --no-progress
 
       - name: Run PHP CS Fixer
-        run: php-cs-fixer fix --diff --dry-run
+        run: nix develop --impure .#ci -c php-cs-fixer fix --diff --dry-run
 
   psalm:
     name: Psalm
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
       - name: Set up Nix
-        uses: cachix/install-nix-action@v19
+        uses: cachix/install-nix-action@6ed004b9ccb68dbc28e7c85bee15fa93dbd214ac # v22
         with:
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set up magic Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@8a218f9e264e9c3803c9a1ee1c30d8e4ab55be63 # v2
+
+      - name: Prepare Nix shell
+        run: nix develop --impure .#ci
+
       - name: Download dependencies
-        run: composer update --no-interaction --no-progress
+        run: nix develop --impure .#ci -c composer update --no-interaction --no-progress
 
       - name: Run Psalm
-        run: psalm --no-progress --output-format=github
+        run: nix develop --impure .#ci -c psalm --no-progress --output-format=github

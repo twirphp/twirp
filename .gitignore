@@ -1,4 +1,6 @@
+/.devenv/
 /.direnv/
+/.pre-commit-config.yaml
 /bin/
 /build/
 /result
@@ -12,4 +14,3 @@
 /phpunit.xml
 /phpstan.neon
 /vendor/
-/vendor-bin/**/vendor/
