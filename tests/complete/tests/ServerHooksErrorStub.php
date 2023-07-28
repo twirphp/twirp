@@ -11,9 +11,6 @@ final class ServerHooksErrorStub extends BaseServerHooks
     public $ctx;
     public $error;
 
-    /**
-     * {@inheritdoc}
-     */
     public function error(array $ctx, \Throwable $error): array
     {
         $this->ctx = $ctx;

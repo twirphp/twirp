@@ -9,6 +9,7 @@ $config = (new PhpCsFixer\Config())
         '@Symfony' => true,
         '@Symfony:risky' => true,
         'yoda_style' => false,
+        'modernize_strpos' => false,
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()

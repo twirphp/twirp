@@ -10,40 +10,25 @@ namespace Twirp;
  */
 class BaseServerHooks implements ServerHooks
 {
-    /**
-     * {@inheritdoc}
-     */
     public function requestReceived(array $ctx): array
     {
         return $ctx;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function requestRouted(array $ctx): array
     {
         return $ctx;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function responsePrepared(array $ctx): array
     {
         return $ctx;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function responseSent(array $ctx): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function error(array $ctx, \Throwable $error): array
     {
         return $ctx;

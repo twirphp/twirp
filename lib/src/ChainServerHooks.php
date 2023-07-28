@@ -19,9 +19,6 @@ final class ChainServerHooks implements ServerHooks
         $this->hooks = $hooks;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function requestReceived(array $ctx): array
     {
         foreach ($this->hooks as $hook) {
@@ -31,9 +28,6 @@ final class ChainServerHooks implements ServerHooks
         return $ctx;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function requestRouted(array $ctx): array
     {
         foreach ($this->hooks as $hook) {
@@ -43,9 +37,6 @@ final class ChainServerHooks implements ServerHooks
         return $ctx;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function responsePrepared(array $ctx): array
     {
         foreach ($this->hooks as $hook) {
@@ -55,9 +46,6 @@ final class ChainServerHooks implements ServerHooks
         return $ctx;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function responseSent(array $ctx): void
     {
         foreach ($this->hooks as $hook) {
@@ -65,9 +53,6 @@ final class ChainServerHooks implements ServerHooks
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function error(array $ctx, \Throwable $error): array
     {
         foreach ($this->hooks as $hook) {
