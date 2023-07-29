@@ -31,10 +31,6 @@
               };
             };
 
-            services = {
-              vault.enable = true;
-            };
-
             pre-commit.hooks = {
               nixpkgs-fmt.enable = true;
               yamllint.enable = true;
