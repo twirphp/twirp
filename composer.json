@@ -2,13 +2,7 @@
     "name": "twirp/twirp",
     "description": "PHP port of Twitch's Twirp RPC framework",
     "license": "MIT",
-    "keywords": [
-        "twirp",
-        "rpc",
-        "framework",
-        "idl",
-        "protobuf"
-    ],
+    "keywords": ["twirp", "rpc", "framework", "idl", "protobuf"],
     "homepage": "https://twirphp.github.io",
     "authors": [
         {
