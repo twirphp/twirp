@@ -6,10 +6,10 @@
 /clientcompat/          export-ignore
 /docs/                  export-ignore
 /example/               export-ignore
-/goreleaser.yml         export-ignore
+/.golangci.yaml         export-ignore
+/.goreleaser.yaml       export-ignore
 /go.mod                 export-ignore
 /go.sum                 export-ignore
 /Makefile               export-ignore
 /phpunit.xml.dist       export-ignore
 /lib/tests/             export-ignore
-/vendor-bin/            export-ignore
