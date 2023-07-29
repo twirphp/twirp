@@ -134,7 +134,7 @@
 
           protoc-gen-twirp_php = pkgs.buildGoModule rec {
             pname = "protoc-gen-twirp_php";
-            version = "0.9.1";
+            version = "0.10.0";
 
             src = ./.;
 
