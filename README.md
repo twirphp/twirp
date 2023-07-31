@@ -1,9 +1,22 @@
-# TwirPHP: PHP port of Twitch's [Twirp](https://twitchtv.github.io/twirp/) RPC framework
+<p align="center">
+  <a href="https://twirphp.github.io">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="resources/logo-dark.png">
+      <img alt="TwirPHP logo" src="resources/logo.png">
+    </picture>
+  </a>
+
+  <h1 align="center">
+    TwirPHP
+  </h1>
+</p>
 
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/twirphp/twirp/ci.yaml?style=flat-square)](https://github.com/twirphp/twirp/actions/workflows/ci.yaml)
 [![Twirp Version](http://img.shields.io/badge/twirp%20version-v7-orange.svg?style=flat-square)](https://twitchtv.github.io/twirp/docs/spec_v7.html)
 [![Go Report Card](https://goreportcard.com/badge/github.com/twirphp/twirp?style=flat-square)](https://goreportcard.com/report/github.com/twirphp/twirp)
 [![Composer Package](http://img.shields.io/badge/composer-twirp%2Ftwirp-green.svg?style=flat-square)](https://packagist.org/packages/twirp/twirp)
+
+**PHP port of Twitch's [Twirp](https://twitchtv.github.io/twirp/) RPC framework**
 
 ## Installation
 
