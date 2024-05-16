@@ -64,16 +64,6 @@
 
           ci = devenv.shells.default;
 
-          ci_7_3 = {
-            imports = [ devenv.shells.default ];
-
-            languages = {
-              php = {
-                version = "7.3";
-              };
-            };
-          };
-
           ci_7_4 = {
             imports = [ devenv.shells.default ];
 
