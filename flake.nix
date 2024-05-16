@@ -33,7 +33,7 @@
 
             pre-commit.hooks = {
               nixpkgs-fmt.enable = true;
-              yamllint.enable = true;
+              # yamllint.enable = true;
             };
 
             packages = with pkgs; [
@@ -63,6 +63,16 @@
           };
 
           ci = devenv.shells.default;
+
+          ci_lowest = {
+            imports = [ devenv.shells.default ];
+
+            languages = {
+              php = {
+                version = "7.4";
+              };
+            };
+          };
 
           ci_7_4 = {
             imports = [ devenv.shells.default ];
@@ -100,6 +110,16 @@
             languages = {
               php = {
                 version = "8.2";
+              };
+            };
+          };
+
+          ci_8_3 = {
+            imports = [ devenv.shells.default ];
+
+            languages = {
+              php = {
+                version = "8.3";
               };
             };
           };

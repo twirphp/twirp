@@ -22,7 +22,7 @@ final class Psr15HttpClient implements ClientInterface
      */
     private $requestFactory;
 
-    public function __construct(RequestHandlerInterface $requestHandler, ServerRequestFactoryInterface $requestFactory = null)
+    public function __construct(RequestHandlerInterface $requestHandler, ?ServerRequestFactoryInterface $requestFactory = null)
     {
         $this->requestHandler = $requestHandler;
         $this->requestFactory = $requestFactory;

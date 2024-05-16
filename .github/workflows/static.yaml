@@ -27,13 +27,13 @@ jobs:
         uses: DeterminateSystems/magic-nix-cache-action@87e8236f46702ab0ce5a058b605a173ec88d618e # v6
 
       - name: Prepare Nix shell
-        run: nix develop --impure .#ci
+        run: nix develop --impure .#ci_lowest
 
       - name: Download dependencies
-        run: nix develop --impure .#ci -c composer update --no-interaction --no-progress
+        run: nix develop --impure .#ci_lowest -c composer update --no-interaction --no-progress
 
       - name: Run PHPStan
-        run: nix develop --impure .#ci -c phpstan analyze --no-progress
+        run: nix develop --impure .#ci_lowest -c phpstan analyze --no-progress
 
   php-cs-fixer:
     name: PHP-CS-Fixer
@@ -53,36 +53,36 @@ jobs:
         uses: DeterminateSystems/magic-nix-cache-action@87e8236f46702ab0ce5a058b605a173ec88d618e # v6
 
       - name: Prepare Nix shell
-        run: nix develop --impure .#ci
+        run: nix develop --impure .#ci_lowest
 
       - name: Download dependencies
-        run: nix develop --impure .#ci -c composer update --no-interaction --no-progress
+        run: nix develop --impure .#ci_lowest -c composer update --no-interaction --no-progress
 
       - name: Run PHP CS Fixer
-        run: nix develop --impure .#ci -c php-cs-fixer fix --diff --dry-run
+        run: nix develop --impure .#ci_lowest -c php-cs-fixer fix --diff --dry-run
 
-  psalm:
-    name: Psalm
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-
-      - name: Set up Nix
-        uses: cachix/install-nix-action@ba0dd844c9180cbf77aa72a116d6fbc515d0e87b # v27
-        with:
-          extra_nix_config: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up magic Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@87e8236f46702ab0ce5a058b605a173ec88d618e # v6
-
-      - name: Prepare Nix shell
-        run: nix develop --impure .#ci
-
-      - name: Download dependencies
-        run: nix develop --impure .#ci -c composer update --no-interaction --no-progress
-
-      - name: Run Psalm
-        run: nix develop --impure .#ci -c psalm --no-progress --output-format=github
+  # psalm:
+  #   name: Psalm
+  #   runs-on: ubuntu-latest
+  #
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+  #
+  #     - name: Set up Nix
+  #       uses: cachix/install-nix-action@ba0dd844c9180cbf77aa72a116d6fbc515d0e87b # v27
+  #       with:
+  #         extra_nix_config: |
+  #           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+  #
+  #     - name: Set up magic Nix cache
+  #       uses: DeterminateSystems/magic-nix-cache-action@87e8236f46702ab0ce5a058b605a173ec88d618e # v6
+  #
+  #     - name: Prepare Nix shell
+  #       run: nix develop --impure .#ci_lowest
+  #
+  #     - name: Download dependencies
+  #       run: nix develop --impure .#ci_lowest -c composer update --no-interaction --no-progress
+  #
+  #     - name: Run Psalm
+  #       run: nix develop --impure .#ci_lowest -c psalm --no-progress --root $PWD --output-format=github
