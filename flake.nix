@@ -103,6 +103,16 @@
               };
             };
           };
+
+          ci_8_3 = {
+            imports = [ devenv.shells.default ];
+
+            languages = {
+              php = {
+                version = "8.3";
+              };
+            };
+          };
         };
 
         packages = {
