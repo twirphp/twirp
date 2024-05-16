@@ -64,6 +64,16 @@
 
           ci = devenv.shells.default;
 
+          ci_lowest = {
+            imports = [ devenv.shells.default ];
+
+            languages = {
+              php = {
+                version = "7.4";
+              };
+            };
+          };
+
           ci_7_4 = {
             imports = [ devenv.shells.default ];
 

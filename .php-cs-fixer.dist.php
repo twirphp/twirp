@@ -4,7 +4,7 @@ $config = (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
         '@PSR2' => true,
-        '@PHP73Migration' => true,
+        '@PHP74Migration' => true,
         '@PHPUnit84Migration:risky' => true,
         '@Symfony' => true,
         '@Symfony:risky' => true,
