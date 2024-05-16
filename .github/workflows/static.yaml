@@ -85,4 +85,4 @@ jobs:
         run: nix develop --impure .#ci_lowest -c composer update --no-interaction --no-progress
 
       - name: Run Psalm
-        run: nix develop --impure .#ci_lowest -c psalm --no-progress $PWD --output-format=github
+        run: nix develop --impure .#ci_lowest -c psalm --no-progress --root $PWD --output-format=github
