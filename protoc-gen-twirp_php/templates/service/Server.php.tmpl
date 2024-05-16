@@ -331,11 +331,16 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
             $e = TwirpError::errorFrom($e, 'internal error');
         }
 
-        $body = $this->streamFactory->createStream(json_encode([
+        $rawBody = [
             'code' => $e->getErrorCode(),
             'msg' => $e->getMessage(),
-            'meta' => $e->getMetaMap(),
-        ], \JSON_FORCE_OBJECT));
+        ];
+
+        if (!empty($e->getMetaMap())) {
+            $rawBody['meta'] = $e->getMetaMap();
+        }
+
+        $body = $this->streamFactory->createStream(json_encode($rawBody, \JSON_FORCE_OBJECT));
 
         return $this->responseFactory
             ->createResponse($statusCode)
