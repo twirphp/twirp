@@ -335,7 +335,7 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
             'code' => $e->getErrorCode(),
             'msg' => $e->getMessage(),
             'meta' => $e->getMetaMap(),
-        ]));
+        ], \JSON_FORCE_OBJECT));
 
         return $this->responseFactory
             ->createResponse($statusCode)
