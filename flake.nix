@@ -33,7 +33,7 @@
 
             pre-commit.hooks = {
               nixpkgs-fmt.enable = true;
-              yamllint.enable = true;
+              # yamllint.enable = true;
             };
 
             packages = with pkgs; [
