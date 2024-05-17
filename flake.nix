@@ -148,7 +148,7 @@
 
             src = ./.;
 
-            vendorSha256 = "sha256-Kz9tMM4XSMOUmlHb/BE5/C/ZohdE505DTeDj9lGki/I=";
+            vendorHash = "sha256-Kz9tMM4XSMOUmlHb/BE5/C/ZohdE505DTeDj9lGki/I=";
 
             subPackages = [ "protoc-gen-twirp_php" ];
 
