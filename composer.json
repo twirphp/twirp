@@ -38,6 +38,7 @@
             "Tests\\Twirp\\": "lib/tests/",
             "Twirp\\Example\\": "example/src/",
             "": [
+                "example/generated/",
                 "tests/clientcompat/generated/",
                 "tests/complete/generated/",
                 "tests/namespace/generated/"
