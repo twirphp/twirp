@@ -144,11 +144,11 @@
 
           protoc-gen-twirp_php = pkgs.buildGoModule rec {
             pname = "protoc-gen-twirp_php";
-            version = "0.10.0";
+            version = "0.11.0";
 
             src = ./.;
 
-            vendorHash = "sha256-Kz9tMM4XSMOUmlHb/BE5/C/ZohdE505DTeDj9lGki/I=";
+            vendorHash = "sha256-BPvKRIYvIxen0m8C9geFC4gIq4VH8mmdI0ZLMnlBB/I=";
 
             subPackages = [ "protoc-gen-twirp_php" ];
 
