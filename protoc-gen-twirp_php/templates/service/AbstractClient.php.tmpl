@@ -53,9 +53,9 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
 
     public function __construct(
         $addr,
-        ClientInterface $httpClient = null,
-        RequestFactoryInterface $requestFactory = null,
-        StreamFactoryInterface $streamFactory = null,
+        ?ClientInterface $httpClient = null,
+        ?RequestFactoryInterface $requestFactory = null,
+        ?StreamFactoryInterface $streamFactory = null,
         string $prefix = '/twirp'
     ) {
         if ($httpClient === null) {

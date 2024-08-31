@@ -23,7 +23,7 @@ final class TwirpError extends \Exception implements Error
      */
     private $meta = [];
 
-    public function __construct(string $code, string $message, int $exCode = 0, \Throwable $previous = null)
+    public function __construct(string $code, string $message, int $exCode = 0, ?\Throwable $previous = null)
     {
         $this->errorCode = $code;
 
@@ -72,7 +72,7 @@ final class TwirpError extends \Exception implements Error
      * error {type: Internal, msg: "invalid error type {code}"}. If you need to
      * add metadata, use setMeta(key, value) method after building the error.
      */
-    public static function newError(string $code, string $msg, \Throwable $previous = null): self
+    public static function newError(string $code, string $msg, ?\Throwable $previous = null): self
     {
         if (ErrorCode::isValid($code)) {
             return new self($code, $msg, 0, $previous);

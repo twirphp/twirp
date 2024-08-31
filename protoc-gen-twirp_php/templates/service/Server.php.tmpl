@@ -62,9 +62,9 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
 
     public function __construct(
         {{ .Service | phpServiceName .File }} $svc,
-        ServerHooks $hook = null,
-        ResponseFactoryInterface $responseFactory = null,
-        StreamFactoryInterface $streamFactory = null,
+        ?ServerHooks $hook = null,
+        ?ResponseFactoryInterface $responseFactory = null,
+        ?StreamFactoryInterface $streamFactory = null,
         string $prefix = '/twirp'
     ) {
         if ($hook === null) {
