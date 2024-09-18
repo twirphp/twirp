@@ -9,6 +9,8 @@
       url = "github:fossar/nix-phps";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    dagger.url = "github:dagger/nix";
+    dagger.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs@{ flake-parts, ... }:
@@ -20,6 +22,16 @@
       systems = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
 
       perSystem = { config, self', inputs', pkgs, system, ... }: rec {
+        _module.args.pkgs = import inputs.nixpkgs {
+          inherit system;
+
+          overlays = [
+            (final: prev: {
+              dagger = inputs'.dagger.packages.dagger;
+            })
+          ];
+        };
+
         devenv.shells = {
           default = {
             languages = {
@@ -54,6 +66,8 @@
               goreleaser
 
               yamllint
+
+              dagger
             ] ++ [
               self'.packages.clientcompat
             ];
