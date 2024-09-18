@@ -9,6 +9,8 @@
       url = "github:fossar/nix-phps";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    dagger.url = "github:dagger/nix";
+    dagger.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs@{ flake-parts, ... }:
@@ -20,6 +22,16 @@
       systems = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
 
       perSystem = { config, self', inputs', pkgs, system, ... }: rec {
+        _module.args.pkgs = import inputs.nixpkgs {
+          inherit system;
+
+          overlays = [
+            (final: prev: {
+              dagger = inputs'.dagger.packages.dagger;
+            })
+          ];
+        };
+
         devenv.shells = {
           default = {
             languages = {
@@ -47,15 +59,17 @@
               gotestsum
 
               golangci-lint
-              php.packages.phpstan
+              # php.packages.phpstan
               php.packages.php-cs-fixer
-              php.packages.psalm
+              # php.packages.psalm
 
               goreleaser
 
               yamllint
+
+              dagger
             ] ++ [
-              self'.packages.clientcompat
+              # self'.packages.clientcompat
             ];
 
             enterShell = ''
@@ -130,21 +144,21 @@
         };
 
         packages = {
-          clientcompat = pkgs.buildGoPackage rec {
-            pname = "clientcompat";
-            version = "8.1.3";
-
-            goPackagePath = "github.com/twitchtv/twirp";
-
-            src = pkgs.fetchFromGitHub {
-              owner = "twitchtv";
-              repo = "twirp";
-              rev = "v${version}";
-              sha256 = "sha256-p3gHVHGBHakOOQnJAuMK7vZumNXN15mOABuEHUG0wNs=";
-            };
-
-            subPackages = [ "clientcompat" ];
-          };
+          # clientcompat = pkgs.buildGoPackage rec {
+          #   pname = "clientcompat";
+          #   version = "8.1.3";
+          #
+          #   goPackagePath = "github.com/twitchtv/twirp";
+          #
+          #   src = pkgs.fetchFromGitHub {
+          #     owner = "twitchtv";
+          #     repo = "twirp";
+          #     rev = "v${version}";
+          #     sha256 = "sha256-p3gHVHGBHakOOQnJAuMK7vZumNXN15mOABuEHUG0wNs=";
+          #   };
+          #
+          #   subPackages = [ "clientcompat" ];
+          # };
 
           protoc-gen-twirp_php = pkgs.buildGoModule rec {
             pname = "protoc-gen-twirp_php";

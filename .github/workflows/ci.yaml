@@ -8,6 +8,9 @@ on:
 permissions:
   contents: read
 
+env:
+  DAGGER_VERSION: 0.15.1
+
 jobs:
   test:
     name: Test
@@ -21,44 +24,29 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: Set up Nix
-        uses: cachix/install-nix-action@3715ab1a11cac9e991980d7b4a28d80c7ebdd8f9 # v27
+      - name: Run pipeline
+        uses: dagger/dagger-for-github@e5153f5610d82ac9f3f848f3a25ad9d696641068 # v7.0.1
         with:
-          extra_nix_config: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+          verb: call
+          args: tests --php-version ${{ matrix.php }} all
+          cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
+          version: ${{ env.DAGGER_VERSION }}
 
-      - name: Set up magic Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@87b14cf437d03d37989d87f0fa5ce4f5dc1a330b # v8
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
 
-      # - name: Set up PHP
-      #   uses: shivammathur/setup-php@v2
-      #   with:
-      #     php-version: ${{ matrix.php }}
-      #     tools: composer:v2
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: Shell name
-        id: shell
-        run: echo "value=ci_$(echo "${{ matrix.php }}" | sed 's/\./_/')" >> "$GITHUB_OUTPUT"
-
-      - name: Prepare Nix shell
-        run: nix develop --impure .#${{ steps.shell.outputs.value }}
-
-      # - name: Set up Problem Matchers for PHPUnit
-      #   run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
-
-      - name: Download Go dependencies
-        run: nix develop --impure .#${{ steps.shell.outputs.value }} -c go mod download
-
-      - name: Download PHP dependencies
-        run: nix develop --impure .#${{ steps.shell.outputs.value }} -c composer update --no-interaction --no-progress
-
-      - name: Lint
-        run: nix develop --impure .#${{ steps.shell.outputs.value }} -c make lint
-        env:
-          LINT_ARGS: --out-format=github-actions
-
-      - name: Test
-        run: nix develop --impure .#${{ steps.shell.outputs.value }} -c make test
+      - name: Run pipeline
+        uses: dagger/dagger-for-github@e5153f5610d82ac9f3f848f3a25ad9d696641068 # v7.0.1
+        with:
+          verb: call
+          args: lint all
+          cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
+          version: ${{ env.DAGGER_VERSION }}
 
   dev:
     name: Developer environment
