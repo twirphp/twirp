@@ -1,3 +1,7 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/goreleaser/goreleaser/v2.2.0/www/docs/static/schema.json
+
+version: 2
+
 dist: build/dist
 
 builds:
@@ -26,7 +30,7 @@ checksum:
   name_template: "protoc-gen-twirp_php_checksums.txt"
 
 changelog:
-  skip: true
+  disable: true
 
 release:
   prerelease: auto
