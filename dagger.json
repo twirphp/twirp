@@ -1,0 +1,18 @@
+{
+  "name": "twirp",
+  "sdk": "go",
+  "exclude": [
+    ".devenv",
+    ".direnv",
+    "go.work",
+    "go.work.sum"
+  ],
+  "dependencies": [
+    {
+      "name": "go",
+      "source": "github.com/sagikazarmark/daggerverse/go@07f08ab95be76586c798bc55424c684ad6d41497"
+    }
+  ],
+  "source": ".dagger",
+  "engineVersion": "v0.13.1"
+}
