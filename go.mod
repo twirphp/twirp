@@ -5,7 +5,7 @@ go 1.23.0
 require (
 	github.com/Masterminds/sprig/v3 v3.2.3
 	github.com/pkg/errors v0.9.1
-	google.golang.org/protobuf v1.34.2
+	google.golang.org/protobuf v1.35.2
 )
 
 require (
