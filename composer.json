@@ -23,7 +23,7 @@
         "guzzlehttp/guzzle": "^7.7",
         "guzzlehttp/psr7": "^2.5",
         "phpspec/prophecy-phpunit": "^2.0",
-        "phpunit/phpunit": "^9.0"
+        "phpunit/phpunit": "^11.4"
     },
     "conflict": {
         "google/protobuf": "<3.5"
