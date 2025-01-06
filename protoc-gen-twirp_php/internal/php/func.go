@@ -130,8 +130,24 @@ func ServiceName(file *protogen.File, svc *protogen.Service) string {
 
 // MessageName transforms a message name into a PHP compatible one.
 func MessageName(file *protogen.File, message *protogen.Message) string {
-	className := string(message.Desc.Name())
-	parentFile := message.Desc.ParentFile()
+  var classNameParts []string
 
-	return "\\" + namespacedName(classNamePrefix(className, parentFile)+className, parentFile)
+  parentFile := message.Desc.ParentFile()
+
+  for i := 0; i < parentFile.Messages().Len(); i++ {
+    parentMessage := parentFile.Messages().Get(i)
+
+    for j := 0; j < parentMessage.Messages().Len(); j++ {
+      nestedMessage := parentMessage.Messages().Get(j)
+      if nestedMessage == message.Desc {
+        classNameParts = append(classNameParts, string(parentMessage.Name()))
+        break
+      }
+    }
+  }
+
+  classNameParts = append(classNameParts, string(message.Desc.Name()))
+  className := strings.Join(classNameParts, "\\")
+
+  return "\\" + namespacedName(classNamePrefix(className, parentFile)+className, parentFile)
 }
