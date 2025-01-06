@@ -132,22 +132,30 @@ func ServiceName(file *protogen.File, svc *protogen.Service) string {
 func MessageName(file *protogen.File, message *protogen.Message) string {
   var classNameParts []string
 
-  parentFile := message.Desc.ParentFile()
-
-  for i := 0; i < parentFile.Messages().Len(); i++ {
-    parentMessage := parentFile.Messages().Get(i)
-
-    for j := 0; j < parentMessage.Messages().Len(); j++ {
-      nestedMessage := parentMessage.Messages().Get(j)
-      if nestedMessage == message.Desc {
-        classNameParts = append(classNameParts, string(parentMessage.Name()))
-        break
-      }
-    }
+  if parentMessage := findParentMessage(message); parentMessage != nil {
+    classNameParts = append(classNameParts, string((*parentMessage).Name()))
   }
 
   classNameParts = append(classNameParts, string(message.Desc.Name()))
   className := strings.Join(classNameParts, "\\")
+  parentFile := message.Desc.ParentFile()
 
   return "\\" + namespacedName(classNamePrefix(className, parentFile)+className, parentFile)
+}
+
+func findParentMessage(message *protogen.Message) *protoreflect.MessageDescriptor {
+    parentFile := message.Desc.ParentFile()
+
+    for i := 0; i < parentFile.Messages().Len(); i++ {
+        parentMessage := parentFile.Messages().Get(i)
+
+        for j := 0; j < parentMessage.Messages().Len(); j++ {
+            nestedMessage := parentMessage.Messages().Get(j)
+            if nestedMessage == message.Desc {
+                return &parentMessage
+            }
+        }
+    }
+
+    return nil
 }
