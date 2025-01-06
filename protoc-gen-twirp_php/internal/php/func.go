@@ -131,13 +131,12 @@ func ServiceName(file *protogen.File, svc *protogen.Service) string {
 // MessageName transforms a message name into a PHP compatible one.
 func MessageName(file *protogen.File, message *protogen.Message) string {
   var classNameParts []string
-
   if parentMessage := findParentMessage(message); parentMessage != nil {
     classNameParts = append(classNameParts, string((*parentMessage).Name()))
   }
-
   classNameParts = append(classNameParts, string(message.Desc.Name()))
   className := strings.Join(classNameParts, "\\")
+
   parentFile := message.Desc.ParentFile()
 
   return "\\" + namespacedName(classNamePrefix(className, parentFile)+className, parentFile)
