@@ -143,13 +143,14 @@ func MessageName(file *protogen.File, message *protogen.Message) string {
 }
 
 func findParentMessage(message *protogen.Message) *protoreflect.MessageDescriptor {
-  parentFile := message.Desc.ParentFile()
+  parentFileMessages := message.Desc.ParentFile().Messages()
 
-  for i := 0; i < parentFile.Messages().Len(); i++ {
-    parentMessage := parentFile.Messages().Get(i)
-    for j := 0; j < parentMessage.Messages().Len(); j++ {
-      nestedMessage := parentMessage.Messages().Get(j)
-      if nestedMessage == message.Desc {
+  for i := 0; i < parentFileMessages.Len(); i++ {
+    parentMessage := parentFileMessages.Get(i)
+    nestedMessages := parentMessage.Messages()
+
+    for j := 0; j < nestedMessages.Len(); j++ {
+      if nestedMessages.Get(j) == message.Desc {
           return &parentMessage
       }
     }
