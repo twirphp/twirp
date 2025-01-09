@@ -12,18 +12,18 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use Twirp\BaseServerHooks;
 use Twirp\Context;
 use Twirp\ErrorCode;
 use Twirp\ServerHooks;
+use Twirp\ServerInterface;
 
 /**
  * @see {{ .Service | phpServiceName .File }}
  *
  * Generated from protobuf service <code>{{ .Service.Desc.FullName }}</code>
  */
-final class {{ .Service | phpServiceName .File }}Server implements RequestHandlerInterface
+final class {{ .Service | phpServiceName .File }}Server implements ServerInterface
 {
     /**
      * A convenience constant that may identify URL paths.
