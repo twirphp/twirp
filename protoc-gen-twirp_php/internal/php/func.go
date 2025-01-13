@@ -13,6 +13,8 @@ import (
 // https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/compiler/php/names.cc
 
 // Reserved PHP keywords that must be prefixed with something.
+//
+// Source: https://github.com/protocolbuffers/protobuf/blob/6e393fd79667597aac2bb42511fb30c31ff1611d/src/google/protobuf/compiler/php/names.cc
 var reservedNames = []string{
 	"abstract", "and", "array", "as", "break",
 	"callable", "case", "catch", "class", "clone",
@@ -20,15 +22,16 @@ var reservedNames = []string{
 	"do", "echo", "else", "elseif", "empty",
 	"enddeclare", "endfor", "endforeach", "endif", "endswitch",
 	"endwhile", "eval", "exit", "extends", "final",
-	"for", "foreach", "function", "global", "goto",
-	"if", "implements", "include", "include_once", "instanceof",
-	"insteadof", "interface", "isset", "list", "namespace",
-	"new", "or", "print", "private", "protected",
-	"public", "require", "require_once", "return", "static",
-	"switch", "throw", "trait", "try", "unset",
-	"use", "var", "while", "xor", "int",
-	"float", "bool", "string", "true", "false",
-	"null", "void", "iterable",
+	"finally", "fn", "for", "foreach", "function",
+	"global", "goto", "if", "implements", "include",
+	"include_once", "instanceof", "insteadof", "interface", "isset",
+	"list", "match", "namespace", "new", "or",
+	"parent", "print", "private", "protected", "public",
+	"readonly", "require", "require_once", "return", "self",
+	"static", "switch", "throw", "trait", "try",
+	"unset", "use", "var", "while", "xor",
+	"yield", "int", "float", "bool", "string",
+	"true", "false", "null", "void", "iterable",
 }
 
 // ClassNamePrefix calculates class name prefix.
