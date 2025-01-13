@@ -127,11 +127,12 @@ func ServiceName(file *protogen.File, svc *protogen.Service) string {
 }
 
 // MessageName transforms a message name into a PHP compatible one.
-func MessageName(file *protogen.File, message *protogen.Message) string {
-	parentFile := message.Desc.ParentFile()
-	className := classNamePrefix(string(message.Desc.Name()), parentFile) + string(message.Desc.Name())
+func MessageName(_ *protogen.File, message *protogen.Message) string {
+	desc := message.Desc
+	parentFile := desc.ParentFile()
+	className := classNamePrefix(string(desc.Name()), parentFile) + string(desc.Name())
 
-	for parent, ok := message.Desc.Parent().(protoreflect.MessageDescriptor); ok && parent != nil; parent, ok = parent.Parent().(protoreflect.MessageDescriptor) {
+	for parent, ok := desc.Parent().(protoreflect.MessageDescriptor); ok && parent != nil; parent, ok = parent.Parent().(protoreflect.MessageDescriptor) {
 		className = classNamePrefix(string(parent.Name()), parentFile) + string(parent.Name()) + "\\" + className
 	}
 
