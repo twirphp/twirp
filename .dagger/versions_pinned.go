@@ -3,6 +3,7 @@ package main
 const (
 	goVersion = "1.23.4"
 
+	// update to 8.4 once php-cs-fixer supports it
 	defaultPhpVersion = "8.3"
 
 	composerVersion = "2.8.4"
