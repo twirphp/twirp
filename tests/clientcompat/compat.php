@@ -5,7 +5,7 @@ require_once __DIR__ . '/../../lib/vendor/autoload.php';
 
 use Google\Protobuf\Internal\GPBDecodeException;
 use Twirp\Clientcompat\ClientCompatMessage;
-use Twirp\Clientcompat\ClientCompatMessage_CompatServiceMethod;
+use Twirp\Clientcompat\ClientCompatMessage\CompatServiceMethod;
 use Twirp\Clientcompat\CompatServiceClient;
 
 $message = new ClientCompatMessage();
@@ -20,7 +20,7 @@ try {
 $client = new CompatServiceClient($message->getServiceAddress());
 
 switch ($message->getMethod()) {
-    case ClientCompatMessage_CompatServiceMethod::NOOP:
+    case CompatServiceMethod::NOOP:
         try {
             doNoop($client, $message->getRequest());
         } catch (\Throwable $e) {
@@ -28,7 +28,7 @@ switch ($message->getMethod()) {
         }
         break;
 
-    case ClientCompatMessage_CompatServiceMethod::METHOD:
+    case CompatServiceMethod::METHOD:
         try {
             doMethod($client, $message->getRequest());
         } catch (\Throwable $e) {

@@ -10,6 +10,10 @@ $config = (new PhpCsFixer\Config())
         '@Symfony:risky' => true,
         'yoda_style' => false,
         'modernize_strpos' => false,
+
+        // until PHP 8.0
+        'trailing_comma_in_multiline' => false,
+        'native_function_invocation' => false,
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()

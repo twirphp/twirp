@@ -3,7 +3,7 @@ includes:
 
 parameters:
     level: max
-    checkMissingIterableValueType: false
+    # checkMissingIterableValueType: false
     paths:
         - lib/src
     bootstrapFiles:
