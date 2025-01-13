@@ -1,12 +1,16 @@
 package php
 
 import (
+	"slices"
 	"strings"
 
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/types/descriptorpb"
 )
+
+// Code in this file is based on the original protoc compiler code for PHP:
+// https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/compiler/php/names.cc
 
 // Reserved PHP keywords that must be prefixed with something.
 var reservedNames = []string{
@@ -43,16 +47,7 @@ func classNamePrefix(className string, file protoreflect.FileDescriptor) string 
 	}
 
 	// Check if the class name matches a reserved name
-	isReserved := false
-	for _, name := range reservedNames {
-		if name == strings.ToLower(className) {
-			isReserved = true
-
-			break
-		}
-	}
-
-	if isReserved {
+	if slices.Contains(reservedNames, strings.ToLower(className)) {
 		// Google internal classes receive a different prefix
 		if file.Package() == "google.protobuf" {
 			return "GPB"
@@ -85,12 +80,12 @@ func namespace(file protoreflect.FileDescriptor) string {
 
 // Path guesses the path of the file based on the (internally calculated) namespace.
 func Path(file *protogen.File) string {
-	return strings.Replace(Namespace(file), "\\", "/", -1)
+	return strings.ReplaceAll(Namespace(file), "\\", "/")
 }
 
 // PathFromNamespace guesses the path of the file based on the namespace.
 func PathFromNamespace(ns string) string {
-	return strings.Replace(ns, "\\", "/", -1)
+	return strings.ReplaceAll(ns, "\\", "/")
 }
 
 // Name generates a name from a proto reference.
@@ -130,8 +125,12 @@ func ServiceName(file *protogen.File, svc *protogen.Service) string {
 
 // MessageName transforms a message name into a PHP compatible one.
 func MessageName(file *protogen.File, message *protogen.Message) string {
-	className := string(message.Desc.Name())
 	parentFile := message.Desc.ParentFile()
+	className := classNamePrefix(string(message.Desc.Name()), parentFile) + string(message.Desc.Name())
 
-	return "\\" + namespacedName(classNamePrefix(className, parentFile)+className, parentFile)
+	for parent, ok := message.Desc.Parent().(protoreflect.MessageDescriptor); ok && parent != nil; parent, ok = parent.Parent().(protoreflect.MessageDescriptor) {
+		className = classNamePrefix(string(parent.Name()), parentFile) + string(parent.Name()) + "\\" + className
+	}
+
+	return "\\" + namespacedName(className, parentFile)
 }
