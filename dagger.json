@@ -1,12 +1,14 @@
 {
   "name": "twirp",
-  "engineVersion": "v0.15.1",
-  "sdk": "go",
-  "exclude": [
-    ".devenv",
-    ".direnv",
-    "go.work",
-    "go.work.sum"
+  "engineVersion": "v0.16.1",
+  "sdk": {
+    "source": "go"
+  },
+  "include": [
+    "!.devenv",
+    "!.direnv",
+    "!go.work",
+    "!go.work.sum"
   ],
   "dependencies": [
     {
