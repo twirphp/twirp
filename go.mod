@@ -1,6 +1,6 @@
 module github.com/twirphp/twirp
 
-go 1.23.0
+go 1.24.0
 
 require (
 	github.com/Masterminds/sprig/v3 v3.3.0
