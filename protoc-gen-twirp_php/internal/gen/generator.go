@@ -5,17 +5,24 @@ import (
 	"strings"
 	"text/template"
 
+	"google.golang.org/protobuf/compiler/protogen"
+	"google.golang.org/protobuf/types/pluginpb"
+
 	"github.com/twirphp/twirp/protoc-gen-twirp_php/internal/php"
 	"github.com/twirphp/twirp/protoc-gen-twirp_php/templates/global"
 	"github.com/twirphp/twirp/protoc-gen-twirp_php/templates/service"
-	"google.golang.org/protobuf/compiler/protogen"
-	"google.golang.org/protobuf/types/pluginpb"
 )
 
 const twirpVersion = "v8.1.0"
 
-var globalTemplates = template.Must(template.New("").Funcs(TxtFuncMap()).ParseFS(global.FS(), "*.php.tmpl"))
-var serviceTemplates = template.Must(template.New("").Funcs(TxtFuncMap()).ParseFS(service.FS(), "*.php.tmpl"))
+var (
+	globalTemplates = template.Must(
+		template.New("").Funcs(TxtFuncMap()).ParseFS(global.FS(), "*.php.tmpl"),
+	)
+	serviceTemplates = template.Must(
+		template.New("").Funcs(TxtFuncMap()).ParseFS(service.FS(), "*.php.tmpl"),
+	)
+)
 
 type serviceFileData struct {
 	File           *protogen.File
