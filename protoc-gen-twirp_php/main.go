@@ -9,11 +9,12 @@ import (
 	"os"
 
 	"github.com/pkg/errors"
-	"github.com/twirphp/twirp/protoc-gen-twirp_php/internal/gen"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/descriptorpb"
 	"google.golang.org/protobuf/types/pluginpb"
+
+	"github.com/twirphp/twirp/protoc-gen-twirp_php/internal/gen"
 )
 
 // Provisioned by ldflags

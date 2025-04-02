@@ -133,7 +133,12 @@ func MessageName(_ *protogen.File, message *protogen.Message) string {
 	className := classNamePrefix(string(desc.Name()), parentFile) + string(desc.Name())
 
 	for parent, ok := desc.Parent().(protoreflect.MessageDescriptor); ok && parent != nil; parent, ok = parent.Parent().(protoreflect.MessageDescriptor) {
-		className = classNamePrefix(string(parent.Name()), parentFile) + string(parent.Name()) + "\\" + className
+		className = classNamePrefix(
+			string(parent.Name()),
+			parentFile,
+		) + string(
+			parent.Name(),
+		) + "\\" + className
 	}
 
 	return "\\" + namespacedName(className, parentFile)
