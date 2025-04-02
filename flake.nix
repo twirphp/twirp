@@ -70,7 +70,7 @@
 
                   golangci-lint
                   # php.packages.phpstan
-                  php.packages.php-cs-fixer
+                  # php.packages.php-cs-fixer
                   # php.packages.psalm
 
                   goreleaser
