@@ -1,6 +1,6 @@
 {
   "name": "twirp",
-  "engineVersion": "v0.16.1",
+  "engineVersion": "v0.18.1",
   "sdk": {
     "source": "go"
   },
