@@ -9,12 +9,12 @@ permissions:
   contents: read
 
 env:
-  DAGGER_VERSION: 0.18.1
+  DAGGER_VERSION: 0.18.2
 
 jobs:
   test:
     name: Test
-    runs-on: depot-ubuntu-latest,dagger=0.18.1
+    runs-on: depot-ubuntu-latest,dagger=0.18.2
     strategy:
       fail-fast: false
       matrix:
@@ -39,7 +39,7 @@ jobs:
 
   lint:
     name: Lint
-    runs-on: depot-ubuntu-latest,dagger=0.18.1
+    runs-on: depot-ubuntu-latest,dagger=0.18.2
 
     steps:
       - name: Checkout repository
