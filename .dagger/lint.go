@@ -31,13 +31,15 @@ func (m *Lint) All(ctx context.Context) error {
 
 func (m *Lint) Go() *dagger.Container {
 	return dag.GolangciLint(dagger.GolangciLintOpts{
-		Version:   golangciLintVersion,
-		GoVersion: goVersion, // do not use goBase here for now to avoid parallel jobs overwriting cache volumes
-	}).
-		WithLinterCache(cacheVolume("golangci-lint")).
-		Run(m.Main.Source, dagger.GolangciLintRunOpts{
-			Verbose: true,
-		})
+		Version: golangciLintVersion,
+		Cache:   cacheVolume("golangci-lint"),
+
+		// do not use goBase here for now to avoid parallel jobs overwriting cache volumes
+		Container: dag.Go(dagger.GoOpts{Version: goVersion}).
+			WithModuleCache(cacheVolume("golangci-lint-go-mod")).
+			WithBuildCache(cacheVolume("golangci-lint-go-build")).
+			Container(),
+	}).Run(m.Main.Source, dagger.GolangciLintRunOpts{Verbose: true})
 }
 
 func (m *Lint) Phpstan() *dagger.Container {
