@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace {{ .File | phpNamespace }};
 
+use GuzzleHttp\Promise\PromiseInterface;
+
 /**
  *{{ .Service.Comments.Leading | protoSplitComments | join "\n *" }}
  *
@@ -23,5 +25,17 @@ interface {{ .Service | phpServiceName .File }}
      * @throws \Twirp\Error
      */
     public function {{ $method.Desc.Name }}(array $ctx, {{ $inputType }} $req): {{ $method.Output | phpMessageName $.File }};
+
+    /**
+     * Async version of {{ $method.Desc.Name }} that returns a promise.
+     *{{ $method.Comments.Leading | protoSplitComments | join "\n     *" }}
+     *
+     * Generated from protobuf method <code>{{ $method | protoMethodFullName }}</code>
+     *
+     * @param array $ctx Context array
+     * @param {{ $inputType }} $req Request message
+     * @return PromiseInterface A promise that resolves to {{ $method.Output | phpMessageName $.File }}
+     */
+    public function {{ $method.Desc.Name }}Async(array $ctx, {{ $inputType }} $req): PromiseInterface;
 {{ end -}}
 }
