@@ -15,6 +15,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Twirp\BaseServerHooks;
+use Twirp\CanEmitJsonDefaults;
 use Twirp\Context;
 use Twirp\ErrorCode;
 use Twirp\ServerHooks;
@@ -25,7 +26,7 @@ use Twirp\ServerWithPathPrefix;
  *
  * Generated from protobuf service <code>{{ .Service.Desc.FullName }}</code>
  */
-final class {{ .Service | phpServiceName .File }}Server implements RequestHandlerInterface, ServerWithPathPrefix
+final class {{ .Service | phpServiceName .File }}Server implements RequestHandlerInterface, ServerWithPathPrefix, CanEmitJsonDefaults
 {
     /**
      * A convenience constant that may identify URL paths.
@@ -53,12 +54,18 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
      */
     private $prefix;
 
+    /**
+     * @var bool
+     */
+    private $emitDefaults = false;
+
     public function __construct(
         {{ .Service | phpServiceName .File }} $svc,
         ?ServerHooks $hook = null,
         ?ResponseFactoryInterface $responseFactory = null,
         ?StreamFactoryInterface $streamFactory = null,
-        string $prefix = '/twirp'
+        string $prefix = '/twirp',
+        bool $emitDefaults = false
     ) {
         if ($hook === null) {
             $hook = new BaseServerHooks();
@@ -77,6 +84,7 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
         $this->responseFactory = $responseFactory;
         $this->streamFactory = $streamFactory;
         $this->prefix = rtrim($prefix, '/');
+        $this->setEmitJsonDefaults($emitDefaults);
     }
 
     /**
@@ -196,7 +204,13 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
             return $this->writeError($ctx, $e);
         }
 
-        $data = $out->serializeToJsonString();
+        if ($this->shouldEmitJsonDefaults()) {
+            // Only supported in protobuf v5.34.0 or greater.
+            // @phpstan-ignore class.notFound, arguments.count
+            $data = $out->serializeToJsonString(\Google\Protobuf\PrintOptions::EMIT_DEFAULTS);
+        } else {
+            $data = $out->serializeToJsonString();
+        }
 
         $body = $this->streamFactory->createStream($data);
 
@@ -374,5 +388,29 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
             // likely that the connection is broken and the original 'err' says
             // so anyway.
         }
+    }
+
+    /**
+     * By default, protobuf will filter out default values from your return value.
+     * This changes that behavior to always emit default values, allowing for clearer
+     * responses for non-generated or customized clients.
+     * Only supported on versions greater than or equal v5.34.0 of the protobuf package or extension.
+     * Will be a noop if on older versions.
+     *
+     * When false (default): `{myVal: 0, myStr: "hi"}` -> `{myStr: "hi"}`
+     * When true: `{myVal: 0, myStr: "hi"}` -> `{myVal: 0, myStr: "hi"}`
+     */
+    public function setEmitJsonDefaults(bool $emitDefaults): void
+    {
+        $this->emitDefaults = $emitDefaults;
+    }
+
+    public function shouldEmitJsonDefaults(): bool
+    {
+        if (!defined('Google\\Protobuf\\PrintOptions::EMIT_DEFAULTS')) {
+            return false;
+        }
+
+        return $this->emitDefaults;
     }
 }
