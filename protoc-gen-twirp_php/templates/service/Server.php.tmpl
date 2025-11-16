@@ -17,13 +17,16 @@ use Twirp\BaseServerHooks;
 use Twirp\Context;
 use Twirp\ErrorCode;
 use Twirp\ServerHooks;
+use Twirp\ServerWithPathPrefix;
 
 /**
  * @see {{ .Service | phpServiceName .File }}
  *
  * Generated from protobuf service <code>{{ .Service.Desc.FullName }}</code>
  */
-final class {{ .Service | phpServiceName .File }}Server implements RequestHandlerInterface
+final class {{ .Service | phpServiceName .File }}Server implements
+    RequestHandlerInterface,
+    ServerWithPathPrefix
 {
     /**
      * A convenience constant that may identify URL paths.
