@@ -54,6 +54,10 @@ final class Router implements RequestHandlerInterface
 
     public function registerServer(ServerWithPathPrefix $server): void
     {
+        if (!$server instanceof ServerRequestInterface) {
+            throw new \InvalidArgumentException('Server must implement ' . ServerRequestInterface::class);
+        }
+
         $this->handlers[$server->getPathPrefix()] = $server;
     }
 
