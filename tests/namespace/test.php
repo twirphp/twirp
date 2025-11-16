@@ -42,3 +42,4 @@ Assert::classExists(\Twirp\Tests\Namespace\Proto\HaberdasherServer::class);
 Assert::classExists(\Twirp\Tests\Namespace\Proto\HaberdasherAbstractClient::class);
 Assert::classExists(\Twirp\Tests\Namespace\Proto\HaberdasherJsonClient::class);
 Assert::interfaceExists(\Twirp\Tests\Namespace\Proto\Haberdasher::class);
+Assert::exit();

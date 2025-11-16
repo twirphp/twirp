@@ -1,6 +1,7 @@
 package php
 
 import (
+	"slices"
 	"strings"
 
 	"google.golang.org/protobuf/compiler/protogen"
@@ -8,7 +9,12 @@ import (
 	"google.golang.org/protobuf/types/descriptorpb"
 )
 
+// Code in this file is based on the original protoc compiler code for PHP:
+// https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/compiler/php/names.cc
+
 // Reserved PHP keywords that must be prefixed with something.
+//
+// Source: https://github.com/protocolbuffers/protobuf/blob/6e393fd79667597aac2bb42511fb30c31ff1611d/src/google/protobuf/compiler/php/names.cc
 var reservedNames = []string{
 	"abstract", "and", "array", "as", "break",
 	"callable", "case", "catch", "class", "clone",
@@ -16,15 +22,16 @@ var reservedNames = []string{
 	"do", "echo", "else", "elseif", "empty",
 	"enddeclare", "endfor", "endforeach", "endif", "endswitch",
 	"endwhile", "eval", "exit", "extends", "final",
-	"for", "foreach", "function", "global", "goto",
-	"if", "implements", "include", "include_once", "instanceof",
-	"insteadof", "interface", "isset", "list", "namespace",
-	"new", "or", "print", "private", "protected",
-	"public", "require", "require_once", "return", "static",
-	"switch", "throw", "trait", "try", "unset",
-	"use", "var", "while", "xor", "int",
-	"float", "bool", "string", "true", "false",
-	"null", "void", "iterable",
+	"finally", "fn", "for", "foreach", "function",
+	"global", "goto", "if", "implements", "include",
+	"include_once", "instanceof", "insteadof", "interface", "isset",
+	"list", "match", "namespace", "new", "or",
+	"parent", "print", "private", "protected", "public",
+	"readonly", "require", "require_once", "return", "self",
+	"static", "switch", "throw", "trait", "try",
+	"unset", "use", "var", "while", "xor",
+	"yield", "int", "float", "bool", "string",
+	"true", "false", "null", "void", "iterable",
 }
 
 // ClassNamePrefix calculates class name prefix.
@@ -43,16 +50,7 @@ func classNamePrefix(className string, file protoreflect.FileDescriptor) string 
 	}
 
 	// Check if the class name matches a reserved name
-	isReserved := false
-	for _, name := range reservedNames {
-		if name == strings.ToLower(className) {
-			isReserved = true
-
-			break
-		}
-	}
-
-	if isReserved {
+	if slices.Contains(reservedNames, strings.ToLower(className)) {
 		// Google internal classes receive a different prefix
 		if file.Package() == "google.protobuf" {
 			return "GPB"
@@ -85,12 +83,12 @@ func namespace(file protoreflect.FileDescriptor) string {
 
 // Path guesses the path of the file based on the (internally calculated) namespace.
 func Path(file *protogen.File) string {
-	return strings.Replace(Namespace(file), "\\", "/", -1)
+	return strings.ReplaceAll(Namespace(file), "\\", "/")
 }
 
 // PathFromNamespace guesses the path of the file based on the namespace.
 func PathFromNamespace(ns string) string {
-	return strings.Replace(ns, "\\", "/", -1)
+	return strings.ReplaceAll(ns, "\\", "/")
 }
 
 // Name generates a name from a proto reference.
@@ -129,9 +127,19 @@ func ServiceName(file *protogen.File, svc *protogen.Service) string {
 }
 
 // MessageName transforms a message name into a PHP compatible one.
-func MessageName(file *protogen.File, message *protogen.Message) string {
-	className := string(message.Desc.Name())
-	parentFile := message.Desc.ParentFile()
+func MessageName(_ *protogen.File, message *protogen.Message) string {
+	desc := message.Desc
+	parentFile := desc.ParentFile()
+	className := classNamePrefix(string(desc.Name()), parentFile) + string(desc.Name())
 
-	return "\\" + namespacedName(classNamePrefix(className, parentFile)+className, parentFile)
+	for parent, ok := desc.Parent().(protoreflect.MessageDescriptor); ok && parent != nil; parent, ok = parent.Parent().(protoreflect.MessageDescriptor) {
+		className = classNamePrefix(
+			string(parent.Name()),
+			parentFile,
+		) + string(
+			parent.Name(),
+		) + "\\" + className
+	}
+
+	return "\\" + namespacedName(className, parentFile)
 }

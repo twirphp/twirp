@@ -1,0 +1,46 @@
+{
+  "name": "twirp",
+  "engineVersion": "v0.18.2",
+  "sdk": {
+    "source": "go"
+  },
+  "include": [
+    "!.devenv",
+    "!.direnv",
+    "!go.work",
+    "!go.work.sum"
+  ],
+  "dependencies": [
+    {
+      "name": "arc",
+      "source": "github.com/sagikazarmark/daggerverse/arc@arc/v0.5.0",
+      "pin": "126b5fbbdad70dbf2a8689600baec2eb78c05ef4"
+    },
+    {
+      "name": "go",
+      "source": "github.com/sagikazarmark/daggerverse/go@07f08ab95be76586c798bc55424c684ad6d41497",
+      "pin": "07f08ab95be76586c798bc55424c684ad6d41497"
+    },
+    {
+      "name": "golangci-lint",
+      "source": "github.com/sagikazarmark/daggerverse/golangci-lint",
+      "pin": "e6c14178bcaaff9e102e2a89173ca31479b80629"
+    },
+    {
+      "name": "php",
+      "source": "github.com/sagikazarmark/daggerverse/php@php/v0.2.0",
+      "pin": "77ecc6dfd82c8d8c1cc37a7f97b719203cfa9cf0"
+    },
+    {
+      "name": "php-cs-fixer",
+      "source": "github.com/sagikazarmark/daggerverse/php-cs-fixer@php-cs-fixer/v0.1.0",
+      "pin": "84e479601ced57c999880867f0beb56e2afd683d"
+    },
+    {
+      "name": "phpstan",
+      "source": "github.com/sagikazarmark/daggerverse/phpstan@phpstan/v0.3.0",
+      "pin": "84e479601ced57c999880867f0beb56e2afd683d"
+    }
+  ],
+  "source": ".dagger"
+}

@@ -8,6 +8,9 @@ on:
 permissions:
   contents: read
 
+env:
+  DAGGER_VERSION: 0.18.2
+
 jobs:
   phpstan:
     name: PHPStan
@@ -17,23 +20,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: Set up Nix
-        uses: cachix/install-nix-action@3715ab1a11cac9e991980d7b4a28d80c7ebdd8f9 # v27
+      - name: Run pipeline
+        uses: dagger/dagger-for-github@e5153f5610d82ac9f3f848f3a25ad9d696641068 # v7.0.1
         with:
-          extra_nix_config: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up magic Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@87b14cf437d03d37989d87f0fa5ce4f5dc1a330b # v8
-
-      - name: Prepare Nix shell
-        run: nix develop --impure .#ci_lowest
-
-      - name: Download dependencies
-        run: nix develop --impure .#ci_lowest -c composer update --no-interaction --no-progress
-
-      - name: Run PHPStan
-        run: nix develop --impure .#ci_lowest -c phpstan analyze --no-progress
+          verb: call
+          args: lint phpstan
+          cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
+          version: ${{ env.DAGGER_VERSION }}
 
   php-cs-fixer:
     name: PHP-CS-Fixer
@@ -43,46 +36,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: Set up Nix
-        uses: cachix/install-nix-action@3715ab1a11cac9e991980d7b4a28d80c7ebdd8f9 # v27
+      - name: Run pipeline
+        uses: dagger/dagger-for-github@e5153f5610d82ac9f3f848f3a25ad9d696641068 # v7.0.1
         with:
-          extra_nix_config: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up magic Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@87b14cf437d03d37989d87f0fa5ce4f5dc1a330b # v8
-
-      - name: Prepare Nix shell
-        run: nix develop --impure .#ci_lowest
-
-      - name: Download dependencies
-        run: nix develop --impure .#ci_lowest -c composer update --no-interaction --no-progress
-
-      - name: Run PHP CS Fixer
-        run: nix develop --impure .#ci_lowest -c php-cs-fixer fix --diff --dry-run
-
-  # psalm:
-  #   name: Psalm
-  #   runs-on: ubuntu-latest
-  #
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-  #
-  #     - name: Set up Nix
-  #       uses: cachix/install-nix-action@3715ab1a11cac9e991980d7b4a28d80c7ebdd8f9 # v27
-  #       with:
-  #         extra_nix_config: |
-  #           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-  #
-  #     - name: Set up magic Nix cache
-  #       uses: DeterminateSystems/magic-nix-cache-action@87b14cf437d03d37989d87f0fa5ce4f5dc1a330b # v8
-  #
-  #     - name: Prepare Nix shell
-  #       run: nix develop --impure .#ci_lowest
-  #
-  #     - name: Download dependencies
-  #       run: nix develop --impure .#ci_lowest -c composer update --no-interaction --no-progress
-  #
-  #     - name: Run Psalm
-  #       run: nix develop --impure .#ci_lowest -c psalm --no-progress --root $PWD --output-format=github
+          verb: call
+          args: lint php-cs-fixer
+          cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
+          version: ${{ env.DAGGER_VERSION }}

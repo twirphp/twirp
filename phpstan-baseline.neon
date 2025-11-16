@@ -1,11 +1,331 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#1 \\$content of method Psr\\\\Http\\\\Message\\\\StreamFactoryInterface\\:\\:createStream\\(\\) expects string, string\\|false given\\.$#"
+			message: '#^Method Twirp\\BaseServerHooks\:\:error\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/BaseServerHooks.php
+
+		-
+			message: '#^Method Twirp\\BaseServerHooks\:\:error\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/BaseServerHooks.php
+
+		-
+			message: '#^Method Twirp\\BaseServerHooks\:\:requestReceived\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/BaseServerHooks.php
+
+		-
+			message: '#^Method Twirp\\BaseServerHooks\:\:requestReceived\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/BaseServerHooks.php
+
+		-
+			message: '#^Method Twirp\\BaseServerHooks\:\:requestRouted\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/BaseServerHooks.php
+
+		-
+			message: '#^Method Twirp\\BaseServerHooks\:\:requestRouted\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/BaseServerHooks.php
+
+		-
+			message: '#^Method Twirp\\BaseServerHooks\:\:responsePrepared\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/BaseServerHooks.php
+
+		-
+			message: '#^Method Twirp\\BaseServerHooks\:\:responsePrepared\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/BaseServerHooks.php
+
+		-
+			message: '#^Method Twirp\\BaseServerHooks\:\:responseSent\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/BaseServerHooks.php
+
+		-
+			message: '#^Method Twirp\\ChainServerHooks\:\:error\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/ChainServerHooks.php
+
+		-
+			message: '#^Method Twirp\\ChainServerHooks\:\:error\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/ChainServerHooks.php
+
+		-
+			message: '#^Method Twirp\\ChainServerHooks\:\:requestReceived\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/ChainServerHooks.php
+
+		-
+			message: '#^Method Twirp\\ChainServerHooks\:\:requestReceived\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/ChainServerHooks.php
+
+		-
+			message: '#^Method Twirp\\ChainServerHooks\:\:requestRouted\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/ChainServerHooks.php
+
+		-
+			message: '#^Method Twirp\\ChainServerHooks\:\:requestRouted\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/ChainServerHooks.php
+
+		-
+			message: '#^Method Twirp\\ChainServerHooks\:\:responsePrepared\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/ChainServerHooks.php
+
+		-
+			message: '#^Method Twirp\\ChainServerHooks\:\:responsePrepared\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/ChainServerHooks.php
+
+		-
+			message: '#^Method Twirp\\ChainServerHooks\:\:responseSent\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/ChainServerHooks.php
+
+		-
+			message: '#^Cannot access offset string on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:httpRequestHeaders\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:httpRequestHeaders\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:httpRequestHeaders\(\) should return array but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:methodName\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:methodName\(\) should return string\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:packageName\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:packageName\(\) should return string\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:serviceName\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:serviceName\(\) should return string\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:statusCode\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:statusCode\(\) should return int\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:withHttpRequestHeaders\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:withHttpRequestHeaders\(\) has parameter \$headers with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:withHttpRequestHeaders\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:withHttpResponseHeader\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:withHttpResponseHeader\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:withMethodName\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:withMethodName\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:withPackageName\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:withPackageName\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:withServiceName\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:withServiceName\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:withStatusCode\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Context\:\:withStatusCode\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Context.php
+
+		-
+			message: '#^Method Twirp\\Error\:\:getMetaMap\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/Error.php
+
+		-
+			message: '#^Parameter \#1 \$content of method Psr\\Http\\Message\\StreamFactoryInterface\:\:createStream\(\) expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: lib/src/Router.php
+
+		-
+			message: '#^Parameter \#1 \$content of method Psr\\Http\\Message\\StreamFactoryInterface\:\:createStream\(\) expects string, string\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: lib/src/Server.php
 
 		-
-			message: "#^Parameter \\#1 \\$content of method Psr\\\\Http\\\\Message\\\\StreamFactoryInterface\\:\\:createStream\\(\\) expects string, string\\|false given\\.$#"
+			message: '#^Method Twirp\\ServerHooks\:\:error\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
-			path: lib/src/Router.php
+			path: lib/src/ServerHooks.php
+
+		-
+			message: '#^Method Twirp\\ServerHooks\:\:error\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/ServerHooks.php
+
+		-
+			message: '#^Method Twirp\\ServerHooks\:\:requestReceived\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/ServerHooks.php
+
+		-
+			message: '#^Method Twirp\\ServerHooks\:\:requestReceived\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/ServerHooks.php
+
+		-
+			message: '#^Method Twirp\\ServerHooks\:\:requestRouted\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/ServerHooks.php
+
+		-
+			message: '#^Method Twirp\\ServerHooks\:\:requestRouted\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/ServerHooks.php
+
+		-
+			message: '#^Method Twirp\\ServerHooks\:\:responsePrepared\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/ServerHooks.php
+
+		-
+			message: '#^Method Twirp\\ServerHooks\:\:responsePrepared\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/ServerHooks.php
+
+		-
+			message: '#^Method Twirp\\ServerHooks\:\:responseSent\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: lib/src/ServerHooks.php
