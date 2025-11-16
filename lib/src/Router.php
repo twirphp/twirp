@@ -53,7 +53,7 @@ final class Router implements RequestHandlerInterface
     }
 
     /**
-     * @param ServerWithPathPrefix&ServerRequestInterface $server
+     * @param ServerWithPathPrefix&RequestHandlerInterface $server
      */
     public function registerServer(ServerWithPathPrefix $server): void
     {
