@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Twirp;
 
-interface ServerWithPathPrefix
+interface ServerWithPathPrefixInterface
 {
     /**
      * Returns the base service path, in the form: "/<prefix>/<package>.<Service>/"
