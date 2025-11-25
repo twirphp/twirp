@@ -52,7 +52,7 @@ final class Router implements RequestHandlerInterface
         $this->handlers[$path] = $handler;
     }
 
-    public function registerServer(ServerWithPathPrefixInterface&RequestHandlerInterface $server): void
+    public function registerServer(ServerWithPathPrefix&RequestHandlerInterface $server): void
     {
         $this->handlers[$server->getPathPrefix()] = $server;
     }
