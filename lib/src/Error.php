@@ -32,6 +32,8 @@ interface Error extends \Throwable
 
     /**
      * Returns the complete key-value metadata map stored on the error.
+     *
+     * @return array<string, string>
      */
     public function getMetaMap(): array;
 }
