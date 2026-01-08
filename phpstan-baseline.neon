@@ -259,18 +259,6 @@ parameters:
 			path: lib/src/Context.php
 
 		-
-			message: '#^Parameter \#1 \$content of method Psr\\Http\\Message\\StreamFactoryInterface\:\:createStream\(\) expects string, string\|false given\.$#'
-			identifier: argument.type
-			count: 1
-			path: lib/src/Router.php
-
-		-
-			message: '#^Parameter \#1 \$content of method Psr\\Http\\Message\\StreamFactoryInterface\:\:createStream\(\) expects string, string\|false given\.$#'
-			identifier: argument.type
-			count: 1
-			path: lib/src/Server.php
-
-		-
 			message: '#^Method Twirp\\ServerHooks\:\:error\(\) has parameter \$ctx with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1

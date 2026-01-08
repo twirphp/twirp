@@ -78,7 +78,7 @@ final class Server implements RequestHandlerInterface
             'meta' => [
                 'twirp_invalid_route' => $request->getMethod().' '.$request->getUri()->getPath(),
             ],
-        ]));
+        ], \JSON_THROW_ON_ERROR));
 
         return $this->responseFactory
             ->createResponse($statusCode)
