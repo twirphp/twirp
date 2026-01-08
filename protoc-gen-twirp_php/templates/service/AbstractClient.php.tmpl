@@ -76,7 +76,7 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
 {{ range $method := .Service.Methods }}
 {{- $inputType := $method.Input | phpMessageName $.File }}
     /**
-     * {@inheritdoc}
+     * @param array<string, mixed> $ctx
      */
     public function {{ $method.Desc.Name }}(array $ctx, {{ $inputType }} $in): {{ $method.Output | phpMessageName $.File }}
     {
@@ -100,11 +100,15 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
 {{ end }}
     /**
      * Common code to make a request to the remote twirp service.
+     *
+     * @param array<string, mixed> $ctx
      */
     abstract protected function doRequest(array $ctx, string $url, Message $in, Message $out): void;
 
     /**
      * Makes an HTTP request and adds common headers.
+     *
+     * @param array<string, mixed> $ctx
      */
     protected function newRequest(array $ctx, string $url, string $reqBody, string $contentType): RequestInterface
     {

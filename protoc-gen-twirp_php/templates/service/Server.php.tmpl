@@ -144,6 +144,9 @@ final class {{ .Service | phpServiceName .File }}Server implements
     }
 {{ range $method := .Service.Methods }}
     {{- $inputType := $method.Input | phpMessageName $.File }}
+    /**
+     * @param array<string, mixed> $ctx
+     */
     private function handle{{ $method.Desc.Name }}(array $ctx, ServerRequestInterface $req): ResponseInterface
     {
         $header = $req->getHeaderLine('Content-Type');
@@ -178,6 +181,9 @@ final class {{ .Service | phpServiceName .File }}Server implements
         return $resp;
     }
 
+    /**
+     * @param array<string, mixed> $ctx
+     */
     private function handle{{ $method.Desc.Name }}Json(array $ctx, ServerRequestInterface $req): ResponseInterface
     {
         $ctx = Context::withMethodName($ctx, '{{ $method.Desc.Name }}');
@@ -215,6 +221,9 @@ final class {{ .Service | phpServiceName .File }}Server implements
         return $resp;
     }
 
+    /**
+     * @param array<string, mixed> $ctx
+     */
     private function handle{{ $method.Desc.Name }}Protobuf(array $ctx, ServerRequestInterface $req): ResponseInterface
     {
         $ctx = Context::withMethodName($ctx, '{{ $method.Desc.Name }}');
@@ -298,6 +307,8 @@ final class {{ .Service | phpServiceName .File }}Server implements
 
     /**
      * Writes errors in the response and triggers hooks.
+     *
+     * @param array<string, mixed> $ctx
      */
     private function writeError(array $ctx, \Throwable $e): ResponseInterface
     {
@@ -355,6 +366,8 @@ final class {{ .Service | phpServiceName .File }}Server implements
 
     /**
      * Triggers response sent hook.
+     *
+     * @param array<string, mixed> $ctx
      */
     private function callResponseSent(array $ctx): void
     {
