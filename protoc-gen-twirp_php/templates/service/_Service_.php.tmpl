@@ -20,6 +20,8 @@ interface {{ .Service | phpServiceName .File }}
      *
      * Generated from protobuf method <code>{{ $method | protoMethodFullName }}</code>
      *
+     * @param array<string, mixed> $ctx
+     *
      * @throws \Twirp\Error
      */
     public function {{ $method.Desc.Name }}(array $ctx, {{ $inputType }} $req): {{ $method.Output | phpMessageName $.File }};

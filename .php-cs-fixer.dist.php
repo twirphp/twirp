@@ -14,6 +14,9 @@ $config = (new PhpCsFixer\Config())
         // until PHP 8.0
         'trailing_comma_in_multiline' => false,
         'native_function_invocation' => false,
+        'phpdoc_to_comment' => [
+            'allow_before_return_statement' => true,
+        ]
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()
