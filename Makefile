@@ -23,6 +23,11 @@ build: ## Build binaries
 	@mkdir -p ${BUILD_DIR}
 	go build -mod=mod -trimpath -ldflags "${LDFLAGS}" -o ${BUILD_DIR}/ ./protoc-gen-twirp_php/
 
+.PHONY: build-linux-aarch64
+build-linux-aarch64: ## Build binaries for Linux aarch64
+	@mkdir -p ${BUILD_DIR}
+	GOOS=linux GOARCH=arm64 go build -mod=mod -trimpath -ldflags "${LDFLAGS}" -o ${BUILD_DIR}/protoc-gen-twirp_php-linux-aarch64 ./protoc-gen-twirp_php/
+
 .PHONY: check
 check: test lint ## Run checks (tests and linters)
 
