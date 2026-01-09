@@ -43,10 +43,14 @@ func (m *Lint) Go() *dagger.Container {
 }
 
 func (m *Lint) Phpstan() *dagger.Container {
+	// Generate example files before running phpstan
+	source := m.Main.source().
+		WithDirectory("example/generated", m.Main.Generate().Example())
+
 	return dag.Phpstan(dagger.PhpstanOpts{
 		Version:    phpstanVersion,
 		PhpVersion: defaultPhpVersion,
-	}).Analyse(m.Main.source())
+	}).Analyse(source)
 }
 
 func (m *Lint) PhpCsFixer() *dagger.Container {
