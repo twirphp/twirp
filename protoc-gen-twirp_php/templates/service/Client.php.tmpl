@@ -9,6 +9,8 @@ namespace {{ .File | phpNamespace }};
 
 use Google\Protobuf\Internal\GPBDecodeException;
 use Google\Protobuf\Internal\Message;
+use GuzzleHttp\Promise\Create;
+use GuzzleHttp\Promise\PromiseInterface;
 
 /**
  * A Protobuf client that implements the {@see {{ .Service | phpServiceName .File }}} interface.
@@ -39,5 +41,42 @@ final class {{ .Service | phpServiceName .File }}Client extends {{ .Service | ph
         } catch (GPBDecodeException $e) {
             throw $this->clientError('failed to unmarshal proto response', $e);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function doRequestAsync(array $ctx, string $url, Message $in, Message $out): PromiseInterface
+    {
+        // Check if the HTTP client supports async operations (e.g., Guzzle)
+        if (!$this->supportsAsync()) {
+            // Fallback: execute synchronously and return a resolved promise
+            return Create::promiseFor($out)->then(function () use ($ctx, $url, $in, $out) {
+                $this->doRequest($ctx, $url, $in, $out);
+                return $out;
+            });
+        }
+
+        $body = $in->serializeToString();
+        $req = $this->newRequest($ctx, $url, $body, 'application/protobuf');
+
+        // Send async request using Guzzle's sendAsync
+        return $this->httpClient->sendAsync($req)->then(
+            function ($resp) use ($out) {
+                if ($resp->getStatusCode() !== 200) {
+                    throw $this->errorFromResponse($resp);
+                }
+
+                try {
+                    $out->mergeFromString((string)$resp->getBody());
+                    return $out;
+                } catch (GPBDecodeException $e) {
+                    throw $this->clientError('failed to unmarshal proto response', $e);
+                }
+            },
+            function ($e) {
+                throw $this->clientError('failed to send request', $e);
+            }
+        );
     }
 }
