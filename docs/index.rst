@@ -38,6 +38,7 @@ resources published by the Twirp developers themselves:
     advanced/other-services
     advanced/http-headers
     advanced/psr15
+    advanced/async-processing
 
 
 .. _Twirp: https://twitchtv.github.io/twirp/
