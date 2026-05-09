@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace {{ .File | phpNamespace }};
 
 use Google\Protobuf\Internal\Message;
+use GuzzleHttp\Promise\PromiseInterface;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Http\Client\ClientInterface;
@@ -98,6 +99,31 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
 
         return $out;
     }
+
+    /**
+     * Async version of {{ $method.Desc.Name }} that returns a promise.
+     * 
+     * @param array $ctx Context array
+     * @param {{ $inputType }} $in Request message
+     * @return PromiseInterface A promise that resolves to {{ $method.Output | phpMessageName $.File }}
+     */
+    public function {{ $method.Desc.Name }}Async(array $ctx, {{ $inputType }} $in): PromiseInterface
+    {
+        $ctx = Context::withPackageName($ctx, '{{ $.File.Proto.GetPackage }}');
+        $ctx = Context::withServiceName($ctx, '{{ $.Service.Desc.Name }}');
+        $ctx = Context::withMethodName($ctx, '{{ $method.Desc.Name }}');
+
+        $out = new {{ $method.Output | phpMessageName $.File }}();
+
+        $url = $this->addr;
+        if (empty($this->prefix)) {
+            $url = $url.'/{{ $method | protoMethodFullName }}';
+        } else {
+            $url = $url.'/'.$this->prefix.'/{{ $method | protoMethodFullName }}';
+        }
+
+        return $this->doRequestAsync($ctx, $url, $in, $out);
+    }
 {{ end }}
     /**
      * Common code to make a request to the remote twirp service.
@@ -105,6 +131,18 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
      * @param array<string, mixed> $ctx
      */
     abstract protected function doRequest(array $ctx, string $url, Message $in, Message $out): void;
+
+    /**
+     * Common code to make an async request to the remote twirp service.
+     * Returns a promise that resolves to void when the $out message is populated.
+     * 
+     * @param array $ctx Context array
+     * @param string $url The URL to send the request to
+     * @param Message $in The input message to serialize and send
+     * @param Message $out The output message to populate with the response
+     * @return PromiseInterface A promise that resolves to the output message
+     */
+    abstract protected function doRequestAsync(array $ctx, string $url, Message $in, Message $out): PromiseInterface;
 
     /**
      * Makes an HTTP request and adds common headers.
@@ -225,6 +263,16 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
         }
 
         return $error;
+    }
+
+    /**
+     * Helper method to check if the HTTP client supports async operations (Guzzle).
+     * 
+     * @return bool
+     */
+    protected function supportsAsync(): bool
+    {
+        return method_exists($this->httpClient, 'sendAsync');
     }
 
     /**
